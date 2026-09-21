@@ -24,7 +24,9 @@ Japanese summary: [README.ja.md](README.ja.md). Language policy: [docs/i18n.md](
 
 ## Status
 
-Documentation bootstrap and V1 design ADRs (0003–0009) are done. Manual orchestrator: [`src/Invoke-AudioRebind.ps1`](src/Invoke-AudioRebind.ps1). Automatic Task Scheduler packaging is still open — see [ROADMAP.md](ROADMAP.md) and Milestone [v1](https://github.com/goichiro-y/audio-rebind/milestone/1).
+**V1 MVP (0.1.0)** is usable for maintainer dogfood: register [`src/Register-AudioRebindTask.ps1`](src/Register-AudioRebindTask.ps1), point it at a YAML profile, resume from sleep. See [src/README.md](src/README.md), [CHANGELOG.md](CHANGELOG.md), and [ROADMAP.md](ROADMAP.md).
+
+Post-V1 polish: [#12](https://github.com/goichiro-y/audio-rebind/issues/12) (UsbDevice disable), [#13](https://github.com/goichiro-y/audio-rebind/issues/13) (resume latency).
 
 ## Development
 

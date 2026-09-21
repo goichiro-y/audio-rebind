@@ -9,26 +9,26 @@ and this project aims to adhere to [Semantic Versioning](https://semver.org/).
 
 ### Added
 
-- Public-safe product documentation (problem, scope, architecture, pipeline spec)
-- ADRs for orchestrator shape and naming
-- Guide for gitignored local investigation notes
-- ADRs 0003–0006 (PowerShell v1, YAML profiles, Task Scheduler trigger, Engine/Usb defaults)
-- [profile-spec](docs/specs/profile-spec.md) for YAML profile schema
-- ADR 0007 (V1 MVP boundaries) and work-placement rules in CONTRIBUTING / ROADMAP
-- ADR 0008 (repo layout: `src/`, `profiles/examples/`, `local/profiles/`)
-- Placeholder example profile and HardwareId discovery guide
-- Pipeline logging path and exit-code contract
-- ADR 0009 (YAML on Windows PowerShell 5.1 via `powershell-yaml`)
-- Host layer-isolation findings summarized on Issues #1 / #2 (Engine for playback; Apps for capture clients)
-- Manual resume orchestrator: [`src/Invoke-AudioRebind.ps1`](src/Invoke-AudioRebind.ps1) (AudioEngine / UsbDevice / Apps, YAML profiles, logs)
-
 ### Changed
-
-- Pipeline and architecture docs aligned with ADR 0003–0006
-- ROADMAP restructured into V1 sequence / Done / Later; uncommitted ideas no longer tracked as open Issues
-- [scope.md](docs/scope.md) records V1 vs Later/V2 version intent
-- Japanese README summary updated for V1 status
 
 ### Fixed
 
 ### Removed
+
+## [0.1.0] - 2026-09-21
+
+First **V1 MVP** suitable for maintainer dogfood (ADR 0007).
+
+### Added
+
+- Product docs: problem, scope, architecture, pipeline and profile specs, local-notes and HardwareId guides
+- ADRs 0001–0009 (orchestrator shape, naming, PowerShell stack, YAML on Windows PowerShell 5.1, Task Scheduler trigger, Engine/Usb defaults, MVP boundaries, repo layout)
+- Manual resume orchestrator: [`src/Invoke-AudioRebind.ps1`](src/Invoke-AudioRebind.ps1) (AudioEngine → UsbDevice → Apps)
+- Task Scheduler packaging: [`src/Register-AudioRebindTask.ps1`](src/Register-AudioRebindTask.ps1) / [`Unregister-AudioRebindTask.ps1`](src/Unregister-AudioRebindTask.ps1) (Power-Troubleshooter Event ID 1, HighestAvailable)
+- Example profile placeholders under `profiles/examples/`
+- Work-placement rules (Issues = committed work; ROADMAP Later = uncommitted)
+
+### Notes
+
+- Maintainer sleep dogfood: scheduled task recovered playback quickly; long-lived capture apps recover after process recycle
+- Known follow-ups: UsbDevice disable refusal on some hosts ([#12](https://github.com/goichiro-y/audio-rebind/issues/12)); resume latency tuning ([#13](https://github.com/goichiro-y/audio-rebind/issues/13))

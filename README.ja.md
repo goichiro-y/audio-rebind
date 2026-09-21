@@ -6,9 +6,8 @@
 
 ## 現状
 
-ドキュメントと V1 設計 ADR（0003–0009）まで完了。手動オーケストレータは [`src/Invoke-AudioRebind.ps1`](src/Invoke-AudioRebind.ps1)。Task Scheduler による自動復帰は未着手です。進捗は英語の [ROADMAP.md](ROADMAP.md) と Milestone [v1](https://github.com/goichiro-y/audio-rebind/milestone/1) を見てください。
+**V1 MVP（0.1.0）** はメンテナ犬食い向けに利用可能です。[`src/Register-AudioRebindTask.ps1`](src/Register-AudioRebindTask.ps1) でタスク登録し、YAML プロファイルを指定してスリープ復帰で実行します。詳細は英語の [src/README.md](src/README.md)、[CHANGELOG.md](CHANGELOG.md)、[ROADMAP.md](ROADMAP.md) を参照してください。
 
-- **V1:** 自分用。YAML で対象を明示。設定 GUI なし。Task Scheduler で復帰時実行（常駐エージェントなし）。
-- **Later / V2+:** カタログ既定＋オプトアウト、設定 GUI など（未コミット。Issue には積まない）。
+後続の磨き込み: UsbDevice disable（[#12](https://github.com/goichiro-y/audio-rebind/issues/12)）、復帰の高速化（[#13](https://github.com/goichiro-y/audio-rebind/issues/13)）。
 
 正本は英語の [README.md](README.md) と [docs/](docs/README.md) です。言語方針は [docs/i18n.md](docs/i18n.md) を参照してください。置き場ルールは [CONTRIBUTING.md](CONTRIBUTING.md#where-work-lives) です。

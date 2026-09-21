@@ -1,10 +1,10 @@
 ﻿# Roadmap
 
-Thin when/status overview. Durable specs: [`docs/`](docs/README.md). Adopted decisions: [`docs/decisions/`](docs/decisions/README.md). Placement rules: [CONTRIBUTING.md](CONTRIBUTING.md#where-work-lives). Actionable work: [GitHub Issues](https://github.com/goichiro-y/audio-rebind/issues) + Milestone `v1`.
+Thin when/status overview. Durable specs: [`docs/`](docs/README.md). Adopted decisions: [`docs/decisions/`](docs/decisions/README.md). Placement rules: [CONTRIBUTING.md](CONTRIBUTING.md#where-work-lives). Actionable work: [GitHub Issues](https://github.com/goichiro-y/audio-rebind/issues).
 
 **Committed work lives in Issues.** Uncommitted ideas stay in **Later** below — do not open Issues for them until accepted.
 
-## V1 (MVP)
+## V1 (MVP) — shipped 0.1.0
 
 Maintainer dogfood: explicit YAML profile (apps / USB), no settings GUI, resume via elevated Task Scheduler (not an always-on agent). See [ADR 0007](docs/decisions/0007-v1-mvp-boundaries.md). Layout: [ADR 0008](docs/decisions/0008-v1-repository-layout.md).
 
@@ -12,34 +12,29 @@ Maintainer dogfood: explicit YAML profile (apps / USB), no settings GUI, resume 
 
 | # | Phase | Status | Tracking |
 |---|--------|--------|----------|
-| 1 | Host investigation (layer isolation after resume) | Done | [#1](https://github.com/goichiro-y/audio-rebind/issues/1), [#2](https://github.com/goichiro-y/audio-rebind/issues/2) — Engine restores playback; Apps recycle restores capture dictation; Event ID 1 OK (`local/` for host detail) |
+| 1 | Host investigation (layer isolation after resume) | Done | [#1](https://github.com/goichiro-y/audio-rebind/issues/1), [#2](https://github.com/goichiro-y/audio-rebind/issues/2) |
 | 2 | Resume orchestrator core (PowerShell) | Done | [#5](https://github.com/goichiro-y/audio-rebind/issues/5) — `src/Invoke-AudioRebind.ps1` |
-| 3 | Profile loader + explicit personal targets | Done | [#6](https://github.com/goichiro-y/audio-rebind/issues/6) — YAML via powershell-yaml on PS 5.1 (ADR 0009); example in `profiles/examples/` |
-| 4 | Resume trigger packaging (Task Scheduler) | Planned | [#7](https://github.com/goichiro-y/audio-rebind/issues/7) |
-| 5 | Dogfood on maintainer machine | Planned | Record results under `local/` only; private profile under `local/profiles/` |
-| 6 | V1 exit (works, docs, CHANGELOG) | Planned | [#11](https://github.com/goichiro-y/audio-rebind/issues/11) |
+| 3 | Profile loader + explicit personal targets | Done | [#6](https://github.com/goichiro-y/audio-rebind/issues/6) |
+| 4 | Resume trigger packaging (Task Scheduler) | Done | [#7](https://github.com/goichiro-y/audio-rebind/issues/7) |
+| 5 | Dogfood on maintainer machine | Done | Auto task on resume; playback quick; capture apps after recycle |
+| 6 | V1 exit (works, docs, CHANGELOG) | Done | [#11](https://github.com/goichiro-y/audio-rebind/issues/11); [CHANGELOG 0.1.0](CHANGELOG.md) |
 
-Open follow-up: UsbDevice disable flake during first smoke — [#12](https://github.com/goichiro-y/audio-rebind/issues/12).
+Milestone [v1](https://github.com/goichiro-y/audio-rebind/milestone/1) closed with 0.1.0.
 
-Milestone: [v1](https://github.com/goichiro-y/audio-rebind/milestone/1)
+### Post-V1 polish (still open)
 
-### Pre-implementation spikes (tracked on Issues, not separate Issues)
+| Item | Tracking |
+|------|----------|
+| UsbDevice disable refusal / pnputil | [#12](https://github.com/goichiro-y/audio-rebind/issues/12) |
+| Faster resume (skip bad USB / shorter graceful stop) | [#13](https://github.com/goichiro-y/audio-rebind/issues/13) |
 
-- YAML on Windows PowerShell 5.1 via `powershell-yaml` — **done** (ADR 0009 + loader)
-- Elevated `Disable-PnpDevice` / `Enable-PnpDevice` — **done** in `Step-UsbDevice` (`pnputil` still not implemented)
-- Log path `%LOCALAPPDATA%\AudioRebind\logs\` and exit codes `0`/`1`/`2`/`3` — **done**
-
-## Done
+## Done (summary)
 
 | Item | Notes |
 |------|--------|
-| Docs bootstrap | Problem, scope, architecture, pipeline spec, naming ADRs, local-notes guide |
-| v1 design decisions | ADR 0003–0009; [profile-spec](docs/specs/profile-spec.md); tracker [#4](https://github.com/goichiro-y/audio-rebind/issues/4) |
-| Work-placement rules | Issues = committed; Later = uncommitted; ADR 0007 MVP boundaries |
-| Repo layout + example profile | ADR 0008; `profiles/examples/example-usb-interface.yaml` |
-| Scope version intent | V1 vs Later/V2 sketched in [scope.md](docs/scope.md) |
-| Host investigation (first probe) | Playback needs Engine; capture dictation needs Apps; Event ID 1 OK — see #1 / #2 |
-| Manual orchestrator + YAML loader | `src/Invoke-AudioRebind.ps1`; Issues #5 / #6 |
+| Docs bootstrap + ADRs 0001–0009 | Specs, placement rules, example profiles |
+| Manual + scheduled orchestrator | `src/`; maintainer dogfood OK |
+| V1 MVP exit | Tagged as release notes in CHANGELOG **0.1.0** |
 
 ## Later (not committed)
 
@@ -49,8 +44,8 @@ Do not file Issues for these until the version is accepted.
 |-------|--------|
 | V2 defaults | Built-in app/USB catalog + opt-out (GUI not required at first) |
 | Settings GUI | Opt-out checkboxes / tray settings over the same profile model |
-| Always-on agent | Only if Power-Troubleshooter Event ID 1 proves insufficient ([#2](https://github.com/goichiro-y/audio-rebind/issues/2)) |
-| Single-layer tool comparison | Optional investigation ([#3](https://github.com/goichiro-y/audio-rebind/issues/3); not on Milestone `v1`) |
+| Always-on agent | Only if Power-Troubleshooter Event ID 1 proves insufficient |
+| Single-layer tool comparison | Optional investigation ([#3](https://github.com/goichiro-y/audio-rebind/issues/3)) |
 | Least-privilege installer | Elevate only steps that need it (was [#8](https://github.com/goichiro-y/audio-rebind/issues/8)) |
 | Optional WASAPI proxy | Only if orchestrator is not enough (was [#9](https://github.com/goichiro-y/audio-rebind/issues/9)) |
 | Secondary triggers | Unlock / other fallbacks (was [#10](https://github.com/goichiro-y/audio-rebind/issues/10)) |
