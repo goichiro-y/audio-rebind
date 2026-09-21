@@ -1,14 +1,14 @@
 ﻿# Example profiles
 
-Shared YAML examples with **placeholders only**. Copy into `local/profiles/` for personal use.
+Shared YAML examples with **placeholders only**. Copy into `local/profiles/` for personal use — never commit real VID/PID, InstanceIds, or personal absolute paths back into this folder.
 
-## What to fill in
+## Checklist (first-time fill)
 
-Open [example-usb-interface.yaml](example-usb-interface.yaml) and complete the checklist at the top of the file:
-
-1. `hardwareIdPatterns` (`VID_XXXX` / `PID_YYYY`) — see [discover-hardware-id](../../docs/guides/discover-hardware-id.md)
-2. `apps.processes[].path` (or disable Apps)
-3. Optionally turn off UsbDevice / set `windowAfterStart: minimize` / shorten stop timeouts
+1. Copy [example-usb-interface.yaml](example-usb-interface.yaml) → `local/profiles/<your-name>.yaml`.
+2. **VID/PID (`XXXX` / `YYYY`)** — read a HardwareId *pattern* (not full InstanceId) via [discover-hardware-id](../../docs/guides/discover-hardware-id.md). Put `USB\VID_xxxx&PID_yyyy` under `hardwareIdPatterns`.
+3. **App path** — set `apps.processes[].path` to your executable, or set `apps.enabled: false`.
+4. **USB toggle timing** — with `usbDevice.enabled: true`, disable/enable runs **when the orchestrator runs** (manual invoke or scheduled resume), after AudioEngine and before Apps. It does **not** run at sleep entry or when you only edit the YAML. If PnP disable fails on your host, set `usbDevice.enabled: false`.
+5. Optional: `windowAfterStart: minimize`; shorter stop timeouts for Electron-style apps (see [src/README](../../src/README.md) Resume timing tips).
 
 | File | Purpose |
 |------|---------|
