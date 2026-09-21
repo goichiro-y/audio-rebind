@@ -8,10 +8,12 @@ Security fixes are applied to the default branch of this repository.
 
 Please do **not** open a public issue for security vulnerabilities.
 
-Prefer one of the following:
+**Preferred:** use GitHub’s private vulnerability reporting on this repository:
 
-1. GitHub Security Advisories (private vulnerability reporting), if enabled for this repository
-2. Contact the repository owner through a private channel listed in the GitHub profile or README
+1. Open the repository’s **Security** tab → **Advisories** (or **Report a vulnerability**), or  
+2. Go to `https://github.com/goichiro-y/audio-rebind/security/advisories/new`
+
+If that path is unavailable, contact the repository owner through a private channel on their [GitHub profile](https://github.com/goichiro-y).
 
 Include enough detail to reproduce the issue. You should receive an acknowledgement when practical; timelines depend on severity and maintainer availability.
 
