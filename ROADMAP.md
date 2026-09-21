@@ -10,9 +10,9 @@ Product phases use **semver** for releases and keep **V2** as the name for catal
 
 | Line | Meaning | Status |
 |------|---------|--------|
-| **0.1.x** | Maintainer / personal dogfood MVP ([ADR 0007](docs/decisions/0007-v1-mvp-boundaries.md)): explicit YAML, no GUI, Task Scheduler resume | **Shipped** as [0.1.0](CHANGELOG.md) (GitHub Milestone `v1` closed) |
-| **0.x** (after 0.1) | **Public-prep** for a safe private→public flip (privacy scan, honesty in Status) — not stranger UX polish | **Ready to flip** after **[0.2.0](CHANGELOG.md)** + [#15](https://github.com/goichiro-y/audio-rebind/issues/15) done; optional [#28](https://github.com/goichiro-y/audio-rebind/issues/28) |
-| **1.0.0** | First release aimed at strangers following the README (same MVP shape; not catalog/GUI) — includes thin fixed install layout | **Not started** — [#29](https://github.com/goichiro-y/audio-rebind/issues/29), [#30](https://github.com/goichiro-y/audio-rebind/issues/30) |
+| **0.1.x** | Maintainer / personal dogfood MVP ([ADR 0007](docs/decisions/0007-v1-mvp-boundaries.md)): explicit YAML, no GUI, Task Scheduler resume | **Shipped** as [0.1.0](CHANGELOG.md) (GitHub Milestone `0.1.0` closed) |
+| **0.x** (after 0.1) | **Public-prep** for a safe private→public flip (privacy scan, honesty in Status) — not stranger UX polish | **Ready to flip** after **[0.2.0](CHANGELOG.md)** + [#15](https://github.com/goichiro-y/audio-rebind/issues/15) done (Milestone `0.2.0` closed) |
+| **1.0.0** | First release aimed at strangers following the README (same MVP shape; not catalog/GUI) — includes thin fixed install layout | **Not started** — Milestone [`1.0.0`](https://github.com/goichiro-y/audio-rebind/milestone/3): [#29](https://github.com/goichiro-y/audio-rebind/issues/29), [#30](https://github.com/goichiro-y/audio-rebind/issues/30), [#31](https://github.com/goichiro-y/audio-rebind/issues/31) |
 | **V2** (product name) | Built-in app/USB catalog + opt-out; settings GUI and related — ship as semver **2.0.0** (not 1.1.x): breaks the “explicit YAML only / no catalog” product promise of the 1.x line | **Later** (not committed) — see below |
 
 Power-transition and privilege contracts: [docs/scope.md](docs/scope.md).
@@ -42,8 +42,6 @@ Gate for flipping the repo public. Maintainer-usable dogfood is **0.2.0**. Priva
 
 Done in 0.x: [#13](https://github.com/goichiro-y/audio-rebind/issues/13), [#14](https://github.com/goichiro-y/audio-rebind/issues/14), [#15](https://github.com/goichiro-y/audio-rebind/issues/15), [#16](https://github.com/goichiro-y/audio-rebind/issues/16), [#18](https://github.com/goichiro-y/audio-rebind/issues/18), [#19](https://github.com/goichiro-y/audio-rebind/issues/19), [#20](https://github.com/goichiro-y/audio-rebind/issues/20), [#21](https://github.com/goichiro-y/audio-rebind/issues/21) (no-activate CreateProcess launch), [#22](https://github.com/goichiro-y/audio-rebind/issues/22) (Kernel-Power 107 co-trigger), [#23](https://github.com/goichiro-y/audio-rebind/issues/23) (engine poll / batched stop / profile timing). Umbrella [#17](https://github.com/goichiro-y/audio-rebind/issues/17) split into #18–#21. Closed without blocking: [#12](https://github.com/goichiro-y/audio-rebind/issues/12). Comparison [#3](https://github.com/goichiro-y/audio-rebind/issues/3) done.
 
-Optional further speed ideas (explicitly **may never do**, label `optional`): [#28](https://github.com/goichiro-y/audio-rebind/issues/28) (supersedes closed #24–#27).
-
 Public flip is OK on clone+Register. Stranger-oriented install UX belongs under **1.0.0**.
 
 ## 1.0.0 — strangers can follow the README (not started)
@@ -54,8 +52,9 @@ Same MVP shape (YAML, Task Scheduler, admin). Brush-up so recipients are not stu
 |------|----------|
 | Packaging layout: Program Files runtime + LocalAppData settings (ADR/docs) | [#29](https://github.com/goichiro-y/audio-rebind/issues/29) |
 | Implement Install/Uninstall + task paths for that layout | [#30](https://github.com/goichiro-y/audio-rebind/issues/30) |
+| 1.0.0 exit: README-led stranger tryout (after thin install) | [#31](https://github.com/goichiro-y/audio-rebind/issues/31) |
 
-Do not call **1.0.0** until README-led tryouts (including thin install) feel ready. Catalog/GUI stay **V2**.
+Do not call **1.0.0** until README-led tryouts (including thin install) feel ready — tracked as [#31](https://github.com/goichiro-y/audio-rebind/issues/31). Catalog/GUI stay **V2**.
 
 ## Done (summary)
 
@@ -63,7 +62,7 @@ Do not call **1.0.0** until README-led tryouts (including thin install) feel rea
 |------|--------|
 | Docs bootstrap + ADRs 0001–0009 | Specs, placement rules, example profiles |
 | Manual + scheduled orchestrator | `src/`; maintainer dogfood OK |
-| 0.1.0 maintainer MVP exit | [CHANGELOG 0.1.0](CHANGELOG.md); Milestone `v1` closed |
+| 0.1.0 maintainer MVP exit | [CHANGELOG 0.1.0](CHANGELOG.md); Milestone `0.1.0` closed |
 
 ## Later (not committed)
 
@@ -78,9 +77,10 @@ Do not file Issues for these until the version is accepted.
 | Optional WASAPI proxy | Only if orchestrator is not enough (was [#9](https://github.com/goichiro-y/audio-rebind/issues/9)) |
 | Secondary triggers | Unlock / other fallbacks if both Event ID 1 and Kernel-Power 107 miss (was [#10](https://github.com/goichiro-y/audio-rebind/issues/10); Kernel-Power 107 landed as [#22](https://github.com/goichiro-y/audio-rebind/issues/22)); not S5 auto for now |
 | Modern Standby | Deferred; community evidence welcome (see [scope](docs/scope.md)) — not a near-term maintainer verification task |
+| Optional further resume-speed ideas | May never do (profile micro-timing, Apps stop refinements, async overlap, latency measurement). Was [#28](https://github.com/goichiro-y/audio-rebind/issues/28) / closed #24–#27 — not an open backlog |
 
 **Not on Later (declined as maintainer work):** scheduled “verify hibernate (S4)” — auto on hibernate is best-effort/unverified only; updates via community Issue/PR to [scope](docs/scope.md). See Operator-style expectation notes there.
 
 **Not on Later (declined):** least-privilege / standard-user-only packaging — see [docs/scope.md](docs/scope.md) Operator / privilege model (was sketched as [#8](https://github.com/goichiro-y/audio-rebind/issues/8)).
 
-When an item is accepted: add Milestone (e.g. `v2` for catalog work, or track **1.0.0** via Issues), open Issues, and update specs/ADRs as needed.
+When an item is accepted: add Milestone (e.g. `1.0.0` or `2.0.0` for catalog work), open Issues, and update specs/ADRs as needed.

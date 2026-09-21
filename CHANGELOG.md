@@ -46,7 +46,7 @@ Maintainer-usable **0.x** dogfood release: reliable resume trigger, practical wa
 
 ## [0.1.0] - 2026-09-21
 
-First **0.1.x** maintainer / personal dogfood MVP ([ADR 0007](docs/decisions/0007-v1-mvp-boundaries.md)). (Also closed GitHub Milestone `v1`.)
+First **0.1.x** maintainer / personal dogfood MVP ([ADR 0007](docs/decisions/0007-v1-mvp-boundaries.md)). (Also closed GitHub Milestone `0.1.0`, formerly titled `v1`.)
 
 ### Added
 
