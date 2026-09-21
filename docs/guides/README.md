@@ -19,3 +19,4 @@ How-to documents for contributors and users (**how**).
 | Guide | Description |
 |-------|-------------|
 | [local-notes.md](local-notes.md) | Using gitignored `local/` and `notes/private/` |
+| [discover-hardware-id.md](discover-hardware-id.md) | Find HardwareId patterns without leaking InstanceIds |

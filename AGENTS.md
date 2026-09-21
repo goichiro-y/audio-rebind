@@ -12,9 +12,14 @@ This file is self-contained. Do not require external personal rule repositories.
 | `docs/` | Durable specifications and guides (what / why) |
 | `docs/decisions/` | Adopted ADRs only |
 | `docs/i18n.md` | Language / translation rules |
-| `ROADMAP.md` | Status and planned work (when / status) |
+| `ROADMAP.md` | Status and planned work (when / status); uncommitted ideas under **Later** |
+| `src/` | PowerShell orchestrator (v1 runtime; see ADR 0008) |
+| `profiles/examples/` | Shared example YAML profiles (placeholders only) |
 | `.github/` | Issue and pull request templates |
 | `local/`, `notes/private/` | **Gitignored** machine-local notes — never commit |
+| `local/profiles/` | Maintainer-private profiles (under `local/`) |
+
+Where work lives (Issues vs ROADMAP vs docs): [CONTRIBUTING.md](CONTRIBUTING.md#where-work-lives). Do not add a `plans/` tree; keep when/status in `ROADMAP.md`.
 
 ## 2. Language (read this)
 

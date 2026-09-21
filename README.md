@@ -14,19 +14,22 @@ Japanese summary: [README.ja.md](README.ja.md). Language policy: [docs/i18n.md](
 | [docs/scope.md](docs/scope.md) | In / out of scope |
 | [docs/architecture-overview.md](docs/architecture-overview.md) | High-level design |
 | [docs/specs/pipeline-spec.md](docs/specs/pipeline-spec.md) | Resume pipeline steps |
+| [docs/specs/profile-spec.md](docs/specs/profile-spec.md) | YAML profile schema |
 | [docs/decisions/](docs/decisions/README.md) | Adopted ADRs |
 | [docs/guides/local-notes.md](docs/guides/local-notes.md) | Where to put machine-private notes |
+| [docs/guides/discover-hardware-id.md](docs/guides/discover-hardware-id.md) | How to find HardwareId patterns safely |
+| [profiles/examples/](profiles/examples/README.md) | Placeholder example profiles |
 | [ROADMAP.md](ROADMAP.md) | Status and planned work |
 | [AGENTS.md](AGENTS.md) | Conventions for humans and coding agents |
 
 ## Status
 
-Documentation bootstrap is done. The resume orchestrator is not implemented yet — see [ROADMAP.md](ROADMAP.md).
+Documentation bootstrap and V1 design ADRs (0003–0008) are done. The resume orchestrator is not implemented yet — see [ROADMAP.md](ROADMAP.md) and Milestone [v1](https://github.com/goichiro-y/audio-rebind/milestone/1).
 
 ## Development
 
 ```bash
-# No runtime package yet. Start with docs/ and ROADMAP.md.
+# No runtime package yet. Layout: src/ (planned scripts), profiles/examples/, docs/, ROADMAP.md.
 ```
 
 ## Contributing

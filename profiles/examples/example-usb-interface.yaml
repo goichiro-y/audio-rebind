@@ -1,0 +1,30 @@
+﻿# Example profile for an AG03-class USB interface + one long-lived app.
+# Copy to local/profiles/ and replace placeholders.
+# Do not commit real InstanceIds or personal usernames.
+# Schema: docs/specs/profile-spec.md
+
+name: example-usb-interface
+description: >
+  Placeholder profile. Replace VID/PID and executable path before use.
+
+steps:
+  audioEngine:
+    enabled: true
+  usbDevice:
+    enabled: true
+    hardwareIdPatterns:
+      # Replace XXXX/YYYY with HardwareId pattern (not full InstanceId).
+      - "USB\\VID_XXXX&PID_YYYY"
+  apps:
+    enabled: true
+    processes:
+      # Prefer full path; name-only matching is allowed but weaker.
+      - path: "C:\\Path\\To\\YourApp.exe"
+        # name: "YourApp.exe"
+    gracefulStopSeconds: 10
+    forceStopSeconds: 5
+
+delays:
+  afterAudioEngineMs: 2000
+  afterUsbDeviceMs: 2000
+  afterAppsMs: 0

@@ -18,15 +18,15 @@ Order matters: restarting apps while the audio engine or device is still zombie 
 
 ## Triggers
 
-Primary trigger: Windows resume (Task Scheduler on Power-Troubleshooter event, or an equivalent service watching power events). Secondary triggers (manual run, unlock) may be added for reliability on machines that miss resume events.
+**v1 primary:** Task Scheduler on `Microsoft-Windows-Power-Troubleshooter` Event ID 1, with the task run at highest privileges ([ADR 0005](decisions/0005-resume-trigger-task-scheduler.md)). Manual invocation of the same entrypoint is supported. Unlock or other secondary triggers may be added later if some hosts miss Event ID 1.
 
 ## Profiles
 
-A profile selects:
+Profiles are **YAML** ([ADR 0004](decisions/0004-profile-format-yaml.md); schema: [profile-spec](specs/profile-spec.md)):
 
 - Whether each step is enabled
 - Delays between steps
-- USB device match rules (hardware IDs / instance patterns)
+- USB device match rules (HardwareId patterns; prefer OK/Started instances)
 - App executable paths or process names to recycle
 
 Shipping examples may include a USB audio interface and a long-lived capture helper; users edit profiles for their stack.
@@ -43,8 +43,10 @@ Public utilities already cover slices of the same problem. AudioRebind is meant 
 
 Order still matters: engine → optional USB → apps. Using only AudioWakeFix or only SAMISH leaves the other layers unrecovered.
 
-## Implementation notes (planned)
+## Implementation notes
 
-- Prefer least privilege where possible; service restart and PnP toggles typically need elevation.
+- **v1 stack:** PowerShell under `src/` + Task Scheduler registration ([ADR 0003](decisions/0003-v1-powershell-orchestrator.md), [ADR 0005](decisions/0005-resume-trigger-task-scheduler.md), [ADR 0008](decisions/0008-v1-repository-layout.md)).
+- v1 uses an elevated scheduled task; finer least-privilege installer remains a later Idea.
 - Fail soft: log and continue when an optional step is disabled or a process is not running.
 - Keep the core free of brand-specific hardcoding.
+- Shared examples: `profiles/examples/`; personal profiles: `local/profiles/`.
