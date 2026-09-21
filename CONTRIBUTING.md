@@ -1,6 +1,6 @@
 ﻿# Contributing
 
-Thanks for your interest in contributing.
+Thanks for your interest. This project is maintained for a **narrow** sleep/resume audio problem; it is **not** actively recruiting contributors. Bug reports, questions in scope, and small fixes are welcome when they arrive.
 
 ## Where work lives
 
@@ -14,22 +14,21 @@ Thanks for your interest in contributing.
 | Stable what/why | [docs/](docs/README.md) | No progress tables in docs |
 | Machine / personal stack detail | `local/` (gitignored) | Never paste raw host inventory into Issues |
 
-Committed work only in Issues. Uncommitted ideas stay on ROADMAP **Later** (enable GitHub Discussions for Ideas later if the project needs intake).
+Committed work only in Issues. Uncommitted ideas stay on ROADMAP **Later**.
 
-## Good first contributions
+## Small contributions
 
-Welcome without requiring deep runtime changes:
+Useful when they stay small and in scope:
 
-- Improve [`profiles/examples/`](profiles/examples/) comments or placeholders (no personal paths)
-- Docs-only fixes: typos, clearer Quick start, links
-- Generalized updates to the power-transition table in [docs/scope.md](docs/scope.md) from your host (no full InstanceIds, usernames, or raw logs)
-- Issues labeled [`good first issue`](https://github.com/goichiro-y/audio-rebind/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22)
+- Docs typos, clearer Quick start, or example-profile comments (no personal paths / real VID/PID)
+- One-cell / Notes updates to the **Automatic trigger** table — how to report: [docs/scope.md](docs/scope.md#updating-the-automatic-trigger-table)
+- Other fixes that match an open Issue or [docs/scope.md](docs/scope.md)
 
-Prefer a small PR that explains **what** and **why**. Machine-specific detail stays in `local/` (gitignored) — see [docs/guides/local-notes.md](docs/guides/local-notes.md).
+Prefer a small PR that explains **what** and **why**. Large features or out-of-scope power/privilege models belong on ROADMAP **Later** (or stay closed) until accepted. Machine-specific detail stays in `local/` — see [docs/guides/local-notes.md](docs/guides/local-notes.md).
 
 ## How to contribute
 
-1. For larger changes, open an issue **after** the work is in scope for a Milestone (or discuss via ROADMAP / maintainers first).
+1. For larger changes, open an issue **after** the work is in scope (or discuss via ROADMAP / maintainers first).
 2. Fork the repository (or create a branch if you have write access).
 3. Make focused changes with a clear description.
 4. Open a pull request that explains **what** changed and **why**.

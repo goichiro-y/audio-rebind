@@ -35,12 +35,16 @@ Overlap: `MultipleInstancesPolicy=IgnoreNew` plus ~120s orchestrator debounce so
 | Situation | Auto (Event ID 1 and/or Kernel-Power 107) | Notes |
 |-----------|-------------------------------------------|--------|
 | Classic sleep → resume (typical S3-class) | **Supported (verified on maintainer dogfood)** | Main 0.1.x battlefield; 107 covers hosts that skip Event ID 1 |
-| Hibernate → resume (S4-class) | **Best-effort, unverified** | May fire if Event ID 1 and/or Kernel-Power 107 is logged — **not a maintainer commitment** to verify or officially support soon. Community reports / PRs that update this table with generalized findings are welcome (no full InstanceIds). |
+| Hibernate → resume (S4-class) | **Best-effort, unverified** | May fire if Event ID 1 and/or Kernel-Power 107 is logged — **not a maintainer commitment** to verify or support soon |
 | Shutdown / power-on (S5-class) | **Out of scope (auto)** | Cold start is a different model; use manual run if needed. No S5 auto trigger planned for now. |
 | Unlock / sign-in only (no sleep resume event) | **Out of scope (auto)** | Needs a different trigger (ROADMAP Later: unlock / other). |
-| Modern Standby (S0 low-power) | **Deferred** | OEM-dependent; not a near-term maintainer commitment. Community evidence welcome. |
+| Modern Standby (S0 low-power) | **Deferred** | OEM-dependent; not a near-term maintainer commitment |
 
-**Hibernate / similar autos:** maintainer dogfood and claims center on classic sleep→resume. Do not treat hibernate (or Modern Standby) as “supported” in README copy. If both Event ID 1 and Kernel-Power 107 are missing on a host, unlock / other triggers stay Later. Contributions that only update this matrix from real-host observation are encouraged.
+**Hibernate / similar autos:** claims center on classic sleep→resume. Do not treat hibernate or Modern Standby as “supported” in README copy. If both Event ID 1 and Kernel-Power 107 are missing on a host, unlock / other triggers stay Later.
+
+#### Updating the Automatic trigger table
+
+If you observe a row that should change, a short Issue or PR that updates **one cell or Notes line** with a **generalized** sentence is enough (e.g. which events fired on hibernate resume). Do **not** paste full InstanceIds, hostnames, usernames, or raw Event Viewer dumps ([local-notes](guides/local-notes.md)). No scheduler/orchestrator code unless separately agreed.
 
 ### Operator / privilege model
 
@@ -62,9 +66,9 @@ Release and product-phase naming (full ladder: [ROADMAP.md](../ROADMAP.md)):
 
 | Line | Intent | Tracking |
 |------|--------|----------|
-| **0.1.x** | Maintainer / personal dogfood MVP: **explicit** YAML targets (apps / USB), **no settings GUI**, resume via elevated Task Scheduler (not always-on). See [ADR 0007](decisions/0007-v1-mvp-boundaries.md). | Shipped [0.1.0](../CHANGELOG.md); Milestone `v1` closed |
+| **0.1.x** | Maintainer / personal dogfood MVP: **explicit** YAML targets (apps / USB), **no settings GUI**, resume via elevated Task Scheduler (not always-on). See [ADR 0007](decisions/0007-v1-mvp-boundaries.md). | Shipped [0.1.0](../CHANGELOG.md); Milestone `0.1.0` closed |
 | **0.x** (public prep) | Safe private→public flip (privacy scan); maintainer dogfood shipped as 0.2.0 | Done — [#15](https://github.com/goichiro-y/audio-rebind/issues/15) |
-| **1.0.0** | First semver major aimed at README-led tryouts (same MVP shape; thin fixed install; still not catalog/GUI). | [ROADMAP](../ROADMAP.md) 1.0.0 — [#29](https://github.com/goichiro-y/audio-rebind/issues/29), [#30](https://github.com/goichiro-y/audio-rebind/issues/30) |
+| **1.0.0** | First semver major aimed at README-led tryouts (same MVP shape; thin fixed install; still not catalog/GUI). | [ROADMAP](../ROADMAP.md) 1.0.0 — [#29](https://github.com/goichiro-y/audio-rebind/issues/29), [#30](https://github.com/goichiro-y/audio-rebind/issues/30), [#31](https://github.com/goichiro-y/audio-rebind/issues/31) |
 | **V2** (product) | Defaults that “just work”: built-in catalog / heuristics + **opt-out**; settings GUI; always-on agent only if Event ID 1 is insufficient. Ships as semver **2.0.0**. | [ROADMAP](../ROADMAP.md) **Later** — no Issues until accepted |
 
 0.1.x stays deliberately narrow so the ordered pipeline can be proven on a real host before investing in zero-config UX. Catalog work stays named **V2** (not renumbered to V3).

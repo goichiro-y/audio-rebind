@@ -4,6 +4,8 @@ Windows **スリープ／復帰**のあと、設定では生きているよう�
 
 特定メーカー専用ではありません。設定はデバイス ID・プロセス名などの汎用プロファイルです。常駐ではなく **タスク スケジューラ**が PowerShell を起動します（管理者必須）。
 
+> **対象外の目安:** ローカル管理者に昇格できない、Modern Standby のみ（クラシックなスリープではない）、企業ロックダウンで管理者不可 — 詳細は [docs/scope.md](docs/scope.md)。対応の中心はクラシックなスリープ復帰＋管理者です。
+
 正本は英語の [README.md](README.md) です（冒頭に短い日本語要約あり）。このファイルは**より詳しい日本語**用です。`docs/` / ADR は英語正本のみ（必要なら兄弟 `*.ja.md`）。Issue は日本語＋短い English summary / Acceptance。言語方針: [docs/i18n.md](docs/i18n.md)。
 
 ## 単層ツールとの違い
@@ -44,11 +46,11 @@ Windows **スリープ／復帰**のあと、設定では生きているよう�
     → AudioEngine →（任意）UsbDevice →（任意）Apps
 ```
 
-同じ入口は、管理者の PowerShell から**手動実行**もできます（セッションが死んだあとの復帰一般）。**自動**はクラシックなスリープ復帰で Event ID 1 および／または Kernel-Power 107 が来るケースを主張します（[#22](https://github.com/goichiro-y/audio-rebind/issues/22)）。休止などの自動はどちらかのイベントが出れば動く**かもしれません**が、**未検証で、メンテナが近いうちに検証・公式サポートする約束はしません**。確認できたら、一般化した結果だけで [scope](docs/scope.md) の表を直す Issue / PR を歓迎します（フル InstanceId は不可。個人実験はフォークで）。シャットダウン起動やロック解除のみの自動はいま対象外です。詳細は英語の [src/README.md](src/README.md)、[ADR 0005](docs/decisions/0005-resume-trigger-task-scheduler.md)。
+同じ入口は、管理者の PowerShell から**手動実行**もできます（セッションが死んだあとの復帰一般）。**自動**はクラシックなスリープ復帰で Event ID 1 および／または Kernel-Power 107 が来るケースを主張します（[#22](https://github.com/goichiro-y/audio-rebind/issues/22)）。休止の自動は**ベストエフォート／未検証**。シャットダウン起動やロック解除のみの自動は対象外。主張と対象外の詳細: [docs/scope.md](docs/scope.md)。実行メモ: 英語の [src/README.md](src/README.md)、[ADR 0005](docs/decisions/0005-resume-trigger-task-scheduler.md)。
 
 ## 必要なもの
 
-> **対象オペレータ:** インストール／実行できる人は昇格（ローカル管理者）できること。標準ユーザーのみのロックダウン環境は対象外。詳細: [docs/scope.md](docs/scope.md)。
+> **対象オペレータ:** 昇格（ローカル管理者）できること。標準ユーザーのみのロックダウン、Modern Standby のみ、その他 [docs/scope.md](docs/scope.md) 外は対象外。
 
 - Windows PowerShell **5.1**、**管理者**で実行（サービス再起動 / PnP / タスク登録）
 - モジュール **`powershell-yaml`**（初回: `Install-Module powershell-yaml -Scope CurrentUser -Force`）
@@ -56,12 +58,17 @@ Windows **スリープ／復帰**のあと、設定では生きているよう�
 
 ## 現状
 
-**[0.2.0](CHANGELOG.md)** がいまのメンテナ向け **0.x** ドッグフード線です（二重トリガー、実用速度、静かめなアプリ起動）。プロファイルを書き、[`src/Register-AudioRebindTask.ps1`](src/Register-AudioRebindTask.ps1) で登録し、スリープ復帰で確認します。
+**[0.2.0](CHANGELOG.md):** clone → プロファイル作成 → 登録 → クラシックなスリープ → 復帰。別インストーラはまだありません。版ラダーと予定: [ROADMAP.md](ROADMAP.md)。
 
-**0.1.0** は最初の MVP 出口でした（[ADR 0007](docs/decisions/0007-v1-mvp-boundaries.md)）。
+## 構成（入口）
 
-バージョン階段: **0.1.x** = 自分用 MVP · **0.x** = 公開準備（いま **0.2.0**） · **1.0.0** = README どおり試せる · **V2**（semver **2.0.0** カタログ／GUI、Later）。英語の [ROADMAP.md](ROADMAP.md)、[CHANGELOG.md](CHANGELOG.md)。
+| パス | 用途 |
+|------|------|
+| [src/](src/README.md) | オーケストレータ＋タスク登録 |
+| [docs/](docs/README.md) | スコープ・仕様・ADR・ガイド |
+| [profiles/examples/](profiles/examples/README.md) | 例プロファイル（プレースホルダ） |
+| [ROADMAP.md](ROADMAP.md) | 状況と予定 |
 
-**0.x** 公開準備（プライバシースキャン）完了: [#15](https://github.com/goichiro-y/audio-rebind/issues/15)。任意: [#28](https://github.com/goichiro-y/audio-rebind/issues/28)。見知らぬ人向け Install は **1.0.0**（[#29](https://github.com/goichiro-y/audio-rebind/issues/29)–[#30](https://github.com/goichiro-y/audio-rebind/issues/30)）。
+## 貢献
 
-置き場ルール: [CONTRIBUTING.md](CONTRIBUTING.md#where-work-lives)。
+バグ報告や小さな修正は歓迎しますが、積極的な貢献者募集のプロジェクトではありません。英語の [CONTRIBUTING.md](CONTRIBUTING.md)、[CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)。
