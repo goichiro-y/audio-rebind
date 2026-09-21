@@ -1,0 +1,28 @@
+﻿# Dependencies and build outputs
+# Delete lines for stacks you do not use in the child repository.
+node_modules/
+dist/
+build/
+out/
+.next/
+
+# Secrets and local env
+.env
+.env.*
+!.env.example
+
+# Logs and caches
+*.log
+.cache/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+
+# Machine-local notes (not for public history)
+/local/
+/notes/private/
+
+# Project-specific (uncomment or extend per repository)
+# export/
