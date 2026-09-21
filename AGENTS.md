@@ -25,8 +25,10 @@ Where work lives (Issues vs ROADMAP vs docs): [CONTRIBUTING.md](CONTRIBUTING.md#
 
 | Kind | Where to write | Rule |
 |------|----------------|------|
-| Canonical docs | `README.md`, `AGENTS.md`, `CONTRIBUTING.md`, `docs/**/*.md` (without a locale suffix) | **English** is the source of truth |
-| Japanese | Sibling files named `*.ja.md` | Optional translation; must not replace English |
+| Canonical docs | `README.md`, `AGENTS.md`, `CONTRIBUTING.md`, `docs/**/*.md` (no locale suffix), ADRs | **English** is the source of truth. No full Japanese dual body in the same file |
+| Japanese | Sibling `*.ja.md` only | Optional; must not replace English |
+| Root README | Optional **short** Japanese blurb after English intro | Fuller Japanese: `README.ja.md` |
+| GitHub Issues | Japanese + short English summary / Acceptance | See [docs/i18n.md](docs/i18n.md) |
 | Other locales | `*.<locale>.md` | Same sibling-file pattern |
 
 Full policy: [docs/i18n.md](docs/i18n.md).

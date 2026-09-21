@@ -1,8 +1,8 @@
-﻿# Problem and motivation
+# Problem and motivation
 
 ## The user-visible failure
 
-After Windows leaves sleep (classic S3 or similar), USB audio and long-lived apps often look healthy in Settings or Device Manager while audio is actually dead:
+After Windows leaves a sleep-like power state (classic S3 is the common case; similar “green but dead” symptoms can follow other resumes), USB audio and long-lived apps often look healthy in Settings or Device Manager while audio is actually dead. That describes the **failure shape**, not a guarantee of which automatic triggers AudioRebind ships — see [scope.md](scope.md) (pipeline vs trigger):
 
 - Playback apps spin or stay silent even though a default render endpoint is still listed as active.
 - Capture / dictation apps accept a hotkey or start a session but record nothing.

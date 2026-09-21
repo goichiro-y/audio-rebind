@@ -41,6 +41,31 @@ function Get-DelayMs {
     return $Default
 }
 
+# Dual Task Scheduler triggers (Event ID 1 + Kernel-Power 107) can fire on one resume.
+# IgnoreNew covers overlap while a run is live; this stamp covers near-sequential starts (#22).
+$script:AudioRebindDebounceSeconds = 120
+
+function Get-AudioRebindDebounceStampPath {
+    return (Join-Path $env:LOCALAPPDATA 'AudioRebind\last-run.stamp')
+}
+
+function Test-AudioRebindRecentRun {
+    param([int] $WindowSeconds = $script:AudioRebindDebounceSeconds)
+    $path = Get-AudioRebindDebounceStampPath
+    if (-not (Test-Path -LiteralPath $path)) { return $false }
+    $age = (Get-Date) - (Get-Item -LiteralPath $path).LastWriteTime
+    return ($age.TotalSeconds -lt $WindowSeconds)
+}
+
+function Set-AudioRebindDebounceStamp {
+    $dir = Join-Path $env:LOCALAPPDATA 'AudioRebind'
+    if (-not (Test-Path -LiteralPath $dir)) {
+        New-Item -ItemType Directory -Path $dir -Force | Out-Null
+    }
+    $path = Get-AudioRebindDebounceStampPath
+    Set-Content -LiteralPath $path -Value (Get-Date -Format o) -Encoding ASCII
+}
+
 try {
     $resolvedProfile = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($ProfilePath)
     if (-not (Test-Path -LiteralPath $resolvedProfile)) {
@@ -59,6 +84,14 @@ try {
     Write-AudioRebindLog ("LogFile: {0}" -f $logPath)
     if ($WhatIf) {
         Write-AudioRebindLog "Mode: WhatIf"
+    }
+    elseif (Test-AudioRebindRecentRun) {
+        Write-AudioRebindLog ("Debounce: skipping pipeline (run within last {0}s; dual-trigger overlap)" -f $script:AudioRebindDebounceSeconds)
+        Write-AudioRebindLog "Finished exitCode=0"
+        exit 0
+    }
+    else {
+        Set-AudioRebindDebounceStamp
     }
 
     $steps = $profile.steps

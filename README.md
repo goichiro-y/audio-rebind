@@ -1,15 +1,53 @@
 ﻿# AudioRebind
 
-Rebinds Windows audio after sleep/resume: rebuilds the Windows audio engine, optionally resets a USB audio device, and restarts configured apps so WASAPI sessions are not left invalidated.
+After Windows sleep/resume, playback or capture can look fine in Settings while audio is actually dead (USB interfaces, long-lived mic/capture apps, and similar). AudioRebind runs a fixed recovery order so shared-mode WASAPI sessions work again without a reboot.
 
-AudioRebind is **not** tied to a single mixer brand. USB audio interfaces and long-lived capture apps motivated the design, but profiles stay generic (device IDs and process names are configuration).
+It is **not** tied to a single mixer brand. Profiles use generic device IDs and process names.
 
-Japanese summary: [README.ja.md](README.ja.md). Language policy: [docs/i18n.md](docs/i18n.md).
+> **日本語（短い要約）:** スリープ復帰後に「設定上は生きているのに音やマイクが死ぬ」とき、音声エンジン →（任意）USB →（任意）アプリの順で張り直します。常駐ではなくタスク スケジューラ起動。管理者必須。休止の自動は未検証（メンテナは近いうちに保証しない）。くわしくは [README.ja.md](README.ja.md)。言語方針: [docs/i18n.md](docs/i18n.md)。
+
+Japanese summary (fuller): [README.ja.md](README.ja.md). Language policy: [docs/i18n.md](docs/i18n.md).
+
+## How it works
+
+Not a always-on background agent. On resume, Windows logs a power event; **Task Scheduler** starts the script; the script runs the pipeline.
+
+```text
+Sleep → resume
+    → Power-Troubleshooter Event ID 1
+      and/or Kernel-Power Event ID 107
+    → Task Scheduler (IgnoreNew + ~120s debounce)
+    → powershell.exe runs Invoke-AudioRebind.ps1
+    → AudioEngine → (optional) UsbDevice → (optional) Apps
+```
+
+The same entrypoint can be run **manually** from an elevated PowerShell (any resume that left sessions dead). **Automatic** runs claim classic sleep→resume when Event ID 1 and/or Kernel-Power 107 fires ([#22](https://github.com/goichiro-y/audio-rebind/issues/22)). Hibernate (and similar) auto **may** work if either event fires — **unverified; not a near-term maintainer commitment**. If you confirm on your host, an Issue or PR that updates the [scope](docs/scope.md) matrix with generalized findings is welcome (no full InstanceIds; fork for private experiments). Shutdown/boot and unlock-only autos are out of scope for now. Details: [src/README.md](src/README.md), [ADR 0005](docs/decisions/0005-resume-trigger-task-scheduler.md).
+
+## Requirements
+
+> **Supported operator model:** you must be able to elevate (local administrator). Locked-down standard-user-only environments are out of scope. Details: [docs/scope.md](docs/scope.md).
+
+- Windows PowerShell **5.1**, run **elevated** (service restart / PnP / task registration)
+- Module **`powershell-yaml`** (one-time: `Install-Module powershell-yaml -Scope CurrentUser -Force`)
+- A **YAML profile** listing your apps (and optional USB HardwareId patterns). Copy from [`profiles/examples/`](profiles/examples/README.md); keep personal paths under `local/profiles/` (gitignored)
+
+Quick start: [src/README.md](src/README.md).
+
+## Status
+
+**[0.2.0](CHANGELOG.md)** is the current maintainer-usable **0.x** dogfood line: dual resume triggers, practical recycle timing, quieter app start. Write a profile, register [`src/Register-AudioRebindTask.ps1`](src/Register-AudioRebindTask.ps1), resume from sleep.
+
+**0.1.0** was the first MVP exit ([ADR 0007](docs/decisions/0007-v1-mvp-boundaries.md)).
+
+Version ladder: **0.1.x** = personal MVP · **0.x** = public prep (current **0.2.0**) · **1.0.0** = strangers-can-follow-README · **V2** = catalog / GUI (Later). See [ROADMAP.md](ROADMAP.md) and [CHANGELOG.md](CHANGELOG.md).
+
+**0.x** open work: [#15](https://github.com/goichiro-y/audio-rebind/issues/15) (privacy scan). Optional leftovers: [#28](https://github.com/goichiro-y/audio-rebind/issues/28).
 
 ## Layout
 
 | Path | Purpose |
 |------|---------|
+| [src/](src/README.md) | Orchestrator + Task Scheduler register/unregister |
 | [docs/problem-and-motivation.md](docs/problem-and-motivation.md) | Why this project exists |
 | [docs/scope.md](docs/scope.md) | In / out of scope |
 | [docs/architecture-overview.md](docs/architecture-overview.md) | High-level design |
@@ -22,17 +60,9 @@ Japanese summary: [README.ja.md](README.ja.md). Language policy: [docs/i18n.md](
 | [ROADMAP.md](ROADMAP.md) | Status and planned work |
 | [AGENTS.md](AGENTS.md) | Conventions for humans and coding agents |
 
-## Status
-
-**V1 MVP (0.1.0)** is usable for maintainer dogfood: register [`src/Register-AudioRebindTask.ps1`](src/Register-AudioRebindTask.ps1), point it at a YAML profile, resume from sleep. See [src/README.md](src/README.md), [CHANGELOG.md](CHANGELOG.md), and [ROADMAP.md](ROADMAP.md).
-
-Post-V1 polish: [#12](https://github.com/goichiro-y/audio-rebind/issues/12) (UsbDevice disable), [#13](https://github.com/goichiro-y/audio-rebind/issues/13) (resume latency).
-
 ## Development
 
-```bash
-# No runtime package yet. Layout: src/ (planned scripts), profiles/examples/, docs/, ROADMAP.md.
-```
+Runtime is PowerShell under [`src/`](src/README.md). There is no separate installable package yet: clone the repo, install `powershell-yaml`, write a profile, then run or register as in [src/README.md](src/README.md).
 
 ## Contributing
 

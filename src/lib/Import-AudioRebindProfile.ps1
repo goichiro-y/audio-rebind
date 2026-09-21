@@ -19,6 +19,7 @@ function Import-AudioRebindYamlModule {
         "Module 'powershell-yaml' is not installed."
         "Install for the current user (Windows PowerShell 5.1):"
         "  Install-Module powershell-yaml -Scope CurrentUser -Force"
+        "Or re-run elevated Register-AudioRebindTask.ps1 (it installs the module when missing)."
         "Then re-run Invoke-AudioRebind.ps1."
     ) -join [Environment]::NewLine
     throw $hint
@@ -108,12 +109,38 @@ function Assert-AudioRebindProfile {
             processes = @()
             gracefulStopSeconds = 10
             forceStopSeconds = 5
+            windowAfterStart = 'leave'
+            minimizeTimeoutMs = 1200
+            minimizeNoWindowGiveUpMs = 400
+            stopMode = 'graceful-then-force'
+            postStopDelayMs = 200
+            postForceStopMs = 200
         }
         $apps = $steps['apps']
     }
     if (-not $apps.ContainsKey('enabled')) { $apps['enabled'] = $false }
     if (-not $apps.ContainsKey('gracefulStopSeconds')) { $apps['gracefulStopSeconds'] = 10 }
     if (-not $apps.ContainsKey('forceStopSeconds')) { $apps['forceStopSeconds'] = 5 }
+    if (-not $apps.ContainsKey('minimizeTimeoutMs')) { $apps['minimizeTimeoutMs'] = 1200 }
+    if (-not $apps.ContainsKey('minimizeNoWindowGiveUpMs')) { $apps['minimizeNoWindowGiveUpMs'] = 400 }
+    if (-not $apps.ContainsKey('stopMode')) { $apps['stopMode'] = 'graceful-then-force' }
+    else {
+        $sm = ([string]$apps['stopMode']).Trim().ToLowerInvariant()
+        if ($sm -notin @('graceful-then-force', 'force')) {
+            throw "apps.stopMode must be 'graceful-then-force' or 'force' (got '$sm')."
+        }
+        $apps['stopMode'] = $sm
+    }
+    if (-not $apps.ContainsKey('postStopDelayMs')) { $apps['postStopDelayMs'] = 200 }
+    if (-not $apps.ContainsKey('postForceStopMs')) { $apps['postForceStopMs'] = 200 }
+    if (-not $apps.ContainsKey('windowAfterStart')) { $apps['windowAfterStart'] = 'leave' }
+    else {
+        $aw = ([string]$apps['windowAfterStart']).Trim().ToLowerInvariant()
+        if ($aw -notin @('leave', 'minimize')) {
+            throw "apps.windowAfterStart must be 'leave' or 'minimize' (got '$aw')."
+        }
+        $apps['windowAfterStart'] = $aw
+    }
     if (-not $apps.ContainsKey('processes')) { $apps['processes'] = @() }
     $apps['processes'] = @(Normalize-ProcessEntries $apps['processes'])
 
@@ -211,7 +238,14 @@ function Normalize-ProcessEntries {
         if ([string]::IsNullOrWhiteSpace($path) -and [string]::IsNullOrWhiteSpace($name)) {
             throw "Each apps.processes entry needs path and/or name."
         }
-        $result += @{ path = $path; name = $name }
+        $windowAfterStart = 'leave'
+        if ($map.ContainsKey('windowAfterStart') -and -not [string]::IsNullOrWhiteSpace([string]$map['windowAfterStart'])) {
+            $windowAfterStart = ([string]$map['windowAfterStart']).Trim().ToLowerInvariant()
+        }
+        if ($windowAfterStart -notin @('leave', 'minimize')) {
+            throw "apps.processes.windowAfterStart must be 'leave' or 'minimize' (got '$windowAfterStart'). 'restore' is not implemented yet."
+        }
+        $result += @{ path = $path; name = $name; windowAfterStart = $windowAfterStart }
     }
     return $result
 }

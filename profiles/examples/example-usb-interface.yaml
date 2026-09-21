@@ -15,16 +15,20 @@ steps:
     hardwareIdPatterns:
       # Replace XXXX/YYYY with HardwareId pattern (not full InstanceId).
       - "USB\\VID_XXXX&PID_YYYY"
+    # If Disable-PnpDevice fails on your host, set enabled: false (see src/README Resume timing tips).
   apps:
     enabled: true
+    # windowAfterStart: minimize   # or per process entry
     processes:
       # Prefer full path; name-only matching is allowed but weaker.
       - path: "C:\\Path\\To\\YourApp.exe"
         # name: "YourApp.exe"
+        # windowAfterStart: minimize
     gracefulStopSeconds: 10
     forceStopSeconds: 5
+    # Electron-style apps often need lower values (e.g. 2) — see src/README Resume timing tips / #13.
 
 delays:
-  afterAudioEngineMs: 2000
+  afterAudioEngineMs: 2000  # try 500–1000 if endpoints settle fast (see src/README / #20)
   afterUsbDeviceMs: 2000
   afterAppsMs: 0

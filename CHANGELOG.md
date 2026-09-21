@@ -15,9 +15,33 @@ and this project aims to adhere to [Semantic Versioning](https://semver.org/).
 
 ### Removed
 
+## [0.2.0] - 2026-09-22
+
+Maintainer-usable **0.x** dogfood release: reliable resume trigger, practical wall-clock, and quieter app recycle. Still pre-1.0 (no stranger-ready catalog/GUI).
+
+### Added
+
+- Task Scheduler co-trigger: `Microsoft-Windows-Kernel-Power` Event ID **107** alongside Power-Troubleshooter Event ID 1; ~120s orchestrator debounce + existing `IgnoreNew` ([#22](https://github.com/goichiro-y/audio-rebind/issues/22))
+- Apps `windowAfterStart: minimize` (per process / apps-level) ([#16](https://github.com/goichiro-y/audio-rebind/issues/16))
+- Minimize poll early-exit / no-HWND give-up / `minimizeTimeoutMs` default 1200 ([#18](https://github.com/goichiro-y/audio-rebind/issues/18))
+- Apps minimize launch via `CreateProcess` + `SW_SHOWMINNOACTIVE` (fallback poll kept; Electron may still flash) ([#21](https://github.com/goichiro-y/audio-rebind/issues/21))
+- Faster Apps stop: `stopMode: force`, poll-after-force, `postStopDelayMs` ([#19](https://github.com/goichiro-y/audio-rebind/issues/19))
+- `Register-AudioRebindTask.ps1` installs `powershell-yaml` for CurrentUser when missing ([#14](https://github.com/goichiro-y/audio-rebind/issues/14))
+
+### Changed
+
+- AudioEngine: Running poll instead of fixed 1s sleeps; StrictMode-safe Count checks ([#23](https://github.com/goichiro-y/audio-rebind/issues/23))
+- Apps: batched stop across all process entries ([#23](https://github.com/goichiro-y/audio-rebind/issues/23))
+- Documented shorter `afterAudioEngineMs` trials (500–1000; example default stays 2000) ([#20](https://github.com/goichiro-y/audio-rebind/issues/20))
+- Version ladder, hibernate auto claims, i18n, scope/ADR updates for public-prep ([ROADMAP](ROADMAP.md), [docs/scope.md](docs/scope.md), [docs/i18n.md](docs/i18n.md), [#3](https://github.com/goichiro-y/audio-rebind/issues/3))
+
+### Notes
+
+- Maintainer dogfood: dual trigger recovers when Event ID 1 is missing; pipeline wall-clock on the order of ~10s class after timing work; Engine-only is not enough when long-lived capture apps are in scope
+
 ## [0.1.0] - 2026-09-21
 
-First **V1 MVP** suitable for maintainer dogfood (ADR 0007).
+First **0.1.x** maintainer / personal dogfood MVP ([ADR 0007](docs/decisions/0007-v1-mvp-boundaries.md)). (Also closed GitHub Milestone `v1`.)
 
 ### Added
 

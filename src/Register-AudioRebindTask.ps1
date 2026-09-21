@@ -10,8 +10,12 @@
 
 .NOTES
   Requires administrator elevation.
+  Ensures module powershell-yaml is installed for CurrentUser when missing (setup-time only).
   Runs as the registering user with highest privileges (so CurrentUser modules like powershell-yaml resolve).
-  Trigger: Microsoft-Windows-Power-Troubleshooter Event ID 1 (ADR 0005).
+  Triggers (ADR 0005 / #22):
+    - Microsoft-Windows-Power-Troubleshooter Event ID 1 (primary)
+    - Microsoft-Windows-Kernel-Power Event ID 107 (fallback when ID 1 is missing)
+  MultipleInstancesPolicy=IgnoreNew; Invoke-AudioRebind also debounce-skips near-duplicate starts.
 #>
 [CmdletBinding()]
 param(
@@ -35,6 +39,39 @@ if (-not (Test-IsAdmin)) {
     exit 1
 }
 
+# Setup-time only: ensure CurrentUser can load YAML (scheduled task runs as this user).
+function Install-AudioRebindYamlModuleIfMissing {
+    if (Get-Module -ListAvailable -Name powershell-yaml) {
+        Write-Host "powershell-yaml: already available for CurrentUser"
+        return
+    }
+
+    Write-Host "powershell-yaml: not found; installing with Install-Module -Scope CurrentUser ..."
+    try {
+        # PS 5.1 + PSGallery often needs TLS 1.2
+        [Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::Tls12
+        Install-Module -Name powershell-yaml -Scope CurrentUser -Force -AllowClobber -ErrorAction Stop
+    }
+    catch {
+        Write-Error @"
+Failed to install module 'powershell-yaml' for CurrentUser.
+$($_.Exception.Message)
+
+Fix network / PSGallery access, then either re-run this script or:
+  Install-Module powershell-yaml -Scope CurrentUser -Force
+"@
+        exit 1
+    }
+
+    if (-not (Get-Module -ListAvailable -Name powershell-yaml)) {
+        Write-Error "Install-Module finished but 'powershell-yaml' is still not listed for this user."
+        exit 1
+    }
+    Write-Host "powershell-yaml: installed for CurrentUser"
+}
+
+Install-AudioRebindYamlModuleIfMissing
+
 $invokePath = Join-Path $PSScriptRoot 'Invoke-AudioRebind.ps1'
 if (-not (Test-Path -LiteralPath $invokePath)) {
     Write-Error "Missing entrypoint: $invokePath"
@@ -52,8 +89,12 @@ $userId = [Security.Principal.WindowsIdentity]::GetCurrent().Name
 $powershellExe = Join-Path $env:SystemRoot 'System32\WindowsPowerShell\v1.0\powershell.exe'
 $arg = '-NoProfile -ExecutionPolicy Bypass -File "{0}" -ProfilePath "{1}"' -f $invokePath, $profileAbs
 
-$query = @'
+$queryPowerTroubleshooter1 = @'
 <QueryList><Query Id="0" Path="System"><Select Path="System">*[System[Provider[@Name='Microsoft-Windows-Power-Troubleshooter'] and (EventID=1)]]</Select></Query></QueryList>
+'@
+
+$queryKernelPower107 = @'
+<QueryList><Query Id="0" Path="System"><Select Path="System">*[System[Provider[@Name='Microsoft-Windows-Kernel-Power'] and (EventID=107)]]</Select></Query></QueryList>
 '@
 
 function Escape-Xml([string] $s) {
@@ -65,13 +106,17 @@ $xml = @"
 <?xml version="1.0" encoding="UTF-16"?>
 <Task version="1.4" xmlns="http://schemas.microsoft.com/windows/2004/02/mit/task">
   <RegistrationInfo>
-    <Description>AudioRebind: run resume pipeline on Power-Troubleshooter Event ID 1</Description>
+    <Description>AudioRebind: resume pipeline on Power-Troubleshooter Event ID 1 or Kernel-Power Event ID 107</Description>
     <Author>$([System.Security.SecurityElement]::Escape($userId))</Author>
   </RegistrationInfo>
   <Triggers>
     <EventTrigger>
       <Enabled>true</Enabled>
-      <Subscription>$(Escape-Xml $query)</Subscription>
+      <Subscription>$(Escape-Xml $queryPowerTroubleshooter1)</Subscription>
+    </EventTrigger>
+    <EventTrigger>
+      <Enabled>true</Enabled>
+      <Subscription>$(Escape-Xml $queryKernelPower107)</Subscription>
     </EventTrigger>
   </Triggers>
   <Principals>
@@ -111,5 +156,7 @@ Write-Host "Registered task: $($task.TaskName) State=$($task.State)"
 Write-Host "  Entrypoint: $invokePath"
 Write-Host "  Profile:    $profileAbs"
 Write-Host "  Run as:     $userId (InteractiveToken, HighestAvailable)"
-Write-Host "  Trigger:    System / Microsoft-Windows-Power-Troubleshooter / EventID=1"
+Write-Host "  Triggers:   System / Microsoft-Windows-Power-Troubleshooter / EventID=1"
+Write-Host "              System / Microsoft-Windows-Kernel-Power / EventID=107 (fallback)"
+Write-Host "  Overlap:    MultipleInstancesPolicy=IgnoreNew; Invoke debounce ~120s"
 exit 0

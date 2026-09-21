@@ -6,10 +6,10 @@ Thanks for your interest in contributing.
 
 | Kind | Where | Open a GitHub Issue? |
 |------|--------|----------------------|
-| Product version intent (V1 / V2) | [ROADMAP.md](ROADMAP.md) | No (versions are not Issues) |
-| V1 delivery phases | [ROADMAP.md](ROADMAP.md) V1 sequence | Yes — committed phase work only |
+| Product version intent (0.1.x / 0.x / 1.0 / V2) | [ROADMAP.md](ROADMAP.md) version ladder | No (versions are not Issues) |
+| 0.1.x / 0.x delivery work | [ROADMAP.md](ROADMAP.md) | Yes — committed phase work only |
 | **Accepted, actionable** work | GitHub Issues + Milestone | **Yes** |
-| **Uncommitted** ideas / V2+ sketches | [ROADMAP.md](ROADMAP.md) **Later** | **No** until accepted |
+| **Uncommitted** ideas / V2 sketches | [ROADMAP.md](ROADMAP.md) **Later** | **No** until accepted |
 | Adopted design | [docs/decisions/](docs/decisions/README.md) | Proposed ideas stay out of ADR files |
 | Stable what/why | [docs/](docs/README.md) | No progress tables in docs |
 | Machine / personal stack detail | `local/` (gitignored) | Never paste raw host inventory into Issues |
@@ -29,9 +29,9 @@ Participation is governed by [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
 
 ## Documentation language
 
-English is the source of truth. Japanese and other translations use sibling `*.ja.md` (or `*.<locale>.md`) files and must not replace English originals.
+English is the source of truth for durable docs. Japanese uses sibling `*.ja.md` files (optional), not in-file dual bodies for `docs/` / ADRs. Root `README.md` may include a **short** Japanese blurb; fuller Japanese is [`README.ja.md`](README.ja.md).
 
-See [docs/i18n.md](docs/i18n.md).
+**Issues:** prefer Japanese plus a short English summary and Acceptance checklist. Details: [docs/i18n.md](docs/i18n.md).
 
 ## What not to commit
 
