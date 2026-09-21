@@ -20,6 +20,7 @@ and this project aims to adhere to [Semantic Versioning](https://semver.org/).
 - Pipeline logging path and exit-code contract
 - ADR 0009 (YAML on Windows PowerShell 5.1 via `powershell-yaml`)
 - Host layer-isolation findings summarized on Issues #1 / #2 (Engine for playback; Apps for capture clients)
+- Manual resume orchestrator: [`src/Invoke-AudioRebind.ps1`](src/Invoke-AudioRebind.ps1) (AudioEngine / UsbDevice / Apps, YAML profiles, logs)
 
 ### Changed
 

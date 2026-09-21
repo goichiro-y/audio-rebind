@@ -24,7 +24,7 @@ Japanese summary: [README.ja.md](README.ja.md). Language policy: [docs/i18n.md](
 
 ## Status
 
-Documentation bootstrap and V1 design ADRs (0003–0008) are done. The resume orchestrator is not implemented yet — see [ROADMAP.md](ROADMAP.md) and Milestone [v1](https://github.com/goichiro-y/audio-rebind/milestone/1).
+Documentation bootstrap and V1 design ADRs (0003–0009) are done. Manual orchestrator: [`src/Invoke-AudioRebind.ps1`](src/Invoke-AudioRebind.ps1). Automatic Task Scheduler packaging is still open — see [ROADMAP.md](ROADMAP.md) and Milestone [v1](https://github.com/goichiro-y/audio-rebind/milestone/1).
 
 ## Development
 

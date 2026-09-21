@@ -6,7 +6,7 @@
 
 ## 現状
 
-ドキュメントと V1 設計 ADR（0003–0008）まで完了。オーケストレータ本体は未実装です。進捗は英語の [ROADMAP.md](ROADMAP.md) と Milestone [v1](https://github.com/goichiro-y/audio-rebind/milestone/1) を見てください。
+ドキュメントと V1 設計 ADR（0003–0009）まで完了。手動オーケストレータは [`src/Invoke-AudioRebind.ps1`](src/Invoke-AudioRebind.ps1)。Task Scheduler による自動復帰は未着手です。進捗は英語の [ROADMAP.md](ROADMAP.md) と Milestone [v1](https://github.com/goichiro-y/audio-rebind/milestone/1) を見てください。
 
 - **V1:** 自分用。YAML で対象を明示。設定 GUI なし。Task Scheduler で復帰時実行（常駐エージェントなし）。
 - **Later / V2+:** カタログ既定＋オプトアウト、設定 GUI など（未コミット。Issue には積まない）。

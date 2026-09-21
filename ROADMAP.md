@@ -13,21 +13,21 @@ Maintainer dogfood: explicit YAML profile (apps / USB), no settings GUI, resume 
 | # | Phase | Status | Tracking |
 |---|--------|--------|----------|
 | 1 | Host investigation (layer isolation after resume) | Done | [#1](https://github.com/goichiro-y/audio-rebind/issues/1), [#2](https://github.com/goichiro-y/audio-rebind/issues/2) — Engine restores playback; Apps recycle restores capture dictation; Event ID 1 OK (`local/` for host detail) |
-| 2 | Resume orchestrator core (PowerShell) | Planned | [#5](https://github.com/goichiro-y/audio-rebind/issues/5) — include PnP/service spikes |
-| 3 | Profile loader + explicit personal targets | Planned | [#6](https://github.com/goichiro-y/audio-rebind/issues/6) — YAML via powershell-yaml on PS 5.1 (ADR 0009); example in `profiles/examples/` |
+| 2 | Resume orchestrator core (PowerShell) | Done | [#5](https://github.com/goichiro-y/audio-rebind/issues/5) — `src/Invoke-AudioRebind.ps1` |
+| 3 | Profile loader + explicit personal targets | Done | [#6](https://github.com/goichiro-y/audio-rebind/issues/6) — YAML via powershell-yaml on PS 5.1 (ADR 0009); example in `profiles/examples/` |
 | 4 | Resume trigger packaging (Task Scheduler) | Planned | [#7](https://github.com/goichiro-y/audio-rebind/issues/7) |
 | 5 | Dogfood on maintainer machine | Planned | Record results under `local/` only; private profile under `local/profiles/` |
 | 6 | V1 exit (works, docs, CHANGELOG) | Planned | [#11](https://github.com/goichiro-y/audio-rebind/issues/11) |
+
+Open follow-up: UsbDevice disable flake during first smoke — [#12](https://github.com/goichiro-y/audio-rebind/issues/12).
 
 Milestone: [v1](https://github.com/goichiro-y/audio-rebind/milestone/1)
 
 ### Pre-implementation spikes (tracked on Issues, not separate Issues)
 
-Document findings in the Issue or `local/` as appropriate:
-
-- YAML load on Windows PowerShell 5.1 vs PowerShell 7 (`powershell-yaml` module vs built-in)
-- Elevated `Disable-PnpDevice` / `Enable-PnpDevice` vs `pnputil` fallback
-- Log path `%LOCALAPPDATA%\AudioRebind\logs\` and exit codes `0`/`1`/`2`/`3` ([pipeline-spec](docs/specs/pipeline-spec.md))
+- YAML on Windows PowerShell 5.1 via `powershell-yaml` — **done** (ADR 0009 + loader)
+- Elevated `Disable-PnpDevice` / `Enable-PnpDevice` — **done** in `Step-UsbDevice` (`pnputil` still not implemented)
+- Log path `%LOCALAPPDATA%\AudioRebind\logs\` and exit codes `0`/`1`/`2`/`3` — **done**
 
 ## Done
 
@@ -39,6 +39,7 @@ Document findings in the Issue or `local/` as appropriate:
 | Repo layout + example profile | ADR 0008; `profiles/examples/example-usb-interface.yaml` |
 | Scope version intent | V1 vs Later/V2 sketched in [scope.md](docs/scope.md) |
 | Host investigation (first probe) | Playback needs Engine; capture dictation needs Apps; Event ID 1 OK — see #1 / #2 |
+| Manual orchestrator + YAML loader | `src/Invoke-AudioRebind.ps1`; Issues #5 / #6 |
 
 ## Later (not committed)
 
