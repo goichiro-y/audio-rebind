@@ -11,9 +11,9 @@ Product phases use **semver** for releases and keep **V2** as the name for catal
 | Line | Meaning | Status |
 |------|---------|--------|
 | **0.1.x** | Maintainer / personal dogfood MVP ([ADR 0007](docs/decisions/0007-v1-mvp-boundaries.md)): explicit YAML, no GUI, Task Scheduler resume | **Shipped** as [0.1.0](CHANGELOG.md) (GitHub Milestone `v1` closed) |
-| **0.x** (after 0.1) | **Public-prep** polish: clearer docs/setup UX, known dogfood follow-ups — still pre-1.0 | **Current** — shipped **[0.2.0](CHANGELOG.md)**; open [#15](https://github.com/goichiro-y/audio-rebind/issues/15); optional [#28](https://github.com/goichiro-y/audio-rebind/issues/28) |
-| **1.0.0** | First release aimed at strangers following the README (same MVP shape; not catalog/GUI) | **Not started** |
-| **V2** (product name) | Built-in app/USB catalog + opt-out; settings GUI and related | **Later** (not committed) — see below |
+| **0.x** (after 0.1) | **Public-prep** for a safe private→public flip (privacy scan, honesty in Status) — not stranger UX polish | **Ready to flip** after **[0.2.0](CHANGELOG.md)** + [#15](https://github.com/goichiro-y/audio-rebind/issues/15) done; optional [#28](https://github.com/goichiro-y/audio-rebind/issues/28) |
+| **1.0.0** | First release aimed at strangers following the README (same MVP shape; not catalog/GUI) — includes thin fixed install layout | **Not started** — [#29](https://github.com/goichiro-y/audio-rebind/issues/29), [#30](https://github.com/goichiro-y/audio-rebind/issues/30) |
+| **V2** (product name) | Built-in app/USB catalog + opt-out; settings GUI and related — ship as semver **2.0.0** (not 1.1.x): breaks the “explicit YAML only / no catalog” product promise of the 1.x line | **Later** (not committed) — see below |
 
 Power-transition and privilege contracts: [docs/scope.md](docs/scope.md).
 
@@ -32,17 +32,30 @@ Explicit YAML profile (apps / USB), no settings GUI, resume via elevated Task Sc
 | 5 | Dogfood on maintainer machine | Done | Auto task on resume; playback quick; capture apps after recycle |
 | 6 | 0.1 exit (works, docs, CHANGELOG) | Done | [#11](https://github.com/goichiro-y/audio-rebind/issues/11); [CHANGELOG 0.1.0](CHANGELOG.md) |
 
-## 0.x — public prep (open)
+## 0.x — public prep (done for flip)
+
+Gate for flipping the repo public. Maintainer-usable dogfood is **0.2.0**. Privacy scan [#15](https://github.com/goichiro-y/audio-rebind/issues/15) is **done**. Distributor UX (thin install) is **1.0.0**, not 0.x.
 
 | Item | Tracking |
 |------|----------|
-| Scan Issues/git for personal / host-private data | [#15](https://github.com/goichiro-y/audio-rebind/issues/15) |
+| Scan Issues/git for personal / host-private data | Done — [#15](https://github.com/goichiro-y/audio-rebind/issues/15) |
 
-Done in 0.x: [#13](https://github.com/goichiro-y/audio-rebind/issues/13), [#14](https://github.com/goichiro-y/audio-rebind/issues/14), [#16](https://github.com/goichiro-y/audio-rebind/issues/16), [#18](https://github.com/goichiro-y/audio-rebind/issues/18), [#19](https://github.com/goichiro-y/audio-rebind/issues/19), [#20](https://github.com/goichiro-y/audio-rebind/issues/20), [#21](https://github.com/goichiro-y/audio-rebind/issues/21) (no-activate CreateProcess launch), [#22](https://github.com/goichiro-y/audio-rebind/issues/22) (Kernel-Power 107 co-trigger), [#23](https://github.com/goichiro-y/audio-rebind/issues/23) (engine poll / batched stop / profile timing). Umbrella [#17](https://github.com/goichiro-y/audio-rebind/issues/17) split into #18–#21. Closed without blocking: [#12](https://github.com/goichiro-y/audio-rebind/issues/12). Comparison [#3](https://github.com/goichiro-y/audio-rebind/issues/3) done.
+Done in 0.x: [#13](https://github.com/goichiro-y/audio-rebind/issues/13), [#14](https://github.com/goichiro-y/audio-rebind/issues/14), [#15](https://github.com/goichiro-y/audio-rebind/issues/15), [#16](https://github.com/goichiro-y/audio-rebind/issues/16), [#18](https://github.com/goichiro-y/audio-rebind/issues/18), [#19](https://github.com/goichiro-y/audio-rebind/issues/19), [#20](https://github.com/goichiro-y/audio-rebind/issues/20), [#21](https://github.com/goichiro-y/audio-rebind/issues/21) (no-activate CreateProcess launch), [#22](https://github.com/goichiro-y/audio-rebind/issues/22) (Kernel-Power 107 co-trigger), [#23](https://github.com/goichiro-y/audio-rebind/issues/23) (engine poll / batched stop / profile timing). Umbrella [#17](https://github.com/goichiro-y/audio-rebind/issues/17) split into #18–#21. Closed without blocking: [#12](https://github.com/goichiro-y/audio-rebind/issues/12). Comparison [#3](https://github.com/goichiro-y/audio-rebind/issues/3) done.
 
 Optional further speed ideas (explicitly **may never do**, label `optional`): [#28](https://github.com/goichiro-y/audio-rebind/issues/28) (supersedes closed #24–#27).
 
-Ship further **0.x** CHANGELOG entries as needed; **0.2.0** is the first post-0.1 usable dogfood cut. Do not call the line **1.0.0** until README-led tryouts feel ready for strangers.
+Public flip is OK on clone+Register. Stranger-oriented install UX belongs under **1.0.0**.
+
+## 1.0.0 — strangers can follow the README (not started)
+
+Same MVP shape (YAML, Task Scheduler, admin). Brush-up so recipients are not stuck on “move the folder and the task dies.”
+
+| Item | Tracking |
+|------|----------|
+| Packaging layout: Program Files runtime + LocalAppData settings (ADR/docs) | [#29](https://github.com/goichiro-y/audio-rebind/issues/29) |
+| Implement Install/Uninstall + task paths for that layout | [#30](https://github.com/goichiro-y/audio-rebind/issues/30) |
+
+Do not call **1.0.0** until README-led tryouts (including thin install) feel ready. Catalog/GUI stay **V2**.
 
 ## Done (summary)
 
@@ -59,7 +72,7 @@ Do not file Issues for these until the version is accepted.
 | Theme | Sketch |
 |-------|--------|
 | **V2** defaults | Built-in app/USB catalog + opt-out (GUI not required at first) |
-| Settings GUI | Opt-out checkboxes / tray settings over the same profile model |
+| Settings GUI | Opt-out checkboxes / tray settings over the same profile model (edits LocalAppData YAML; does not replace [#29](https://github.com/goichiro-y/audio-rebind/issues/29)–[#30](https://github.com/goichiro-y/audio-rebind/issues/30) thin install) |
 | Always-on agent | Only if Event ID 1 + Kernel-Power 107 still prove insufficient |
 | Single-layer tool comparison | Done (optional) — [#3](https://github.com/goichiro-y/audio-rebind/issues/3); generalized in [architecture-overview](docs/architecture-overview.md) |
 | Optional WASAPI proxy | Only if orchestrator is not enough (was [#9](https://github.com/goichiro-y/audio-rebind/issues/9)) |

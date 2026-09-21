@@ -1,10 +1,35 @@
 ﻿# AudioRebind
 
-Windows のスリープ／復帰のあと、設定画面では問題なさそうなのに再生やマイクが死んでいることがあります（USB オーディオ、常駐の音声キャプチャアプリなど）。AudioRebind は決まった順番で張り直し、再起動なしで共有モードの WASAPI がまた使えるようにします。
+Windows **スリープ／復帰**のあと、設定では生きているように見えて共有モード **WASAPI** の再生やマイクが死んでいるとき、**音声エンジン →（任意）USB →（任意）アプリ**の順で張り直します。
 
-特定メーカー専用ではありません。設定はデバイス ID・プロセス名などの汎用プロファイルです。
+特定メーカー専用ではありません。設定はデバイス ID・プロセス名などの汎用プロファイルです。常駐ではなく **タスク スケジューラ**が PowerShell を起動します（管理者必須）。
 
 正本は英語の [README.md](README.md) です（冒頭に短い日本語要約あり）。このファイルは**より詳しい日本語**用です。`docs/` / ADR は英語正本のみ（必要なら兄弟 `*.ja.md`）。Issue は日本語＋短い English summary / Acceptance。言語方針: [docs/i18n.md](docs/i18n.md)。
+
+## 単層ツールとの違い
+
+公開されているツールは多くの場合どちらか一層だけです。AudioRebind は順序付きの組み合わせです。
+
+| やり方 | カバー | 足りないところ |
+|--------|--------|----------------|
+| `Audiosrv` / `AudioEndpointBuilder` だけ再起動（[AudioWakeFix](https://jdslabs.com/support/troubleshooting/) 系） | エンジン | USB もアプリ再起動も無し — 長寿命キャプチャが残りがち |
+| ミキサー／キャプチャアプリだけ再起動（[SAMISH](https://github.com/thomwithah/samish) 系） | アプリ | サービス再起動も USB も無し |
+| 手動の抜き差し／デバイスの無効化 | デバイス | 自動化されない |
+| **AudioRebind** | エンジン → 任意 USB → 任意アプリ | YAML で明示指定（組み込みカタログはまだ Later／V2） |
+
+詳細（英語）: [docs/architecture-overview.md](docs/architecture-overview.md)。
+
+## クイックスタート
+
+管理者の Windows PowerShell 5.1 で、このリポジトリの clone から:
+
+1. [`profiles/examples/example-usb-interface.yaml`](profiles/examples/example-usb-interface.yaml) を `local/profiles/my.yaml` にコピーし、ファイル先頭のチェックリストどおりプレースホルダを埋める
+2. `.\src\Register-AudioRebindTask.ps1 -ProfilePath .\local\profiles\my.yaml`  
+   （無ければ `powershell-yaml` を CurrentUser に入れる）
+3. スリープ → 復帰 → `%LOCALAPPDATA%\AudioRebind\logs\` を確認
+
+手動1回: `.\src\Invoke-AudioRebind.ps1 -ProfilePath .\local\profiles\my.yaml`  
+詳細・タイミング: 英語の [src/README.md](src/README.md)。
 
 ## 仕組み
 
@@ -29,16 +54,14 @@ Windows のスリープ／復帰のあと、設定画面では問題なさそう
 - モジュール **`powershell-yaml`**（初回: `Install-Module powershell-yaml -Scope CurrentUser -Force`）
 - 対象アプリ（と任意の USB HardwareId）を書いた **YAML プロファイル**。[`profiles/examples/`](profiles/examples/README.md) をコピーし、個人用は `local/profiles/`（gitignore）へ
 
-手順の正本: [src/README.md](src/README.md)。
-
 ## 現状
 
 **[0.2.0](CHANGELOG.md)** がいまのメンテナ向け **0.x** ドッグフード線です（二重トリガー、実用速度、静かめなアプリ起動）。プロファイルを書き、[`src/Register-AudioRebindTask.ps1`](src/Register-AudioRebindTask.ps1) で登録し、スリープ復帰で確認します。
 
 **0.1.0** は最初の MVP 出口でした（[ADR 0007](docs/decisions/0007-v1-mvp-boundaries.md)）。
 
-バージョン階段: **0.1.x** = 自分用 MVP · **0.x** = 公開準備（いま **0.2.0**） · **1.0.0** = README どおり試せる · **V2** = カタログ／GUI（Later）。英語の [ROADMAP.md](ROADMAP.md)、[CHANGELOG.md](CHANGELOG.md)。
+バージョン階段: **0.1.x** = 自分用 MVP · **0.x** = 公開準備（いま **0.2.0**） · **1.0.0** = README どおり試せる · **V2**（semver **2.0.0** カタログ／GUI、Later）。英語の [ROADMAP.md](ROADMAP.md)、[CHANGELOG.md](CHANGELOG.md)。
 
-**0.x** の残作業: [#15](https://github.com/goichiro-y/audio-rebind/issues/15)。任意: [#28](https://github.com/goichiro-y/audio-rebind/issues/28)。
+**0.x** 公開準備（プライバシースキャン）完了: [#15](https://github.com/goichiro-y/audio-rebind/issues/15)。任意: [#28](https://github.com/goichiro-y/audio-rebind/issues/28)。見知らぬ人向け Install は **1.0.0**（[#29](https://github.com/goichiro-y/audio-rebind/issues/29)–[#30](https://github.com/goichiro-y/audio-rebind/issues/30)）。
 
 置き場ルール: [CONTRIBUTING.md](CONTRIBUTING.md#where-work-lives)。

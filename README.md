@@ -1,12 +1,37 @@
 ﻿# AudioRebind
 
-After Windows sleep/resume, playback or capture can look fine in Settings while audio is actually dead (USB interfaces, long-lived mic/capture apps, and similar). AudioRebind runs a fixed recovery order so shared-mode WASAPI sessions work again without a reboot.
+After Windows sleep/resume, playback or capture can look fine in Settings while shared-mode WASAPI audio is actually dead. AudioRebind runs a fixed order — **audio engine → optional USB device → optional apps** — so sessions work again without a reboot.
 
-It is **not** tied to a single mixer brand. Profiles use generic device IDs and process names.
+It is **not** tied to a single mixer brand. Profiles use generic device IDs and process names. Not an always-on agent: **Task Scheduler** starts a PowerShell script on resume (admin required).
 
 > **日本語（短い要約）:** スリープ復帰後に「設定上は生きているのに音やマイクが死ぬ」とき、音声エンジン →（任意）USB →（任意）アプリの順で張り直します。常駐ではなくタスク スケジューラ起動。管理者必須。休止の自動は未検証（メンテナは近いうちに保証しない）。くわしくは [README.ja.md](README.ja.md)。言語方針: [docs/i18n.md](docs/i18n.md)。
 
 Japanese summary (fuller): [README.ja.md](README.ja.md). Language policy: [docs/i18n.md](docs/i18n.md).
+
+## Compared to single-layer tools
+
+Public utilities often cover only one layer. AudioRebind is the ordered combination:
+
+| Approach | Covers | Typical gap |
+|----------|--------|-------------|
+| Restart `Audiosrv` / `AudioEndpointBuilder` only (e.g. [AudioWakeFix](https://jdslabs.com/support/troubleshooting/)-style) | Engine | No USB rebind; no app recycle — long-lived capture clients often stay broken |
+| Close/restart mixer or capture apps only (e.g. [SAMISH](https://github.com/thomwithah/samish)-style) | Apps | No service restart; no USB PnP |
+| Manual unplug / Device Manager toggle | Device | Not automated |
+| **AudioRebind** | Engine → optional USB → optional apps | Explicit YAML profile (no built-in catalog yet) |
+
+More detail: [docs/architecture-overview.md](docs/architecture-overview.md).
+
+## Quick start
+
+Elevated Windows PowerShell 5.1, from a clone of this repo:
+
+1. Copy [`profiles/examples/example-usb-interface.yaml`](profiles/examples/example-usb-interface.yaml) → `local/profiles/my.yaml` and fill the placeholders (see the checklist at the top of that file).
+2. `.\src\Register-AudioRebindTask.ps1 -ProfilePath .\local\profiles\my.yaml`  
+   (installs `powershell-yaml` for CurrentUser if missing)
+3. Sleep → resume, then check `%LOCALAPPDATA%\AudioRebind\logs\`
+
+Manual one-shot: `.\src\Invoke-AudioRebind.ps1 -ProfilePath .\local\profiles\my.yaml`  
+Details and timing tips: [src/README.md](src/README.md).
 
 ## How it works
 
@@ -31,17 +56,15 @@ The same entrypoint can be run **manually** from an elevated PowerShell (any res
 - Module **`powershell-yaml`** (one-time: `Install-Module powershell-yaml -Scope CurrentUser -Force`)
 - A **YAML profile** listing your apps (and optional USB HardwareId patterns). Copy from [`profiles/examples/`](profiles/examples/README.md); keep personal paths under `local/profiles/` (gitignored)
 
-Quick start: [src/README.md](src/README.md).
-
 ## Status
 
 **[0.2.0](CHANGELOG.md)** is the current maintainer-usable **0.x** dogfood line: dual resume triggers, practical recycle timing, quieter app start. Write a profile, register [`src/Register-AudioRebindTask.ps1`](src/Register-AudioRebindTask.ps1), resume from sleep.
 
 **0.1.0** was the first MVP exit ([ADR 0007](docs/decisions/0007-v1-mvp-boundaries.md)).
 
-Version ladder: **0.1.x** = personal MVP · **0.x** = public prep (current **0.2.0**) · **1.0.0** = strangers-can-follow-README · **V2** = catalog / GUI (Later). See [ROADMAP.md](ROADMAP.md) and [CHANGELOG.md](CHANGELOG.md).
+Version ladder: **0.1.x** = personal MVP · **0.x** = public prep (current **0.2.0**) · **1.0.0** = strangers-can-follow-README · **V2** (= semver **2.0.0** catalog / GUI, Later). See [ROADMAP.md](ROADMAP.md) and [CHANGELOG.md](CHANGELOG.md).
 
-**0.x** open work: [#15](https://github.com/goichiro-y/audio-rebind/issues/15) (privacy scan). Optional leftovers: [#28](https://github.com/goichiro-y/audio-rebind/issues/28).
+**0.x** public-prep (privacy scan) done: [#15](https://github.com/goichiro-y/audio-rebind/issues/15). Optional leftovers: [#28](https://github.com/goichiro-y/audio-rebind/issues/28). Next line for stranger install UX: **1.0.0** ([#29](https://github.com/goichiro-y/audio-rebind/issues/29)–[#30](https://github.com/goichiro-y/audio-rebind/issues/30)).
 
 ## Layout
 

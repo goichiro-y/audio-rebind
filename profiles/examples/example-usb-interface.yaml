@@ -1,7 +1,13 @@
 ﻿# Example profile for an AG03-class USB interface + one long-lived app.
-# Copy to local/profiles/ and replace placeholders.
-# Do not commit real InstanceIds or personal usernames.
 # Schema: docs/specs/profile-spec.md
+#
+# Fill before run (copy to local/profiles/ first — do not commit personal paths):
+# [ ] hardwareIdPatterns: replace XXXX/YYYY (HardwareId pattern only — not full InstanceId)
+#     Guide: docs/guides/discover-hardware-id.md
+# [ ] apps.processes[].path: your executable (or set apps.enabled: false)
+# [ ] If USB disable fails on your PC: usbDevice.enabled: false
+# [ ] Optional: windowAfterStart: minimize for background apps; lower gracefulStopSeconds for Electron
+# Do not commit real InstanceIds, usernames, or machine-absolute personal paths into shared examples.
 
 name: example-usb-interface
 description: >

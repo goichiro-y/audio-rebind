@@ -9,7 +9,12 @@ and this project aims to adhere to [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- README Quick start; example profile fill-in checklist; CONTRIBUTING “Good first contributions”
+- README comparison vs engine-only / apps-only wake tools (no keyword dump)
+
 ### Changed
+
+- ROADMAP / scope: #15 privacy scan done; thin Install tracked under **1.0.0** (#29–#30); V2 ships as semver **2.0.0**
 
 ### Fixed
 

@@ -63,9 +63,9 @@ Release and product-phase naming (full ladder: [ROADMAP.md](../ROADMAP.md)):
 | Line | Intent | Tracking |
 |------|--------|----------|
 | **0.1.x** | Maintainer / personal dogfood MVP: **explicit** YAML targets (apps / USB), **no settings GUI**, resume via elevated Task Scheduler (not always-on). See [ADR 0007](decisions/0007-v1-mvp-boundaries.md). | Shipped [0.1.0](../CHANGELOG.md); Milestone `v1` closed |
-| **0.x** (public prep) | Same MVP shape; polish docs/setup and dogfood follow-ups before calling the repo “ready for strangers.” | [ROADMAP](../ROADMAP.md) 0.x — [#15](https://github.com/goichiro-y/audio-rebind/issues/15) |
-| **1.0.0** | First semver major aimed at README-led tryouts (still not catalog/GUI). | Not started |
-| **V2** (product) | Defaults that “just work”: built-in catalog / heuristics + **opt-out**; settings GUI; always-on agent only if Event ID 1 is insufficient. | [ROADMAP](../ROADMAP.md) **Later** — no Issues until accepted |
+| **0.x** (public prep) | Safe private→public flip (privacy scan); maintainer dogfood shipped as 0.2.0 | Done — [#15](https://github.com/goichiro-y/audio-rebind/issues/15) |
+| **1.0.0** | First semver major aimed at README-led tryouts (same MVP shape; thin fixed install; still not catalog/GUI). | [ROADMAP](../ROADMAP.md) 1.0.0 — [#29](https://github.com/goichiro-y/audio-rebind/issues/29), [#30](https://github.com/goichiro-y/audio-rebind/issues/30) |
+| **V2** (product) | Defaults that “just work”: built-in catalog / heuristics + **opt-out**; settings GUI; always-on agent only if Event ID 1 is insufficient. Ships as semver **2.0.0**. | [ROADMAP](../ROADMAP.md) **Later** — no Issues until accepted |
 
 0.1.x stays deliberately narrow so the ordered pipeline can be proven on a real host before investing in zero-config UX. Catalog work stays named **V2** (not renumbered to V3).
 

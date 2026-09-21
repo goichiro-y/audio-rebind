@@ -14,7 +14,18 @@ Thanks for your interest in contributing.
 | Stable what/why | [docs/](docs/README.md) | No progress tables in docs |
 | Machine / personal stack detail | `local/` (gitignored) | Never paste raw host inventory into Issues |
 
-Committed work only in Issues. Uncommitted ideas stay on ROADMAP **Later** (enable GitHub Discussions for Ideas later if the project goes public and needs intake).
+Committed work only in Issues. Uncommitted ideas stay on ROADMAP **Later** (enable GitHub Discussions for Ideas later if the project needs intake).
+
+## Good first contributions
+
+Welcome without requiring deep runtime changes:
+
+- Improve [`profiles/examples/`](profiles/examples/) comments or placeholders (no personal paths)
+- Docs-only fixes: typos, clearer Quick start, links
+- Generalized updates to the power-transition table in [docs/scope.md](docs/scope.md) from your host (no full InstanceIds, usernames, or raw logs)
+- Issues labeled [`good first issue`](https://github.com/goichiro-y/audio-rebind/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22)
+
+Prefer a small PR that explains **what** and **why**. Machine-specific detail stays in `local/` (gitignored) — see [docs/guides/local-notes.md](docs/guides/local-notes.md).
 
 ## How to contribute
 
@@ -41,4 +52,4 @@ English is the source of truth for durable docs. Japanese uses sibling `*.ja.md`
 
 ## Local development
 
-See [README.md](README.md) and [ROADMAP.md](ROADMAP.md). There is no runtime package yet; start with documentation and the planned resume orchestrator.
+See [README.md](README.md) Quick start and [src/README.md](src/README.md). Runtime is PowerShell under `src/`; register or invoke with an elevated Windows PowerShell 5.1 prompt.
