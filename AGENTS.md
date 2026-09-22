@@ -13,7 +13,7 @@ This file is self-contained. Do not require external personal rule repositories.
 | `docs/decisions/` | Adopted ADRs only |
 | `docs/i18n.md` | Language / translation rules |
 | `ROADMAP.md` | Status and planned work (when / status); uncommitted ideas under **Later** |
-| `src/` | PowerShell orchestrator (v1 runtime; see ADR 0008) |
+| `src/` | PowerShell orchestrator (runtime; see ADR 0008 / installed layout ADR 0010) |
 | `profiles/examples/` | Shared example YAML profiles (placeholders only) |
 | `.github/` | Issue and pull request templates |
 | `local/`, `notes/private/` | **Gitignored** machine-local notes — never commit |

@@ -9,16 +9,26 @@ and this project aims to adhere to [Semantic Versioning](https://semver.org/).
 
 ### Added
 
-- README Quick start; example profile fill-in checklist; CONTRIBUTING “Good first contributions”
-- README comparison vs engine-only / apps-only wake tools (no keyword dump)
-
 ### Changed
-
-- ROADMAP / scope: #15 privacy scan done; thin Install tracked under **1.0.0** (#29–#30); V2 ships as semver **2.0.0**
 
 ### Fixed
 
 ### Removed
+
+## [1.0.0] - 2026-09-22
+
+First release aimed at README-led tryouts: thin elevated Install to Program Files, profiles under LocalAppData, clone path no longer required for the scheduled task ([#29](https://github.com/goichiro-y/audio-rebind/issues/29), [#30](https://github.com/goichiro-y/audio-rebind/issues/30), [#31](https://github.com/goichiro-y/audio-rebind/issues/31)). Same MVP shape (explicit YAML, Task Scheduler, admin). No catalog/GUI (V2).
+
+### Added
+
+- [ADR 0010](docs/decisions/0010-installed-layout-programfiles-localappdata.md): `%ProgramFiles%\AudioRebind\` runtime + `%LOCALAPPDATA%\AudioRebind\` profiles/logs
+- `Install-AudioRebind.ps1` — copy runtime, seed `profiles\default.yaml`, ensure `powershell-yaml`
+- `Uninstall-AudioRebind.ps1` — remove task + Program Files; keep LocalAppData by default (`-RemoveUserData` optional)
+- `Register-AudioRebindTask.ps1`: omit `-ProfilePath` to use LocalAppData `default.yaml`
+
+### Changed
+
+- README / README.ja Quick start prefer Install → edit profile → Register from Program Files; clone Register remains for development ([src/README.md](src/README.md))
 
 ## [0.2.0] - 2026-09-22
 

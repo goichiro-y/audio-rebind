@@ -12,7 +12,7 @@ Product phases use **semver** for releases and keep **V2** as the name for catal
 |------|---------|--------|
 | **0.1.x** | Maintainer / personal dogfood MVP ([ADR 0007](docs/decisions/0007-v1-mvp-boundaries.md)): explicit YAML, no GUI, Task Scheduler resume | **Shipped** as [0.1.0](CHANGELOG.md) (GitHub Milestone `0.1.0` closed) |
 | **0.x** (after 0.1) | **Public-prep** for a safe private→public flip (privacy scan, honesty in Status) — not stranger UX polish | **Ready to flip** after **[0.2.0](CHANGELOG.md)** + [#15](https://github.com/goichiro-y/audio-rebind/issues/15) done (Milestone `0.2.0` closed) |
-| **1.0.0** | First release aimed at strangers following the README (same MVP shape; not catalog/GUI) — includes thin fixed install layout | **Not started** — Milestone [`1.0.0`](https://github.com/goichiro-y/audio-rebind/milestone/3): [#29](https://github.com/goichiro-y/audio-rebind/issues/29), [#30](https://github.com/goichiro-y/audio-rebind/issues/30), [#31](https://github.com/goichiro-y/audio-rebind/issues/31) |
+| **1.0.0** | First release aimed at strangers following the README (same MVP shape; not catalog/GUI) — includes thin fixed install layout | **Shipped** as [1.0.0](CHANGELOG.md) (Milestone [`1.0.0`](https://github.com/goichiro-y/audio-rebind/milestone/3): [#29](https://github.com/goichiro-y/audio-rebind/issues/29)–[#31](https://github.com/goichiro-y/audio-rebind/issues/31)) |
 | **V2** (product name) | Built-in app/USB catalog + opt-out; settings GUI and related — ship as semver **2.0.0** (not 1.1.x): breaks the “explicit YAML only / no catalog” product promise of the 1.x line | **Later** (not committed) — see below |
 
 Power-transition and privilege contracts: [docs/scope.md](docs/scope.md).
@@ -44,25 +44,26 @@ Done in 0.x: [#13](https://github.com/goichiro-y/audio-rebind/issues/13), [#14](
 
 Public flip is OK on clone+Register. Stranger-oriented install UX belongs under **1.0.0**.
 
-## 1.0.0 — strangers can follow the README (not started)
+## 1.0.0 — strangers can follow the README (shipped)
 
-Same MVP shape (YAML, Task Scheduler, admin). Brush-up so recipients are not stuck on “move the folder and the task dies.”
+Same MVP shape (YAML, Task Scheduler, admin). Thin fixed install so recipients are not stuck on “move the folder and the task dies.” Layout: [ADR 0010](docs/decisions/0010-installed-layout-programfiles-localappdata.md).
 
 | Item | Tracking |
 |------|----------|
-| Packaging layout: Program Files runtime + LocalAppData settings (ADR/docs) | [#29](https://github.com/goichiro-y/audio-rebind/issues/29) |
-| Implement Install/Uninstall + task paths for that layout | [#30](https://github.com/goichiro-y/audio-rebind/issues/30) |
-| 1.0.0 exit: README-led stranger tryout (after thin install) | [#31](https://github.com/goichiro-y/audio-rebind/issues/31) |
+| Packaging layout: Program Files runtime + LocalAppData settings (ADR/docs) | Done — [#29](https://github.com/goichiro-y/audio-rebind/issues/29) |
+| Implement Install/Uninstall + task paths for that layout | Done — [#30](https://github.com/goichiro-y/audio-rebind/issues/30) |
+| 1.0.0 exit: README-led stranger tryout (after thin install) | Done — [#31](https://github.com/goichiro-y/audio-rebind/issues/31) |
 
-Do not call **1.0.0** until README-led tryouts (including thin install) feel ready — tracked as [#31](https://github.com/goichiro-y/audio-rebind/issues/31). Catalog/GUI stay **V2**.
+Catalog/GUI stay **V2**.
 
 ## Done (summary)
 
 | Item | Notes |
 |------|--------|
-| Docs bootstrap + ADRs 0001–0009 | Specs, placement rules, example profiles |
+| Docs bootstrap + ADRs 0001–0010 | Specs, placement rules, example profiles, installed layout |
 | Manual + scheduled orchestrator | `src/`; maintainer dogfood OK |
 | 0.1.0 maintainer MVP exit | [CHANGELOG 0.1.0](CHANGELOG.md); Milestone `0.1.0` closed |
+| 1.0.0 thin install + README exit | [CHANGELOG 1.0.0](CHANGELOG.md); Milestone `1.0.0` |
 
 ## Later (not committed)
 

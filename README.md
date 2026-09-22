@@ -25,15 +25,20 @@ More detail: [docs/architecture-overview.md](docs/architecture-overview.md).
 
 ## Quick start
 
-Elevated Windows PowerShell 5.1, from a clone of this repo:
+Elevated Windows PowerShell 5.1, from a clone or unpack of this repo:
 
-1. Copy [`profiles/examples/example-usb-interface.yaml`](profiles/examples/example-usb-interface.yaml) → `local/profiles/my.yaml` and fill the placeholders (see the checklist at the top of that file).
-2. `.\src\Register-AudioRebindTask.ps1 -ProfilePath .\local\profiles\my.yaml`  
-   (installs `powershell-yaml` for CurrentUser if missing)
-3. Sleep → resume, then check `%LOCALAPPDATA%\AudioRebind\logs\`
+1. `.\src\Install-AudioRebind.ps1`  
+   (copies runtime to `%ProgramFiles%\AudioRebind\`, seeds `%LOCALAPPDATA%\AudioRebind\profiles\default.yaml`, ensures `powershell-yaml`)
+2. Edit `default.yaml` (checklist at the top of the file; placeholders only until you fill VID/PID and app path).
+3. `& "$env:ProgramFiles\AudioRebind\Register-AudioRebindTask.ps1"`  
+   (defaults to that profile; task points at Program Files — moving the clone later is safe)
+4. Sleep → resume, then check `%LOCALAPPDATA%\AudioRebind\logs\`
 
-Manual one-shot: `.\src\Invoke-AudioRebind.ps1 -ProfilePath .\local\profiles\my.yaml`  
-Details and timing tips: [src/README.md](src/README.md).
+Manual one-shot (installed):  
+`& "$env:ProgramFiles\AudioRebind\Invoke-AudioRebind.ps1"`  
+(or pass `-ProfilePath` explicitly)
+
+Dev clone Register (path-locked to the checkout) remains available — see [src/README.md](src/README.md). Uninstall: `& "$env:ProgramFiles\AudioRebind\Uninstall-AudioRebind.ps1"` (keeps LocalAppData by default).
 
 ## How it works
 
@@ -56,17 +61,17 @@ The same entrypoint can be run **manually** from an elevated PowerShell (any res
 
 - Windows PowerShell **5.1**, run **elevated** (service restart / PnP / task registration)
 - Module **`powershell-yaml`** (one-time: `Install-Module powershell-yaml -Scope CurrentUser -Force`)
-- A **YAML profile** listing your apps (and optional USB HardwareId patterns). Copy from [`profiles/examples/`](profiles/examples/README.md); keep personal paths under `local/profiles/` (gitignored)
+- A **YAML profile** under `%LOCALAPPDATA%\AudioRebind\profiles\` (Install seeds `default.yaml` from [`profiles/examples/`](profiles/examples/README.md)). Do not put personal paths under Program Files. Layout: [ADR 0010](docs/decisions/0010-installed-layout-programfiles-localappdata.md)
 
 ## Status
 
-**[0.2.0](CHANGELOG.md):** clone → write a profile → register → classic sleep → resume. No separate installer yet. Version ladder and planned work: [ROADMAP.md](ROADMAP.md).
+**[1.0.0](CHANGELOG.md):** thin Install to Program Files + LocalAppData profiles; README-led tryout without depending on a durable clone path. Version ladder: [ROADMAP.md](ROADMAP.md).
 
 ## Layout
 
 | Path | Purpose |
 |------|---------|
-| [src/](src/README.md) | Orchestrator + Task Scheduler register/unregister |
+| [src/](src/README.md) | Orchestrator, Install/Uninstall, Task Scheduler register/unregister |
 | [docs/](docs/README.md) | Scope, specs, ADRs, guides |
 | [profiles/examples/](profiles/examples/README.md) | Placeholder example profiles |
 | [ROADMAP.md](ROADMAP.md) | Status and planned work |

@@ -23,15 +23,17 @@ Windows **スリープ／復帰**のあと、設定では生きているよう�
 
 ## クイックスタート
 
-管理者の Windows PowerShell 5.1 で、このリポジトリの clone から:
+管理者の Windows PowerShell 5.1 で、このリポジトリの clone／解凍から:
 
-1. [`profiles/examples/example-usb-interface.yaml`](profiles/examples/example-usb-interface.yaml) を `local/profiles/my.yaml` にコピーし、ファイル先頭のチェックリストどおりプレースホルダを埋める
-2. `.\src\Register-AudioRebindTask.ps1 -ProfilePath .\local\profiles\my.yaml`  
-   （無ければ `powershell-yaml` を CurrentUser に入れる）
-3. スリープ → 復帰 → `%LOCALAPPDATA%\AudioRebind\logs\` を確認
+1. `.\src\Install-AudioRebind.ps1`  
+   （`%ProgramFiles%\AudioRebind\` にランタイム、`%LOCALAPPDATA%\AudioRebind\profiles\default.yaml` をシード、必要なら `powershell-yaml`）
+2. `default.yaml` を編集（ファイル先頭のチェックリスト；VID/PID とアプリパス）
+3. `& "$env:ProgramFiles\AudioRebind\Register-AudioRebindTask.ps1"`  
+   （既定でそのプロファイル；タスクは Program Files を指すので、あとで clone を動かしても安全）
+4. スリープ → 復帰 → `%LOCALAPPDATA%\AudioRebind\logs\` を確認
 
-手動1回: `.\src\Invoke-AudioRebind.ps1 -ProfilePath .\local\profiles\my.yaml`  
-詳細・タイミング: 英語の [src/README.md](src/README.md)。
+手動1回（インストール後）: `& "$env:ProgramFiles\AudioRebind\Invoke-AudioRebind.ps1"`  
+開発用の clone 直 Register（パス固定）は英語の [src/README.md](src/README.md)。アンインストール: `& "$env:ProgramFiles\AudioRebind\Uninstall-AudioRebind.ps1"`（LocalAppData は既定で残す）。
 
 ## 仕組み
 
@@ -52,19 +54,19 @@ Windows **スリープ／復帰**のあと、設定では生きているよう�
 
 > **対象オペレータ:** 昇格（ローカル管理者）できること。標準ユーザーのみのロックダウン、Modern Standby のみ、その他 [docs/scope.md](docs/scope.md) 外は対象外。
 
-- Windows PowerShell **5.1**、**管理者**で実行（サービス再起動 / PnP / タスク登録）
+- Windows PowerShell **5.1**、**管理者**で実行（サービス再起動 / PnP / タスク登録 / Install）
 - モジュール **`powershell-yaml`**（初回: `Install-Module powershell-yaml -Scope CurrentUser -Force`）
-- 対象アプリ（と任意の USB HardwareId）を書いた **YAML プロファイル**。[`profiles/examples/`](profiles/examples/README.md) をコピーし、個人用は `local/profiles/`（gitignore）へ
+- **YAML プロファイル**は `%LOCALAPPDATA%\AudioRebind\profiles\`（Install が `default.yaml` をシード）。個人パスは Program Files に置かない。配置: [ADR 0010](docs/decisions/0010-installed-layout-programfiles-localappdata.md)
 
 ## 現状
 
-**[0.2.0](CHANGELOG.md):** clone → プロファイル作成 → 登録 → クラシックなスリープ → 復帰。別インストーラはまだありません。版ラダーと予定: [ROADMAP.md](ROADMAP.md)。
+**[1.0.0](CHANGELOG.md):** Program Files への薄い Install + LocalAppData プロファイル。clone パスに依存しない README 試行。版ラダー: [ROADMAP.md](ROADMAP.md)。
 
 ## 構成（入口）
 
 | パス | 用途 |
 |------|------|
-| [src/](src/README.md) | オーケストレータ＋タスク登録 |
+| [src/](src/README.md) | オーケストレータ、Install/Uninstall、タスク登録 |
 | [docs/](docs/README.md) | スコープ・仕様・ADR・ガイド |
 | [profiles/examples/](profiles/examples/README.md) | 例プロファイル（プレースホルダ） |
 | [ROADMAP.md](ROADMAP.md) | 状況と予定 |
