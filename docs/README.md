@@ -11,7 +11,7 @@ Language policy (English canonical, `*.ja.md` for Japanese): [i18n.md](i18n.md).
 | Path | Purpose |
 |------|---------|
 | [problem-and-motivation.md](problem-and-motivation.md) | Sleep/resume failure and why AudioRebind exists |
-| [scope.md](scope.md) | In / out of scope; version intent (0.1.x / 0.x / 1.0.0 / V2) |
+| [scope.md](scope.md) | In / out of scope; version intent (0.1.x / 0.x / 0.3.0 / 1.0.0 / V2) |
 | [architecture-overview.md](architecture-overview.md) | Resume pipeline and relation to other tools |
 | [specs/](specs/README.md) | Area specs (`pipeline-spec`, `profile-spec`) |
 | [decisions/](decisions/README.md) | Adopted ADRs |

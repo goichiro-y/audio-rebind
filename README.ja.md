@@ -60,7 +60,7 @@ Windows **スリープ／復帰**のあと、設定では生きているよう�
 
 ## 現状
 
-**[1.0.0](CHANGELOG.md):** Program Files への薄い Install + LocalAppData プロファイル。clone パスに依存しない README 試行。版ラダー: [ROADMAP.md](ROADMAP.md)。
+**[0.3.0](CHANGELOG.md):** Program Files への薄い Install + LocalAppData プロファイル。タスクは clone パスに依存しなくてよい。semver **1.0.0**（見知らぬ人向けの仕上げ）はこれから。版ラダー: [ROADMAP.md](ROADMAP.md)。
 
 ## 構成（入口）
 

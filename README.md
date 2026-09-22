@@ -65,7 +65,7 @@ The same entrypoint can be run **manually** from an elevated PowerShell (any res
 
 ## Status
 
-**[1.0.0](CHANGELOG.md):** thin Install to Program Files + LocalAppData profiles; README-led tryout without depending on a durable clone path. Version ladder: [ROADMAP.md](ROADMAP.md).
+**[0.3.0](CHANGELOG.md):** thin Install to Program Files + LocalAppData profiles; scheduled task need not depend on a durable clone path. Semver **1.0.0** (polished stranger tryouts) is still ahead. Version ladder: [ROADMAP.md](ROADMAP.md).
 
 ## Layout
 

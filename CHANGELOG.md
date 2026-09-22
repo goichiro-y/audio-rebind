@@ -15,9 +15,11 @@ and this project aims to adhere to [Semantic Versioning](https://semver.org/).
 
 ### Removed
 
-## [1.0.0] - 2026-09-22
+## [0.3.0] - 2026-09-22
 
-First release aimed at README-led tryouts: thin elevated Install to Program Files, profiles under LocalAppData, clone path no longer required for the scheduled task ([#29](https://github.com/goichiro-y/audio-rebind/issues/29), [#30](https://github.com/goichiro-y/audio-rebind/issues/30), [#31](https://github.com/goichiro-y/audio-rebind/issues/31)). Same MVP shape (explicit YAML, Task Scheduler, admin). No catalog/GUI (V2).
+Thin elevated Install to Program Files, profiles under LocalAppData, so the scheduled task no longer depends on a durable clone path ([#29](https://github.com/goichiro-y/audio-rebind/issues/29), [#30](https://github.com/goichiro-y/audio-rebind/issues/30), [#31](https://github.com/goichiro-y/audio-rebind/issues/31)). Same MVP shape (explicit YAML, Task Scheduler, admin). Still **0.x** (not yet claiming semver **1.0.0** stranger-ready polish). No catalog/GUI (V2).
+
+> Note: This line was briefly published as GitHub Release `v1.0.0` / Milestone `1.0.0`, then renumbered to **0.3.0** to match the version ladder.
 
 ### Added
 
