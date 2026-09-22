@@ -6,7 +6,7 @@ Thanks for your interest. This project is maintained for a **narrow** sleep/resu
 
 | Kind | Where | Open a GitHub Issue? |
 |------|--------|----------------------|
-| Product version intent (0.1.x / 0.x / 0.3 / 1.0 / V2) | [ROADMAP.md](ROADMAP.md) version ladder | No (versions are not Issues) |
+| Product version intent (0.1.x / 0.x / 0.3.0 / 1.0.0 / V2) | [ROADMAP.md](ROADMAP.md) version ladder | No (versions are not Issues) |
 | 0.1.x / 0.x delivery work | [ROADMAP.md](ROADMAP.md) | Yes — committed phase work only |
 | **Accepted, actionable** work | GitHub Issues + Milestone | **Yes** |
 | **Uncommitted** ideas / V2 sketches | [ROADMAP.md](ROADMAP.md) **Later** | **No** until accepted |

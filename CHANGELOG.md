@@ -34,7 +34,7 @@ Thin elevated Install to Program Files, profiles under LocalAppData, so the sche
 
 ## [0.2.0] - 2026-09-22
 
-Maintainer-usable **0.x** dogfood release: reliable resume trigger, practical wall-clock, and quieter app recycle. Still pre-1.0 (no stranger-ready catalog/GUI).
+Maintainer-usable **0.x** dogfood release: reliable resume trigger, practical wall-clock, and quieter app recycle. Still before polished stranger **1.0.0** (catalog/GUI remain **V2**).
 
 ### Added
 
