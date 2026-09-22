@@ -4,6 +4,7 @@
 
 .PARAMETER ProfilePath
   Profile YAML path. Relative paths are resolved against the current location.
+  When omitted, defaults to %LOCALAPPDATA%\AudioRebind\profiles\default.yaml (ADR 0010).
 
 .PARAMETER TaskName
   Scheduled task name (default: AudioRebind-Resume).
@@ -12,6 +13,7 @@
   Requires administrator elevation.
   Ensures module powershell-yaml is installed for CurrentUser when missing (setup-time only).
   Runs as the registering user with highest privileges (so CurrentUser modules like powershell-yaml resolve).
+  Entrypoint is always $PSScriptRoot\Invoke-AudioRebind.ps1 (Program Files after Install, or repo src\ for dev).
   Triggers (ADR 0005 / #22):
     - Microsoft-Windows-Power-Troubleshooter Event ID 1 (primary)
     - Microsoft-Windows-Kernel-Power Event ID 107 (fallback when ID 1 is missing)
@@ -19,7 +21,6 @@
 #>
 [CmdletBinding()]
 param(
-    [Parameter(Mandatory = $true)]
     [string] $ProfilePath,
 
     [string] $TaskName = 'AudioRebind-Resume'
@@ -79,8 +80,17 @@ if (-not (Test-Path -LiteralPath $invokePath)) {
 }
 $invokePath = (Resolve-Path -LiteralPath $invokePath).Path
 
+if (-not $ProfilePath) {
+    $ProfilePath = Join-Path $env:LOCALAPPDATA 'AudioRebind\profiles\default.yaml'
+    Write-Host "ProfilePath omitted; using $ProfilePath"
+}
+
 if (-not (Test-Path -LiteralPath $ProfilePath)) {
-    Write-Error "Profile not found: $ProfilePath"
+    Write-Error @"
+Profile not found: $ProfilePath
+
+Run Install-AudioRebind.ps1 first (seeds default.yaml), or pass -ProfilePath explicitly.
+"@
     exit 1
 }
 $profileAbs = (Resolve-Path -LiteralPath $ProfilePath).Path
