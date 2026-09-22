@@ -54,7 +54,7 @@ Setup (task registration) and automatic runs assume an elevated scheduled task o
 
 | Commitment | Stance |
 |------------|--------|
-| **In scope (near term)** | Admin (or one-time admin registration) for setup and for the privileged steps (audio services / PnP). Daily resume can stay quiet after that registration — no UAC every wake. |
+| **In scope (near term)** | Admin (or one-time admin registration) for setup and for the privileged steps (audio services / PnP). Daily resume can stay quiet after that registration — no UAC every wake. Thin elevated Install copies runtime to Program Files and keeps profiles under LocalAppData ([ADR 0010](decisions/0010-installed-layout-programfiles-localappdata.md)). |
 | **Out of scope (not a product promise)** | Completing the same recovery as a locked-down **standard user with no elevation**. Enterprise “standard-user-only” packaging. |
 | **Not planned** | A least-privilege installer that splits elevation per step, or shipping a path where non-admins fully self-serve the same pipeline. Windows does not allow standard users to freely restart Audio services or toggle PnP; this project does not take on that product surface. |
 
@@ -68,7 +68,7 @@ Release and product-phase naming (full ladder: [ROADMAP.md](../ROADMAP.md)):
 |------|--------|----------|
 | **0.1.x** | Maintainer / personal dogfood MVP: **explicit** YAML targets (apps / USB), **no settings GUI**, resume via elevated Task Scheduler (not always-on). See [ADR 0007](decisions/0007-v1-mvp-boundaries.md). | Shipped [0.1.0](../CHANGELOG.md); Milestone `0.1.0` closed |
 | **0.x** (public prep) | Safe private→public flip (privacy scan); maintainer dogfood shipped as 0.2.0 | Done — [#15](https://github.com/goichiro-y/audio-rebind/issues/15) |
-| **1.0.0** | First semver major aimed at README-led tryouts (same MVP shape; thin fixed install; still not catalog/GUI). | [ROADMAP](../ROADMAP.md) 1.0.0 — [#29](https://github.com/goichiro-y/audio-rebind/issues/29), [#30](https://github.com/goichiro-y/audio-rebind/issues/30), [#31](https://github.com/goichiro-y/audio-rebind/issues/31) |
+| **1.0.0** | First semver major aimed at README-led tryouts (same MVP shape; thin fixed install; still not catalog/GUI). | Shipped [1.0.0](../CHANGELOG.md); Milestone `1.0.0` — [#29](https://github.com/goichiro-y/audio-rebind/issues/29), [#30](https://github.com/goichiro-y/audio-rebind/issues/30), [#31](https://github.com/goichiro-y/audio-rebind/issues/31) |
 | **V2** (product) | Defaults that “just work”: built-in catalog / heuristics + **opt-out**; settings GUI; always-on agent only if Event ID 1 is insufficient. Ships as semver **2.0.0**. | [ROADMAP](../ROADMAP.md) **Later** — no Issues until accepted |
 
 0.1.x stays deliberately narrow so the ordered pipeline can be proven on a real host before investing in zero-config UX. Catalog work stays named **V2** (not renumbered to V3).
