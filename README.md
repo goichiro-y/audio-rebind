@@ -4,9 +4,9 @@
 
 ## 日本語
 
-本ツールは、PCをスリープから復帰させたとき、「なぜか音が出ない」「なぜかマイクが反応しない」を直します。特定のUSB機器やメーカー専用ではありません。
+本ツールは、PCをスリープから復帰させたとき、「なぜか音が出ない」「なぜかマイクが反応しない」を直します。
 
-これまでは、手作業でWindowsの音声サービスを再起動したり、USBケーブルを抜き差ししたり、アプリを再起動したりして直していました。本ツールは、この面倒な復旧作業を代行します。
+これまでは、手作業でWindowsの音声サービスを再起動したり、USBケーブルを抜き差ししたり、アプリを再起動したりして直していました。本ツールは、この面倒な復旧作業を代行します。特定のUSB機器やメーカー専用ではありません。
 
 **仕組みについて**
 
@@ -25,6 +25,7 @@
 ツールの導入および実行には、Windowsの**管理者権限**が必要です（将来のバージョン1.0.0でも同様です）。
 
 **音楽制作ソフト（DAW）等を利用中の方への注意**
+
 本ツールはWindowsの音声サービスを再起動するため、音を独占して使っているソフトが止まったり、不安定になったりする場合があります。基本的には日常使いでのストレス軽減用としてご利用ください。
 
 また、以下の環境や状態では、自動で復旧処理が動きません。
@@ -36,14 +37,16 @@
 
 ### いつタスクスケジューラが起動するか
 
-| 直前のPCの状態 | ACPI | タスクスケジューラによる起動 | 手動での実行 |
-| --- | --- | --- | --- |
-| スリープ | S3 | **起動する（推奨ルート）** | 可能 |
-| 休止状態 | S4 | 未確認（同じ復帰ログが出れば動く可能性あり） | 可能 |
-| 画面オフのみ | S0 | 起動しない | 可能 |
-| モダンスタンバイ | S0低電力 | いまは保証しない | 可能 |
-| シャットダウンからの起動 | S5 | 起動しない | 可能 |
-| ロック画面の解除のみ | — | 起動しない | 可能 |
+| 直前のPCの状態 | ACPI | タスクスケジューラによる起動 |
+| --- | --- | --- |
+| スリープ | S3 | **起動する（推奨ルート）** |
+| 休止状態 | S4 | 未確認（同じ復帰ログが出れば動く可能性あり） |
+| 画面オフのみ | S0 | 起動しない |
+| モダンスタンバイ | S0低電力 | いまは保証しない |
+| シャットダウンからの起動 | S5 | 起動しない |
+| ロック画面の解除のみ | — | 起動しない |
+
+自動では動かない状態でも、自分でスクリプトを起動すれば復旧できます。
 
 ### はじめ方
 
@@ -69,9 +72,9 @@
 
 ## English
 
-This tool is for when a PC resumes from sleep and, for no obvious reason, there is no sound or the microphone does not pick up. It is not limited to a particular USB device or manufacturer.
+This tool is for when a PC resumes from sleep and, for no obvious reason, there is no sound or the microphone does not pick up.
 
-People already recover this by restarting Windows Audio services, unplugging a USB cable, or restarting apps. AudioRebind does that recovery for you.
+People already recover this by restarting Windows Audio services, unplugging a USB cable, or restarting apps. AudioRebind does that recovery for you. It is not limited to a particular USB device or manufacturer.
 
 **How it runs**
 
@@ -87,7 +90,9 @@ It is not a resident program. You register it with Windows Task Scheduler. After
 
 Install and run require **Administrator** elevation (still required at **1.0.0**).
 
-**DAW and exclusive-mode software:** restarting Windows Audio can stop or destabilize apps that hold the device exclusively. This is meant to reduce daily friction, not as something you run through a studio session.
+**DAW and exclusive-mode software**
+
+Restarting Windows Audio can stop or destabilize apps that hold the device exclusively. This is meant to reduce daily friction, not as something you run through a studio session.
 
 Automatic recovery does **not** run when:
 
@@ -98,14 +103,16 @@ Automatic recovery does **not** run when:
 
 ### When Task Scheduler starts
 
-| Previous PC state | ACPI | Task Scheduler start | Manual run |
-| --- | --- | --- | --- |
-| Sleep | S3 | **Yes (supported path)** | Yes |
-| Hibernate | S4 | Unverified (may run if the same resume events are logged) | Yes |
-| Display off only | S0 | No | Yes |
-| Modern Standby | S0 low-power | Not a current promise | Yes |
-| Power on from shutdown | S5 | No | Yes |
-| Unlock only | — | No | Yes |
+| Previous PC state | ACPI | Task Scheduler start |
+| --- | --- | --- |
+| Sleep | S3 | **Yes (supported path)** |
+| Hibernate | S4 | Unverified (may run if the same resume events are logged) |
+| Display off only | S0 | No |
+| Modern Standby | S0 low-power | Not a current promise |
+| Power on from shutdown | S5 | No |
+| Unlock only | — | No |
+
+If the task does not start, you can still recover by running the script yourself.
 
 Details: [docs/scope.md](docs/scope.md). Runtime notes: [src/README.md](src/README.md), [ADR 0005](docs/decisions/0005-resume-trigger-task-scheduler.md). Why an ordered package was uncommon: [docs/problem-and-motivation.md](docs/problem-and-motivation.md).
 
