@@ -36,6 +36,7 @@ Full policy: [docs/i18n.md](docs/i18n.md).
 ## 3. Documentation rules
 
 - When specs and roadmap disagree, fix the durable spec in `docs/` first, then update `ROADMAP.md`.
+- A version cut updates the ladder wording that names the ongoing line, in the ADR and in every place that quotes it, so an older minor is not left as the name of later cuts.
 - Do not duplicate full specs inside the roadmap; link instead.
 - Commit only public-safe text. Host identity, InstanceIds, raw logs, driver/VID-PID investigation detail, applied mitigations on a specific PC, and **personal app-stack** details belong under `local/` or `notes/private/` — see [docs/guides/local-notes.md](docs/guides/local-notes.md).
 - Agents: when gathering or writing facts about *this* machine or *this* user’s apps, write them to `local/` first; only promote generalized wording into public docs.

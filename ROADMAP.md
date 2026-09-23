@@ -1,4 +1,4 @@
-﻿# Roadmap
+# Roadmap
 
 Thin when/status overview. Durable specs: [`docs/`](docs/README.md). Adopted decisions: [`docs/decisions/`](docs/decisions/README.md). Placement rules: [CONTRIBUTING.md](CONTRIBUTING.md#where-work-lives). Actionable work: [GitHub Issues](https://github.com/goichiro-y/audio-rebind/issues).
 
@@ -13,7 +13,7 @@ Product phases use **semver**. The next public major is **1.0.0** (catalog + set
 | **0.1.x** | Maintainer / personal dogfood MVP ([ADR 0007](docs/decisions/0007-v1-mvp-boundaries.md)): explicit YAML, no GUI, Task Scheduler resume | **Shipped** as [0.1.0](CHANGELOG.md) (GitHub Milestone `0.1.0` closed) |
 | **0.x** (after 0.1) | **Public-prep** for a safe private→public flip (privacy scan, honesty in Status) | **Ready to flip** after **[0.2.0](CHANGELOG.md)** + [#15](https://github.com/goichiro-y/audio-rebind/issues/15) done (Milestone `0.2.0` closed) |
 | **0.3.0** | Thin fixed install (Program Files + LocalAppData); clone path no longer required for the scheduled task | **Shipped** as [0.3.0](CHANGELOG.md) (Milestone [`0.3.0`](https://github.com/goichiro-y/audio-rebind/milestone/3): [#29](https://github.com/goichiro-y/audio-rebind/issues/29)–[#31](https://github.com/goichiro-y/audio-rebind/issues/31)) |
-| **0.3.x** | YAML-line polish on the same product (explicit YAML, admin, Task Scheduler). A long **0.x** is OK | **0.4.0** is the latest cut. Hand-edit error copy and README YAML lessons are not opened |
+| **0.x** after **0.3.0** | YAML-line polish on the same product (explicit YAML, admin, Task Scheduler). A long **0.x** is OK | **0.4.0** is the latest cut. Hand-edit error copy and README YAML lessons are not opened |
 | **0.4.0** | Same YAML product after that install: double-click setup, USB step withdrawn, stop overlaps the engine, setup dialogs | **Shipped** as [0.4.0](CHANGELOG.md) |
 | **1.0.0** | First semver major: catalog / defaults + settings GUI so typical stacks need not hand-edit YAML. **Admin still required.** Do not ship until that line exists | **Not a release yet.** Related work is [#33](https://github.com/goichiro-y/audio-rebind/issues/33). The issues do not decide this name. A later check, outside the issues, decides when a release may be called **1.0.0** |
 
@@ -36,7 +36,7 @@ Explicit YAML profile (apps / USB), no settings GUI, resume via elevated Task Sc
 
 ## 0.x — public prep (done for flip)
 
-Gate for flipping the repo public. Maintainer-usable dogfood is **0.2.0**. Privacy scan [#15](https://github.com/goichiro-y/audio-rebind/issues/15) is **done**. Thin Install landed as **0.3.0**. Further YAML tryout polish belongs under **0.3.x**, not **1.0.0**.
+Gate for flipping the repo public. Maintainer-usable dogfood is **0.2.0**. Privacy scan [#15](https://github.com/goichiro-y/audio-rebind/issues/15) is **done**. Thin Install landed as **0.3.0**. Further YAML tryout polish stays on **0.x** after 0.3.0 (**0.4.0** is one cut). **1.0.0** is catalog + settings GUI.
 
 | Item | Tracking |
 |------|----------|

@@ -18,7 +18,7 @@ The product vision includes silent background behavior, built-in catalogs of app
 3. **Automatic runs use Task Scheduler** on resume (ADR 0005), not a always-on agent process.
 4. **Success bar:** after resume, with the maintainer profile, shared-mode WASAPI paths used by that profile work again without a reboot — documented via `local/` notes and a public CHANGELOG entry when exiting 0.1.x.
 
-**Version ladder:** superseded by [ADR 0011](0011-version-ladder-1-0-catalog-gui.md). Short form: **0.1.x** = this MVP; **0.3.x** = YAML-line polish; **1.0.0** = catalog + settings GUI (admin still required; Later until accepted). See [ROADMAP.md](../../ROADMAP.md).
+**Version ladder:** superseded by [ADR 0011](0011-version-ladder-1-0-catalog-gui.md). Short form: **0.1.x** = this MVP; YAML-line polish stays on **0.x** after 0.3.0; **1.0.0** = catalog + settings GUI (admin still required; Later until accepted). See [ROADMAP.md](../../ROADMAP.md).
 
 Catalog defaults, settings GUI, and always-on agents belong on [ROADMAP.md](../../ROADMAP.md) **Later** until separately accepted — not inside 0.x Issues.
 

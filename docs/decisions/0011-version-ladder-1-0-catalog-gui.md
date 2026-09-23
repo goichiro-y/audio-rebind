@@ -1,7 +1,8 @@
-﻿# 11. Version ladder: 1.0.0 is catalog / GUI
+# 11. Version ladder: 1.0.0 is catalog / GUI
 
 - Status: Accepted
 - Date: 2026-09-22
+- Updated: 2026-09-24 (a later minor such as **0.4.0** is a cut on the same YAML line; that line is **0.x** after 0.3.0)
 - Supersedes: version-ladder paragraph in [ADR 0007](0007-v1-mvp-boundaries.md) (0.1.x MVP boundaries themselves stay)
 
 ## Context
@@ -15,7 +16,7 @@ The YAML MVP (explicit profiles, no catalog, Task Scheduler, elevation) is alrea
 | Line | Meaning |
 |------|---------|
 | **0.1.x – 0.3.0** | Unchanged shipped history (MVP, public-prep, thin Install). |
-| **0.3.x** | Current product polish on the YAML line: README-led tryouts, Install-path dogfood, clearer first-run failures. Not a new major. |
+| **0.x** after **0.3.0** | YAML-line polish on the same product: README-led tryouts, Install-path dogfood, clearer first-run failures. **0.4.0** is one cut. Later cuts stay on this line. |
 | **1.0.0** | First semver major: built-in catalog / heuristics + opt-out, and a settings GUI so typical stacks need not hand-edit YAML. **Elevation remains required.** Do not ship **1.0.0** before that GUI/catalog line exists. A long **0.x** is accepted. |
 | **2.0.0 / “V2”** | Not the public destination. Do not headline a second major as the “real” product. A future 2.0.0 is only if a later contract break actually needs it. |
 
@@ -25,7 +26,7 @@ The settings window is open as [#33](https://github.com/goichiro-y/audio-rebind/
 
 ## Consequences
 
-- Stranger-facing YAML friction is **0.3.x**, not an unnamed gap and not **1.0.0**.
+- Stranger-facing YAML friction stays on **0.x** after 0.3.0. **0.4.0** is one cut on that line. **1.0.0** is catalog + settings GUI.
 - README must not imply that **1.0.0** drops admin or is for locked-down standard users.
 - [ADR 0007](0007-v1-mvp-boundaries.md) still forbids catalog/GUI **inside 0.x** as silent scope creep.
 - Index and ROADMAP drop **V2** as a product-phase name.
