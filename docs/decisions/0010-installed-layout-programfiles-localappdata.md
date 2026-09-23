@@ -1,8 +1,8 @@
-﻿# 10. Installed layout: Program Files runtime + LocalAppData settings
+# 10. Installed layout: Program Files runtime + LocalAppData settings
 
 - Status: Accepted
 - Date: 2026-09-22
-- Issues: [#29](https://github.com/goichiro-y/audio-rebind/issues/29), [#30](https://github.com/goichiro-y/audio-rebind/issues/30)
+- Issues: [#29](https://github.com/goichiro-y/audio-rebind/issues/29), [#30](https://github.com/goichiro-y/audio-rebind/issues/30), [#34](https://github.com/goichiro-y/audio-rebind/issues/34)
 
 ## Context
 
@@ -25,7 +25,9 @@ Two layers:
 
 **Uninstall:** remove scheduled task and Program Files payload; **keep** LocalAppData by default (`-RemoveUserData` to delete).
 
-**Dev clone:** registering from a repo checkout (`.\src\Register-AudioRebindTask.ps1`) remains supported; `$PSScriptRoot` resolves the entrypoint. Public Quick start prefers Install → edit `default.yaml` → Register from Program Files.
+**Dev clone:** registering from a repo checkout (`.\src\Register-AudioRebindTask.ps1`) remains supported; `$PSScriptRoot` resolves the entrypoint. Manual Quick start remains Install → edit `default.yaml` → Register from Program Files.
+
+**Repo-root double-click:** `Install-AudioRebind.cmd` elevates once, runs existing Install, then Register from the Program Files copy against LocalAppData `default.yaml`. Declining elevation registers nothing. The task reads that file at run time, so a later edit does not need another Register. The launcher is not a second layout, MSI, or Setup.exe, and it is not copied under Program Files.
 
 No MSI / signed Setup.exe requirement; no least-privilege or standard-user-only install.
 

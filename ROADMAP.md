@@ -57,13 +57,12 @@ Same MVP shape (YAML, Task Scheduler, admin). Thin fixed install so the task is 
 
 ## Open work
 
-[#32](https://github.com/goichiro-y/audio-rebind/issues/32), [#33](https://github.com/goichiro-y/audio-rebind/issues/33), [#34](https://github.com/goichiro-y/audio-rebind/issues/34), [#35](https://github.com/goichiro-y/audio-rebind/issues/35), and [#36](https://github.com/goichiro-y/audio-rebind/issues/36) do not depend on each other. Any can be done first. They do not decide a version number.
+[#32](https://github.com/goichiro-y/audio-rebind/issues/32), [#33](https://github.com/goichiro-y/audio-rebind/issues/33), [#35](https://github.com/goichiro-y/audio-rebind/issues/35), and [#36](https://github.com/goichiro-y/audio-rebind/issues/36) do not depend on each other. Any can be done first. They do not decide a version number.
 
 | Issue | Work |
 |-------|------|
 | [#32](https://github.com/goichiro-y/audio-rebind/issues/32) | Confirm the Program Files task still runs after the clone is moved, on one classic sleep/resume |
 | [#33](https://github.com/goichiro-y/audio-rebind/issues/33) | Settings window: choose apps and a USB device, write the existing LocalAppData profile |
-| [#34](https://github.com/goichiro-y/audio-rebind/issues/34) | Double-click at the repo root runs existing Install, then task registration. One elevation prompt. Decline leaves a visible “admin required” message |
 | [#35](https://github.com/goichiro-y/audio-rebind/issues/35) | Setup failures (execution policy, `powershell-yaml`, Program Files write, task registration) show a dialog |
 | [#36](https://github.com/goichiro-y/audio-rebind/issues/36) | Remove `AudioRebind-Resume` from a window. On open, unregister it when its action file is already missing |
 
@@ -77,6 +76,7 @@ Hand-edit first-run copy and a README YAML lesson are not opened. Display-off au
 | Manual + scheduled orchestrator | `src/`; maintainer dogfood OK |
 | 0.1.0 maintainer MVP exit | [CHANGELOG 0.1.0](CHANGELOG.md); Milestone `0.1.0` closed |
 | 0.3.0 thin install + README Install path | [CHANGELOG 0.3.0](CHANGELOG.md); Milestone `0.3.0` |
+| Double-click setup | Done — [#34](https://github.com/goichiro-y/audio-rebind/issues/34). Decline shows that admin is required. Accept copies to Program Files and registers the task |
 
 ## Later (not committed)
 

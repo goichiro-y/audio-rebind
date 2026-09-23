@@ -14,9 +14,15 @@ Install-Module powershell-yaml -Scope CurrentUser -Force
 
 `Install-AudioRebind.ps1` and `Register-AudioRebindTask.ps1` install it automatically when missing (setup-time only; not on every resume). If PSGallery/network blocks install, setup fails with an actionable error.
 
+## Double-click setup
+
+`Install-AudioRebind.cmd` at the repository root asks for elevation once. If accepted, it runs `Install-AudioRebind.ps1`, then `%ProgramFiles%\AudioRebind\Register-AudioRebindTask.ps1` (the installed copy and LocalAppData `default.yaml`). That process uses `-ExecutionPolicy Bypass` only for itself; it does not change the machine policy. If elevation is declined, a dialog says Administrator is required and the task was not registered. The launcher is not copied to Program Files.
+
 ## Quick start (installed — preferred)
 
-Elevated Windows PowerShell 5.1, from a clone or unpack of this repo:
+Double-click `Install-AudioRebind.cmd`, then edit `%LOCALAPPDATA%\AudioRebind\profiles\default.yaml`. The task reads that file on each resume.
+
+The same steps from an elevated Windows PowerShell 5.1 prompt, from a clone or unpack of this repo:
 
 ```powershell
 cd <repo>
@@ -97,6 +103,7 @@ Get-ScheduledTask -TaskName AudioRebind-Resume | Format-List TaskName, State
 
 | Path | Role |
 |------|------|
+| `Start-AudioRebindSetup.ps1` | Called by repo-root `Install-AudioRebind.cmd` (not copied to Program Files) |
 | `Install-AudioRebind.ps1` | Copy runtime to Program Files; seed LocalAppData profile |
 | `Uninstall-AudioRebind.ps1` | Remove task + Program Files; keep user data by default |
 | `Invoke-AudioRebind.ps1` | Pipeline entrypoint |

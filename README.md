@@ -50,16 +50,20 @@
 
 ### はじめ方
 
-管理者権限で「PowerShell（バージョン5.1）」を開き、ダウンロードしたフォルダ内で以下のコマンドを順番に実行します。
+ダウンロードしたフォルダの直下にある `Install-AudioRebind.cmd` をダブルクリックします。管理者の許可は1回です。
+
+- 許可すると、ツール本体を Program Files に置き、そのコピーと `%LOCALAPPDATA%\AudioRebind\profiles\default.yaml` に対してタスクを登録します。
+- 許可しなかったときは、管理者権限が必要なので、タスクは登録されません。
+
+そのあと `default.yaml` を編集します（再起動したいアプリなど。USB機器の指定は任意です）。中身は復帰のたびに読むので、編集のあと登録し直す必要はありません。
+
+PCを一度スリープさせてから復帰し、音が鳴るか確認します。動作ログは `%LOCALAPPDATA%\AudioRebind\logs\` に保存されます。
+
+コマンドで行う場合は、管理者の PowerShell 5.1 で次の順です。
 
 1. `.\src\Install-AudioRebind.ps1`
-（ツール本体をProgram Filesフォルダに配置します）
-2. `%LOCALAPPDATA%\AudioRebind\profiles\default.yaml` を編集
-（再起動したいアプリなどを指定します。USB機器の指定は任意です）
+2. `default.yaml` を編集
 3. `& "$env:ProgramFiles\AudioRebind\Register-AudioRebindTask.ps1"`
-（スリープ復帰時にツールが動くよう、タスクスケジューラに登録します）
-4. PCを一度スリープさせてから復帰し、音が鳴るか確認します。
-（動作ログは `%LOCALAPPDATA%\AudioRebind\logs\` に保存されます）
 
 **今すぐ手動で復旧させたいとき:**
 
@@ -133,14 +137,22 @@ More detail: [docs/architecture-overview.md](docs/architecture-overview.md). Why
 
 ## Quick start
 
-Elevated Windows PowerShell 5.1, from a clone or unpack of this repo:
+From a clone or unpack of this repo, double-click `Install-AudioRebind.cmd` at the repository root. Windows asks for Administrator once.
+
+- If you accept, it copies the runtime to `%ProgramFiles%\AudioRebind\` and registers the scheduled task against that copy and `%LOCALAPPDATA%\AudioRebind\profiles\default.yaml`.
+- If you decline, a message says Administrator is required and the task was not registered.
+
+Then edit `default.yaml` (apps to restart; USB device IDs are optional. Checklist at the top of the file). The task reads that file on each resume, so you do not re-register after an edit.
+
+Sleep → resume, then check `%LOCALAPPDATA%\AudioRebind\logs\`.
+
+The same steps from an elevated Windows PowerShell 5.1 prompt:
 
 1. `.\src\Install-AudioRebind.ps1`  
-   (copies runtime to `%ProgramFiles%\AudioRebind\`, seeds `%LOCALAPPDATA%\AudioRebind\profiles\default.yaml`, ensures `powershell-yaml`)
-2. Edit `default.yaml` (apps to restart; USB device IDs are optional. Checklist at the top of the file; placeholders until you fill them in).
+   (copies runtime to `%ProgramFiles%\AudioRebind\`, seeds `default.yaml`, ensures `powershell-yaml`)
+2. Edit `default.yaml`
 3. `& "$env:ProgramFiles\AudioRebind\Register-AudioRebindTask.ps1"`  
-   (defaults to that profile; task points at Program Files — moving the clone later is safe)
-4. Sleep → resume, then check `%LOCALAPPDATA%\AudioRebind\logs\`
+   (task points at Program Files — moving the clone later is safe)
 
 Manual one-shot (installed):  
 `& "$env:ProgramFiles\AudioRebind\Invoke-AudioRebind.ps1"`  
@@ -164,6 +176,7 @@ Dev clone Register (path-locked to the checkout) remains available — see [src/
 
 | Path | Purpose |
 |------|---------|
+| [Install-AudioRebind.cmd](Install-AudioRebind.cmd) | Double-click setup: Install, then register the Program Files task |
 | [src/](src/README.md) | Orchestrator, Install/Uninstall, Task Scheduler register/unregister |
 | [docs/](docs/README.md) | Scope, specs, ADRs, guides |
 | [profiles/examples/](profiles/examples/README.md) | Placeholder example profiles |
