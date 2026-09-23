@@ -32,19 +32,24 @@ Auto triggers (one task, two subscriptions — [ADR 0005](decisions/0005-resume-
 
 Overlap: `MultipleInstancesPolicy=IgnoreNew` plus ~120s orchestrator debounce so one resume that emits both events runs the pipeline at most once.
 
-| Situation | Auto (Event ID 1 and/or Kernel-Power 107) | Notes |
-|-----------|-------------------------------------------|--------|
-| Classic sleep → resume (typical S3-class) | **Supported (verified on maintainer dogfood)** | Main 0.1.x battlefield; 107 covers hosts that skip Event ID 1 |
-| Hibernate → resume (S4-class) | **Best-effort, unverified** | May fire if Event ID 1 and/or Kernel-Power 107 is logged — **not a maintainer commitment** to verify or support soon |
-| Shutdown / power-on (S5-class) | **Out of scope (auto)** | Cold start is a different model; use manual run if needed. No S5 auto trigger planned for now. |
-| Unlock / sign-in only (no sleep resume event) | **Out of scope (auto)** | Needs a different trigger (ROADMAP Later: unlock / other). |
-| Modern Standby (S0 low-power) | **Deferred** | OEM-dependent; not a near-term maintainer commitment |
+Automatic start happens only when Windows logs a **resume from sleep** (Event ID 1 and/or 107). The ACPI name in Settings is a hint, not a second trigger.
 
-**Hibernate / similar autos:** claims center on classic sleep→resume. Do not treat hibernate or Modern Standby as “supported” in README copy. If both Event ID 1 and Kernel-Power 107 are missing on a host, unlock / other triggers stay Later.
+| What the PC is doing | ACPI | Automatic | Manual run |
+|----------------------|------|-----------|------------|
+| On, display off (not sleep) | S0 | No | Yes, if you start the script |
+| Modern Standby | S0 low-power | Not a current promise | Yes, if you start the script |
+| Sleep | S3 | **Yes** — this is the supported path | Yes |
+| Hibernate | S4 | Maybe, if the same wake events are logged (not verified) | Yes |
+| Shut down, then power on | S5 | No | Yes, if you start the script |
+| Unlock / sign-in only (no sleep) | — | No | Yes, if you start the script |
+
+S1 / S2 are unused on most PCs and are not a product claim.
+
+Do not describe hibernate or Modern Standby as a supported automatic path. If a host never logs Event ID 1 or Kernel-Power 107, use a manual run; other automatic triggers stay [ROADMAP Later](../ROADMAP.md).
 
 #### Updating the Automatic trigger table
 
-If you observe a row that should change, a short Issue or PR that updates **one cell or Notes line** with a **generalized** sentence is enough (e.g. which events fired on hibernate resume). Do **not** paste full InstanceIds, hostnames, usernames, or raw Event Viewer dumps ([local-notes](guides/local-notes.md)). No scheduler/orchestrator code unless separately agreed.
+If you observe a row that should change, a short Issue or PR that updates **one cell** with a **generalized** sentence is enough (e.g. which events fired on hibernate resume). Do **not** paste full InstanceIds, hostnames, usernames, or raw Event Viewer dumps ([local-notes](guides/local-notes.md)). No scheduler/orchestrator code unless separately agreed.
 
 ### Operator / privilege model
 
@@ -58,7 +63,11 @@ Setup (task registration) and automatic runs assume an elevated scheduled task o
 | **Out of scope (not a product promise)** | Completing the same recovery as a locked-down **standard user with no elevation**. Enterprise “standard-user-only” packaging. |
 | **Not planned** | A least-privilege installer that splits elevation per step, or shipping a path where non-admins fully self-serve the same pipeline. Windows does not allow standard users to freely restart Audio services or toggle PnP; this project does not take on that product surface. |
 
-Do **not** keep least-privilege installer on [ROADMAP Later](../ROADMAP.md) as a future improvement — it is declined for this product’s intended audience (people who administer their own PC).
+Do **not** keep least-privilege installer on [ROADMAP Later](../ROADMAP.md) as a future improvement — it is declined for this product’s intended audience (people who administer their own PC). Semver **1.0.0** (catalog / settings GUI) still requires elevation ([ADR 0011](decisions/0011-version-ladder-1-0-catalog-gui.md)).
+
+### Cautions (not out of scope)
+
+Restarting Windows Audio can stop or destabilize **exclusive-mode** clients (DAWs and similar). That is a usage caution, not a product exclusion: the pipeline is for daily friction after classic sleep, not a studio-session companion. User-facing wording: [README.md](../README.md).
 
 ## Version intent
 
@@ -69,10 +78,10 @@ Release and product-phase naming (full ladder: [ROADMAP.md](../ROADMAP.md)):
 | **0.1.x** | Maintainer / personal dogfood MVP: **explicit** YAML targets (apps / USB), **no settings GUI**, resume via elevated Task Scheduler (not always-on). See [ADR 0007](decisions/0007-v1-mvp-boundaries.md). | Shipped [0.1.0](../CHANGELOG.md); Milestone `0.1.0` closed |
 | **0.x** (public prep) | Safe private→public flip (privacy scan); maintainer dogfood shipped as 0.2.0 | Done — [#15](https://github.com/goichiro-y/audio-rebind/issues/15) |
 | **0.3.0** | Thin fixed install (Program Files + LocalAppData); clone path not required for the task | Shipped [0.3.0](../CHANGELOG.md); Milestone `0.3.0` — [#29](https://github.com/goichiro-y/audio-rebind/issues/29)–[#31](https://github.com/goichiro-y/audio-rebind/issues/31) |
-| **1.0.0** | Semver major for polished README-led tryouts (same MVP shape; still not catalog/GUI). | Not started — [ROADMAP](../ROADMAP.md) |
-| **V2** (product) | Defaults that “just work”: built-in catalog / heuristics + **opt-out**; settings GUI; always-on agent only if Event ID 1 is insufficient. Ships as semver **2.0.0**. | [ROADMAP](../ROADMAP.md) **Later** — no Issues until accepted |
+| **0.3.x** | YAML-line polish (README-led tryouts, Install dogfood, first-run errors). Same shape; not a major. | Current — [ROADMAP](../ROADMAP.md) |
+| **1.0.0** | First semver major: catalog / heuristics + **opt-out**, and settings GUI so typical stacks need not hand-edit YAML. **Admin still required.** Do not ship before that line exists. | [ROADMAP](../ROADMAP.md) **Later** — no Issues until accepted |
 
-0.1.x stays deliberately narrow so the ordered pipeline can be proven on a real host before investing in zero-config UX. Catalog work stays named **V2** (not renumbered to V3).
+0.1.x stays deliberately narrow so the ordered pipeline can be proven on a real host before investing in zero-config UX. Catalog / GUI is **1.0.0**, not a second public major ([ADR 0011](decisions/0011-version-ladder-1-0-catalog-gui.md)). A long **0.x** is accepted.
 
 ## Out of scope (initially)
 
@@ -81,10 +90,13 @@ Release and product-phase naming (full ladder: [ROADMAP.md](../ROADMAP.md)):
 - Rewriting closed apps (dictation helpers, chat clients, browsers) to handle `DEVICE_INVALIDATED` themselves.
 - A full virtual-cable / WASAPI proxy product (may be revisited later if the orchestrator is not enough).
 - Non-Windows platforms (unless explicitly added later).
-- MVP / 0.x settings GUI, built-in “restart all audio-looking apps” catalogs, or always-on agents (Later / **V2**).
-- **Automatic** runs on shutdown/boot (S5), unlock-only, or Modern Standby (see table above). Manual pipeline runs remain available.
+- MVP / 0.x settings GUI, built-in “restart all audio-looking apps” catalogs, or always-on agents (**1.0.0** / Later for catalog+GUI; always-on only if resume events are insufficient).
+- **Automatic** runs on display-off-only (S0, not sleep), shutdown/boot (S5), unlock-only, or Modern Standby (see table above). Manual pipeline runs remain available.
+- Watching or relaunching apps that **exited on their own** (including after display-off while the PC stayed awake). This is not a crashed-app watchdog; optional Apps recycle runs only when the pipeline itself starts.
 - Standard-user-only / no-elevation completion of the full pipeline; least-privilege “elevate only some steps” installer (see Operator / privilege model).
 
 ## Design stance
 
 Prefer one orchestrator with three steps over three separate tools. Existing projects such as “restart Audiosrv on wake” or “restart mixer apps on wake” are complementary references, not the end state for this repository.
+
+Stay on classic sleep/resume rebind; do not grow into every silent playback or dead mic. User-facing wording: [README.md](../README.md). Why: [problem-and-motivation.md](problem-and-motivation.md). New automatic patterns (display-off, extra event IDs, health probes) need an explicit scope change before code.

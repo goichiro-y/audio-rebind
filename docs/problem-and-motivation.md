@@ -1,4 +1,4 @@
-# Problem and motivation
+﻿# Problem and motivation
 
 ## The user-visible failure
 
@@ -24,9 +24,18 @@ The break sits between layers that each claim success:
 
 Vendors document workarounds (disable sleep, disable selective suspend, unplug/replug). Related tools cover **one** slice (restart audio services, or restart mixer apps). Few ship an **ordered pipeline** across engine + device + apps.
 
+## Why an ordered, non-resident package was uncommon
+
+Single-layer public tools already exist (restart the audio engine, recycle mixer apps, or unplug the interface). People who can write a few elevated commands often already wired the same idea to Task Scheduler on their own PC. Vendors typically document disable-sleep, disable selective suspend, or unplug/replug: the break often sits in ACPI / USB power policy, not a single driver they can patch in isolation, so a productized “force-reset the device on resume” is an awkward official offering.
+
+What was uncommon is a small, generic OSS package that runs the **ordered** ritual (engine → optional USB → optional apps) without an always-on agent.
+
+The pipeline uses stock Windows facilities (Task Scheduler, service control, PnP disable/enable) — not a new kernel driver. `pnputil` is only a possible fallback for the optional USB step, not the product core.
+
 ## Motivation for AudioRebind
 
-1. Automate the ritual humans already perform after resume.
+1. Automate the ritual humans already perform after resume — without an always-on agent.
 2. Stay **generic**: configurable USB devices and app lists — not a single SKU or personal app stack.
 3. Prefer a small open orchestrator over waiting for a cross-vendor “real” fix that may never land.
 4. Keep host-specific investigation notes and personal stack details out of public git history (`local/`, `notes/private/` — see [guides/local-notes.md](guides/local-notes.md)).
+5. Stay **narrow**: classic sleep/resume audio rebind, not every silent playback or dead mic. User-facing wording: [README.md](../README.md). Claims: [scope.md](scope.md).

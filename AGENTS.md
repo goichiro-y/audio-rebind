@@ -25,9 +25,9 @@ Where work lives (Issues vs ROADMAP vs docs): [CONTRIBUTING.md](CONTRIBUTING.md#
 
 | Kind | Where to write | Rule |
 |------|----------------|------|
-| Canonical docs | `README.md`, `AGENTS.md`, `CONTRIBUTING.md`, `docs/**/*.md` (no locale suffix), ADRs | **English** is the source of truth. No full Japanese dual body in the same file |
-| Japanese | Sibling `*.ja.md` only | Optional; must not replace English |
-| Root README | Optional **short** Japanese blurb after English intro | Fuller Japanese: `README.ja.md` |
+| Canonical docs | `AGENTS.md`, `CONTRIBUTING.md`, `ROADMAP.md`, `CHANGELOG.md`, `docs/**/*.md` (no locale suffix), ADRs | **English** is the source of truth. No Japanese dual body in the same file |
+| Root `README.md` | Japanese **landing at the top** + English landing of the same visitor density | English wins if they disagree. Do not put Event IDs / WASAPI diagnosis in README (`docs/` holds those). Do not duplicate the whole README in Japanese. See [docs/i18n.md](docs/i18n.md) |
+| Japanese elsewhere | Sibling `*.ja.md` only | Optional; must not replace English. `README.ja.md` is a pointer, not a second full README |
 | GitHub Issues | Japanese + short English summary / Acceptance | See [docs/i18n.md](docs/i18n.md) |
 | Other locales | `*.<locale>.md` | Same sibling-file pattern |
 

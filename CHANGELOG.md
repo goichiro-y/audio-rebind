@@ -9,7 +9,17 @@ and this project aims to adhere to [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- [ADR 0011](docs/decisions/0011-version-ladder-1-0-catalog-gui.md): version ladder — **1.0.0** is catalog + settings GUI (admin still required); YAML tryout polish is **0.3.x**; no public **V2** / 2.0.0 destination
+- README Japanese landing at the top (USP, audience, Quick start skeleton); [`README.ja.md`](README.ja.md) is a pointer ([docs/i18n.md](docs/i18n.md))
+
 ### Changed
+
+- Document which power states start the task automatically vs a manual run (S0 display-off, Modern Standby, S3, S4, S5) in [docs/scope.md](docs/scope.md) and the README
+- README Japanese landing and English intro: user-facing sleep-resume dropout first; DAW as a caution, not product out-of-scope
+- README English landing matches Japanese density; Event IDs, debounce, and WASAPI diagnosis stay in [docs/scope.md](docs/scope.md) ([docs/i18n.md](docs/i18n.md))
+- [docs/scope.md](docs/scope.md): exclusive-mode / DAW as a caution; not a crashed-app watchdog
+- Japanese README landing points at [docs/README.md](docs/README.md) and [CONTRIBUTING.md](CONTRIBUTING.md)
+- [src/README.md](src/README.md): host ExecutionPolicy can block local `.ps1` files (Install does not bypass it)
 
 ### Fixed
 
@@ -17,9 +27,9 @@ and this project aims to adhere to [Semantic Versioning](https://semver.org/).
 
 ## [0.3.0] - 2026-09-22
 
-Thin elevated Install to Program Files, profiles under LocalAppData, so the scheduled task no longer depends on a durable clone path ([#29](https://github.com/goichiro-y/audio-rebind/issues/29), [#30](https://github.com/goichiro-y/audio-rebind/issues/30), [#31](https://github.com/goichiro-y/audio-rebind/issues/31)). Same MVP shape (explicit YAML, Task Scheduler, admin). Still **0.x** (not yet claiming semver **1.0.0** stranger-ready polish). No catalog/GUI (V2).
+Thin elevated Install to Program Files, profiles under LocalAppData, so the scheduled task no longer depends on a durable clone path ([#29](https://github.com/goichiro-y/audio-rebind/issues/29), [#30](https://github.com/goichiro-y/audio-rebind/issues/30), [#31](https://github.com/goichiro-y/audio-rebind/issues/31)). Same MVP shape (explicit YAML, Task Scheduler, admin). No catalog/GUI on this line.
 
-> Note: This line was briefly published as GitHub Release `v1.0.0` / Milestone `1.0.0`, then renumbered to **0.3.0** to match the version ladder.
+> Note: This line was briefly published as GitHub Release `v1.0.0` / Milestone `1.0.0`, then renumbered to **0.3.0** to match the version ladder then in force (1.0.0 = README polish). That meaning of **1.0.0** later moved to **0.3.x**; **1.0.0** is now catalog + settings GUI ([ADR 0011](docs/decisions/0011-version-ladder-1-0-catalog-gui.md)).
 
 ### Added
 
@@ -34,7 +44,7 @@ Thin elevated Install to Program Files, profiles under LocalAppData, so the sche
 
 ## [0.2.0] - 2026-09-22
 
-Maintainer-usable **0.x** dogfood release: reliable resume trigger, practical wall-clock, and quieter app recycle. Still before polished stranger **1.0.0** (catalog/GUI remain **V2**).
+Maintainer-usable **0.x** dogfood release: reliable resume trigger, practical wall-clock, and quieter app recycle. Catalog/GUI were then named **V2**; that destination is now **1.0.0** ([ADR 0011](docs/decisions/0011-version-ladder-1-0-catalog-gui.md)).
 
 ### Added
 

@@ -33,4 +33,4 @@ No MSI / signed Setup.exe requirement; no least-privilege or standard-user-only 
 
 - [#30](https://github.com/goichiro-y/audio-rebind/issues/30) implements Install / Uninstall and Register defaults against these paths.
 - Moving or deleting the git clone after Install must not break the scheduled task.
-- Catalog / GUI and richer installers stay **V2** / Later.
+- Catalog / GUI and richer installers stay **1.0.0** / Later ([ADR 0011](0011-version-ladder-1-0-catalog-gui.md)).

@@ -16,13 +16,13 @@ The product vision includes silent background behavior, built-in catalogs of app
 3. **Automatic runs use Task Scheduler** on resume (ADR 0005), not a always-on agent process.
 4. **Success bar:** after resume, with the maintainer profile, shared-mode WASAPI paths used by that profile work again without a reboot — documented via `local/` notes and a public CHANGELOG entry when exiting 0.1.x.
 
-**Version ladder** (do not rename catalog work to “V3”): **0.1.x** = this MVP; **0.x** = public-prep polish (incl. **0.3.0** thin install); **1.0.0** = polished strangers-can-follow-README; **V2** = catalog / GUI as semver **2.0.0** (Later). See [ROADMAP.md](../../ROADMAP.md).
+**Version ladder:** superseded by [ADR 0011](0011-version-ladder-1-0-catalog-gui.md). Short form: **0.1.x** = this MVP; **0.3.x** = YAML-line polish; **1.0.0** = catalog + settings GUI (admin still required; Later until accepted). See [ROADMAP.md](../../ROADMAP.md).
 
-Catalog defaults, opt-out GUI, and always-on agents belong in **Later / V2** on [ROADMAP.md](../../ROADMAP.md) until separately accepted.
+Catalog defaults, settings GUI, and always-on agents belong on [ROADMAP.md](../../ROADMAP.md) **Later** until separately accepted — not inside 0.x Issues.
 
 ## Consequences
 
 - Implementation Issues for 0.1.x stayed scoped to orchestrator, profile loader, and trigger packaging.
 - Public-prep work continues under **0.x** Issues without expanding into catalog/GUI.
-- Expanding to “zero config” requires a new ADR and Milestone (`v2`), not silent scope creep inside 0.x Issues.
+- Expanding to “zero config” / catalog / settings GUI requires accepting the **1.0.0** line ([ADR 0011](0011-version-ladder-1-0-catalog-gui.md)), not silent scope creep inside 0.x Issues.
 - Personal app paths and full InstanceIds remain in `local/` or private profiles — never in shared examples without placeholders.

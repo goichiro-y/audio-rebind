@@ -6,10 +6,10 @@ Thanks for your interest. This project is maintained for a **narrow** sleep/resu
 
 | Kind | Where | Open a GitHub Issue? |
 |------|--------|----------------------|
-| Product version intent (0.1.x / 0.x / 0.3.0 / 1.0.0 / V2) | [ROADMAP.md](ROADMAP.md) version ladder | No (versions are not Issues) |
-| 0.1.x / 0.x delivery work | [ROADMAP.md](ROADMAP.md) | Yes — committed phase work only |
+| Product version intent (0.1.x / 0.x / 0.3.x / 1.0.0) | [ROADMAP.md](ROADMAP.md) version ladder | No (versions are not Issues) |
+| 0.x / **0.3.x** YAML-line polish | [ROADMAP.md](ROADMAP.md) | Yes — when a concrete item is accepted (not catalog/GUI) |
 | **Accepted, actionable** work | GitHub Issues + Milestone | **Yes** |
-| **Uncommitted** ideas / V2 sketches | [ROADMAP.md](ROADMAP.md) **Later** | **No** until accepted |
+| **Uncommitted** ideas / **1.0.0** catalog-GUI sketches | [ROADMAP.md](ROADMAP.md) **Later** | **No** until accepted |
 | Adopted design | [docs/decisions/](docs/decisions/README.md) | Proposed ideas stay out of ADR files |
 | Stable what/why | [docs/](docs/README.md) | No progress tables in docs |
 | Machine / personal stack detail | `local/` (gitignored) | Never paste raw host inventory into Issues |
@@ -28,6 +28,8 @@ Prefer a small PR that explains **what** and **why**. Large features or out-of-s
 
 ## How to contribute
 
+Durable specs start at [docs/README.md](docs/README.md) (scope, architecture, area specs, ADRs).
+
 1. For larger changes, open an issue **after** the work is in scope (or discuss via ROADMAP / maintainers first).
 2. Fork the repository (or create a branch if you have write access).
 3. Make focused changes with a clear description.
@@ -39,7 +41,7 @@ Participation is governed by [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
 
 ## Documentation language
 
-English is the source of truth for durable docs. Japanese uses sibling `*.ja.md` files (optional), not in-file dual bodies for `docs/` / ADRs. Root `README.md` may include a **short** Japanese blurb; fuller Japanese is [`README.ja.md`](README.ja.md).
+English is the source of truth for durable docs. Do not put Japanese dual bodies in `docs/` or ADRs. Root [`README.md`](README.md) has a **Japanese landing at the top** and an English landing of the same visitor density; if they disagree, English wins. Event IDs and the WASAPI diagnosis live in `docs/`, not README. [`README.ja.md`](README.ja.md) is a pointer, not a second full README.
 
 **Issues:** prefer Japanese plus a short English summary and Acceptance checklist. Details: [docs/i18n.md](docs/i18n.md).
 

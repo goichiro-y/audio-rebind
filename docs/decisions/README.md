@@ -18,10 +18,11 @@ Store **adopted** decisions here.
 | [0004-profile-format-yaml.md](0004-profile-format-yaml.md) | Profiles are YAML |
 | [0005-resume-trigger-task-scheduler.md](0005-resume-trigger-task-scheduler.md) | Task Scheduler + elevated task; Power-Troubleshooter/1 + Kernel-Power/107 |
 | [0006-v1-step-defaults-engine-usb.md](0006-v1-step-defaults-engine-usb.md) | Restart both audio services; USB disable/enable by HardwareId |
-| [0007-v1-mvp-boundaries.md](0007-v1-mvp-boundaries.md) | 0.1.x MVP boundaries; version ladder → ROADMAP |
+| [0007-v1-mvp-boundaries.md](0007-v1-mvp-boundaries.md) | 0.1.x MVP boundaries (YAML, no GUI); ladder → [0011](0011-version-ladder-1-0-catalog-gui.md) |
 | [0008-v1-repository-layout.md](0008-v1-repository-layout.md) | `src/`, `profiles/examples/`, `local/profiles/` |
 | [0009-yaml-on-windows-powershell-51.md](0009-yaml-on-windows-powershell-51.md) | YAML via powershell-yaml on Windows PowerShell 5.1 |
 | [0010-installed-layout-programfiles-localappdata.md](0010-installed-layout-programfiles-localappdata.md) | Program Files runtime + LocalAppData profiles/logs (#29/#30) |
+| [0011-version-ladder-1-0-catalog-gui.md](0011-version-ladder-1-0-catalog-gui.md) | **1.0.0** = catalog + settings GUI; YAML polish is **0.3.x**; no public **V2** / 2.0 destination |
 
 ## Template (copy into a new file)
 

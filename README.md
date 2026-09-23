@@ -1,14 +1,112 @@
 ﻿# AudioRebind
 
-After Windows sleep/resume, playback or capture can look fine in Settings while shared-mode WASAPI audio is actually dead. AudioRebind runs a fixed order — **audio engine → optional USB device → optional apps** — so sessions work again without a reboot.
+[日本語](#日本語) · [English](#english) · Language policy: [docs/i18n.md](docs/i18n.md)
 
-It is **not** tied to a single mixer brand. Profiles use generic device IDs and process names. Not an always-on agent: **Task Scheduler** starts a PowerShell script on resume (admin required).
+## 日本語
 
-> **Not for you if:** no local-admin elevation, Modern Standby-only (or other non-classic sleep), or enterprise lockdown without admin — see [docs/scope.md](docs/scope.md). Classic sleep→resume + admin is the supported auto path.
+本ツールは、PCをスリープから復帰させたとき、「なぜか音が出ない」「なぜかマイクが反応しない」を直すためのツールです。特定のUSB機器やメーカー専用ではありません。
 
-> **日本語（短い要約）:** スリープ復帰後に「設定上は生きているのに音やマイクが死ぬ」とき、音声エンジン →（任意）USB →（任意）アプリの順で張り直します。常駐ではなくタスク スケジューラ起動。管理者必須。休止の自動は未検証（メンテナは近いうちに保証しない）。**対象外の目安:** 管理者なし／Modern Standby のみ／企業ロックダウン → [docs/scope.md](docs/scope.md)。くわしくは [README.ja.md](README.ja.md)。言語方針: [docs/i18n.md](docs/i18n.md)。
+こんなとき、これまでは手作業でUSBケーブルを抜き差ししたり、アプリを再起動したりして直していました。本ツールは、この面倒な復旧作業を代行します。
 
-Japanese summary (fuller): [README.ja.md](README.ja.md). Language policy: [docs/i18n.md](docs/i18n.md).
+**仕組みについて**
+本ツールは、常駐ソフトではありません。Windowsタスクスケジューラに処理を登録して使います。PCがスリープから戻ると、タスクスケジューラが本ツールを呼び出し、復旧処理を1回だけ走らせて終了します。
+
+**復旧する順番**
+以下の順番で処理を自動実行します。
+
+1. Windowsの音声サービスの再起動（標準で実行）
+2. （設定した場合のみ）USB機器を一度無効にして有効にする処理
+3. （設定した場合のみ）指定した音声アプリの再起動
+
+### 注意点・対象外となる環境
+
+ツールの導入および実行には、Windowsの**管理者権限**が必要です（将来のバージョン1.0.0でも同様です）。
+
+**音楽制作ソフト（DAW）等を利用中の方への注意**
+本ツールはWindowsの音声サービスを再起動するため、音を独占して使っているソフトが止まったり、不安定になったりする場合があります。基本的には日常使いでのストレス軽減用としてご利用ください。
+
+また、以下の環境や状態では、自動で復旧処理が動きません。
+
+* スリープではなく、モニターの画面だけが消えていた場合
+* アプリが自分で終了してしまった場合（落ちたアプリを監視して再起動するソフトではありません）
+* モダンスタンバイ（ノートPCなどでよくある、画面オフに近い省電力機能）のみのPC。本ツールの自動起動はいまは保証していません。
+* 会社のPCなど、管理者権限が使えない環境
+
+### いつタスクスケジューラが起動するか
+
+| 直前のPCの状態 | ACPI | タスクスケジューラによる起動 | 手動での実行 |
+| --- | --- | --- | --- |
+| スリープ | S3 | **起動する（推奨ルート）** | 可能 |
+| 休止状態 | S4 | 未確認（同じ復帰ログが出れば動く可能性あり） | 可能 |
+| 画面オフのみ | S0 | 起動しない | 可能 |
+| モダンスタンバイ | S0低電力 | いまは保証しない | 可能 |
+| シャットダウンからの起動 | S5 | 起動しない | 可能 |
+| ロック画面の解除のみ | — | 起動しない | 可能 |
+
+### はじめ方
+
+管理者権限で「PowerShell（バージョン5.1）」を開き、ダウンロードしたフォルダ内で以下のコマンドを順番に実行します。
+
+1. `.\src\Install-AudioRebind.ps1`
+（ツール本体をProgram Filesフォルダに配置します）
+2. `%LOCALAPPDATA%\AudioRebind\profiles\default.yaml` を編集
+（再起動したいアプリなどを指定します。USB機器の指定は任意です）
+3. `& "$env:ProgramFiles\AudioRebind\Register-AudioRebindTask.ps1"`
+（スリープ復帰時にツールが動くよう、タスクスケジューラに登録します）
+4. PCを一度スリープさせてから復帰し、音が鳴るか確認します。
+（動作ログは `%LOCALAPPDATA%\AudioRebind\logs\` に保存されます）
+
+**今すぐ手動で復旧させたいとき:**
+タスクスケジューラを待たずに、以下のコマンドで直接ツールを走らせることもできます。
+`& "$env:ProgramFiles\AudioRebind\Invoke-AudioRebind.ps1"`
+
+詳しい仕様や他ツールとの比較は、この下の英語（[English](#english)）と [docs/](docs/README.md) を参照してください。協力する場合は [CONTRIBUTING.md](CONTRIBUTING.md) です。
+
+---
+
+## English
+
+This tool is for when a PC resumes from sleep and, for no obvious reason, there is no sound or the microphone does not pick up. It is not limited to a particular USB device or manufacturer.
+
+People already recover this by unplugging a USB cable or restarting apps. AudioRebind does that recovery for you.
+
+**How it runs**
+
+It is not a resident program. You register it with Windows Task Scheduler. After the PC resumes from sleep, Task Scheduler launches this tool, it runs the recovery once, and it exits.
+
+**Recovery order**
+
+1. Restart Windows Audio services (runs by default)
+2. (If configured) Disable then enable a USB audio device
+3. (If configured) Restart the listed audio apps
+
+### Limits
+
+Install and run require **Administrator** elevation (still required at **1.0.0**).
+
+**DAW and exclusive-mode software:** restarting Windows Audio can stop or destabilize apps that hold the device exclusively. This is meant to reduce daily friction, not as something you run through a studio session.
+
+Automatic recovery does **not** run when:
+
+- The display was off but the PC did not sleep
+- An app quit by itself (this is not a crashed-app watchdog)
+- The PC is Modern Standby-only (common on notebooks; automatic start is not a current promise)
+- You cannot elevate (for example a locked-down work PC)
+
+### When Task Scheduler starts
+
+| Previous PC state | ACPI | Task Scheduler start | Manual run |
+| --- | --- | --- | --- |
+| Sleep | S3 | **Yes (supported path)** | Yes |
+| Hibernate | S4 | Unverified (may run if the same resume events are logged) | Yes |
+| Display off only | S0 | No | Yes |
+| Modern Standby | S0 low-power | Not a current promise | Yes |
+| Power on from shutdown | S5 | No | Yes |
+| Unlock only | — | No | Yes |
+
+Details: [docs/scope.md](docs/scope.md). Runtime notes: [src/README.md](src/README.md), [ADR 0005](docs/decisions/0005-resume-trigger-task-scheduler.md). Why an ordered package was uncommon: [docs/problem-and-motivation.md](docs/problem-and-motivation.md).
+
+Japanese landing is at the top of this file (not a second full README).
 
 ## Compared to single-layer tools
 
@@ -19,9 +117,9 @@ Public utilities often cover only one layer. AudioRebind is the ordered combinat
 | Restart `Audiosrv` / `AudioEndpointBuilder` only (e.g. [AudioWakeFix](https://jdslabs.com/support/troubleshooting/)-style) | Engine | No USB rebind; no app recycle — long-lived capture clients often stay broken |
 | Close/restart mixer or capture apps only (e.g. [SAMISH](https://github.com/thomwithah/samish)-style) | Apps | No service restart; no USB PnP |
 | Manual unplug / Device Manager toggle | Device | Not automated |
-| **AudioRebind** | Engine → optional USB → optional apps | Explicit YAML profile (no built-in catalog yet) |
+| **AudioRebind** | Engine → optional USB → optional apps | Explicit YAML profile (built-in catalog is **1.0.0** / Later) |
 
-More detail: [docs/architecture-overview.md](docs/architecture-overview.md).
+More detail: [docs/architecture-overview.md](docs/architecture-overview.md). Why an ordered package was uncommon: [docs/problem-and-motivation.md](docs/problem-and-motivation.md).
 
 ## Quick start
 
@@ -29,7 +127,7 @@ Elevated Windows PowerShell 5.1, from a clone or unpack of this repo:
 
 1. `.\src\Install-AudioRebind.ps1`  
    (copies runtime to `%ProgramFiles%\AudioRebind\`, seeds `%LOCALAPPDATA%\AudioRebind\profiles\default.yaml`, ensures `powershell-yaml`)
-2. Edit `default.yaml` (checklist at the top of the file; placeholders only until you fill VID/PID and app path).
+2. Edit `default.yaml` (apps to restart; USB device IDs are optional. Checklist at the top of the file; placeholders until you fill them in).
 3. `& "$env:ProgramFiles\AudioRebind\Register-AudioRebindTask.ps1"`  
    (defaults to that profile; task points at Program Files — moving the clone later is safe)
 4. Sleep → resume, then check `%LOCALAPPDATA%\AudioRebind\logs\`
@@ -39,21 +137,6 @@ Manual one-shot (installed):
 (or pass `-ProfilePath` explicitly)
 
 Dev clone Register (path-locked to the checkout) remains available — see [src/README.md](src/README.md). Uninstall: `& "$env:ProgramFiles\AudioRebind\Uninstall-AudioRebind.ps1"` (keeps LocalAppData by default).
-
-## How it works
-
-Not a always-on background agent. On resume, Windows logs a power event; **Task Scheduler** starts the script; the script runs the pipeline.
-
-```text
-Sleep → resume
-    → Power-Troubleshooter Event ID 1
-      and/or Kernel-Power Event ID 107
-    → Task Scheduler (IgnoreNew + ~120s debounce)
-    → powershell.exe runs Invoke-AudioRebind.ps1
-    → AudioEngine → (optional) UsbDevice → (optional) Apps
-```
-
-The same entrypoint can be run **manually** from an elevated PowerShell (any resume that left sessions dead). **Automatic** runs claim classic sleep→resume when Event ID 1 and/or Kernel-Power 107 fires ([#22](https://github.com/goichiro-y/audio-rebind/issues/22)). Hibernate auto is **best-effort / unverified**; shutdown/boot and unlock-only autos are out of scope. Claims and out-of-scope detail: [docs/scope.md](docs/scope.md). Runtime notes: [src/README.md](src/README.md), [ADR 0005](docs/decisions/0005-resume-trigger-task-scheduler.md).
 
 ## Requirements
 
@@ -65,7 +148,7 @@ The same entrypoint can be run **manually** from an elevated PowerShell (any res
 
 ## Status
 
-**[0.3.0](CHANGELOG.md):** thin Install to Program Files + LocalAppData profiles; scheduled task need not depend on a durable clone path. Semver **1.0.0** (polished stranger tryouts) is still ahead. Version ladder: [ROADMAP.md](ROADMAP.md).
+**[0.3.0](CHANGELOG.md):** thin Install to Program Files + LocalAppData profiles; scheduled task need not depend on a durable clone path. Current polish is **0.3.x** (same YAML product). Semver **1.0.0** is catalog + settings GUI and is not shipped until that exists; **admin is still required then**. Version ladder: [ROADMAP.md](ROADMAP.md).
 
 ## Layout
 

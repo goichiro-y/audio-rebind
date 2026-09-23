@@ -4,7 +4,7 @@ PowerShell orchestrator for the resume rebind pipeline. Specs: [pipeline-spec](.
 
 ## Requirements
 
-- Windows PowerShell **5.1** (`powershell.exe`) — [ADR 0009](../docs/decisions/0009-yaml-on-windows-powershell-51.md)
+- Windows PowerShell **5.1** (`powershell.exe`) — [ADR 0009](../docs/decisions/0009-yaml-on-windows-powershell-51.md). An elevated session must be allowed to run local `.ps1` files; if Windows blocks the script, that is the host ExecutionPolicy, not something Install bypasses.
 - **Administrator** elevation (service restart / PnP / task registration / Install). Supported operator model: [scope](../docs/scope.md) (elevate required; standard-user-only out of scope).
 - Module **`powershell-yaml`** (CurrentUser). Manual install if needed:
 
