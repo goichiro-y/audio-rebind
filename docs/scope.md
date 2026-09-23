@@ -1,10 +1,10 @@
-# Scope
+﻿# Scope
 
 ## In scope
 
 - Run an ordered **rebind pipeline** after a power-related resume leaves shared-mode WASAPI sessions invalid:
   1. **Audio engine** — restart Windows Audio related services (e.g. `Audiosrv`, `AudioEndpointBuilder`). This is the current requirement.
-  2. **Apps** (profile) — stop and start configured processes so they open fresh WASAPI sessions. This is the current requirement when those apps are listed.
+  2. **Apps** (profile) — stop and start configured processes so they open fresh WASAPI sessions. Stop may run while the audio engine restarts. Start waits until that restart has succeeded and the profile's post-engine delay has elapsed. This is the current requirement when those apps are listed.
 - Configuration-driven profiles (process names, delays, which steps are enabled).
 - Logging suitable for diagnosing which step ran and whether it succeeded.
 - Documentation that treats any vendor mixer (for example an AG03-class USB interface) as an **example of the problem**, not hard-coded product identity. Disable/enable of a USB device is not in the current pipeline ([Later](../ROADMAP.md)).

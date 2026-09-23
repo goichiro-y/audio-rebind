@@ -29,6 +29,33 @@ function Initialize-AudioRebindLog {
     return $script:AudioRebindLogPath
 }
 
+function Add-AudioRebindLogLine {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string] $Path,
+
+        [Parameter(Mandatory = $true)]
+        [string] $Line
+    )
+
+    # Stop overlaps AudioEngine, so two threads append the same file (#39).
+    $mutex = New-Object System.Threading.Mutex($false, 'Local\AudioRebindLog')
+    $held = $false
+    try {
+        try {
+            $held = $mutex.WaitOne()
+        }
+        catch [System.Threading.AbandonedMutexException] {
+            $held = $true
+        }
+        Add-Content -LiteralPath $Path -Value $Line -Encoding UTF8
+    }
+    finally {
+        if ($held) { $mutex.ReleaseMutex() }
+        $mutex.Dispose()
+    }
+}
+
 function Write-AudioRebindLog {
     [CmdletBinding()]
     param(
@@ -41,7 +68,7 @@ function Write-AudioRebindLog {
 
     $line = '{0} [{1}] {2}' -f (Get-Date -Format 'yyyy-MM-dd HH:mm:ss'), $Level, $Message
     if ($script:AudioRebindLogPath) {
-        Add-Content -LiteralPath $script:AudioRebindLogPath -Value $line -Encoding UTF8
+        Add-AudioRebindLogLine -Path $script:AudioRebindLogPath -Line $line
     }
     switch ($Level) {
         'ERROR' { Write-Host $line -ForegroundColor Red }

@@ -1,15 +1,21 @@
 ﻿# Step Apps: graceful then force stop; start configured executables.
 
+# Captured at dot-source time. $PSScriptRoot inside a later call is the caller's script.
+$script:AudioRebindAppsLibRoot = $PSScriptRoot
+
 function Invoke-AudioRebindApps {
     [CmdletBinding()]
     param(
         [Parameter(Mandatory = $true)]
         $StepConfig,
 
+        [ValidateSet('All', 'Stop', 'Start')]
+        [string] $Phase = 'All',
+
         [switch] $WhatIf
     )
 
-    $gracefulSec = 10
+    $gracefulSec = 2
     $forceSec = 5
     if ($StepConfig.ContainsKey('gracefulStopSeconds') -and $null -ne $StepConfig.gracefulStopSeconds) {
         $gracefulSec = [int]$StepConfig.gracefulStopSeconds
@@ -51,9 +57,8 @@ function Invoke-AudioRebindApps {
     }
 
     $processes = @($StepConfig.processes)
-    Write-AudioRebindLog ("Apps: {0} process entr(y/ies); graceful={1}s forceWait={2}s stopMode={3} postStopDelayMs={4} defaultWindow={5} minimizeTimeoutMs={6}" -f $processes.Count, $gracefulSec, $forceSec, $stopMode, $postStopDelayMs, $defaultWindow, $minimizeTimeoutMs)
-
-    if ($WhatIf) {
+    if ($WhatIf -and $Phase -eq 'All') {
+        Write-AudioRebindLog ("Apps: {0} process entr(y/ies); graceful={1}s forceWait={2}s stopMode={3} postStopDelayMs={4} defaultWindow={5} minimizeTimeoutMs={6}" -f $processes.Count, $gracefulSec, $forceSec, $stopMode, $postStopDelayMs, $defaultWindow, $minimizeTimeoutMs)
         foreach ($entry in $processes) {
             $w = Get-AudioRebindWindowAfterStart -Entry $entry -Default $defaultWindow
             Write-AudioRebindLog ("Apps: WhatIf would recycle path='{0}' name='{1}' windowAfterStart={2} stopMode={3}" -f $entry.path, $entry.name, $w, $stopMode)
@@ -61,20 +66,96 @@ function Invoke-AudioRebindApps {
         return $true
     }
 
-    $stopSw = [System.Diagnostics.Stopwatch]::StartNew()
-    # Stop all configured entries in one batched phase (not sequential per entry).
-    Stop-AudioRebindProcessEntries -Entries $processes -GracefulSeconds $gracefulSec -ForceWaitSeconds $forceSec -StopMode $stopMode -PostForceStopMs $postForceStopMs
-    if ($postStopDelayMs -gt 0) {
-        Start-Sleep -Milliseconds $postStopDelayMs
+    if ($Phase -ne 'Start') {
+        Write-AudioRebindLog ("Apps: {0} process entr(y/ies); graceful={1}s forceWait={2}s stopMode={3} postStopDelayMs={4} defaultWindow={5} minimizeTimeoutMs={6}" -f $processes.Count, $gracefulSec, $forceSec, $stopMode, $postStopDelayMs, $defaultWindow, $minimizeTimeoutMs)
+        if ($WhatIf) {
+            Write-AudioRebindLog "Apps: WhatIf would stop configured processes during AudioEngine"
+        }
+        else {
+            $stopSw = [System.Diagnostics.Stopwatch]::StartNew()
+            # Stop all configured entries in one batched phase (not sequential per entry).
+            Stop-AudioRebindProcessEntries -Entries $processes -GracefulSeconds $gracefulSec -ForceWaitSeconds $forceSec -StopMode $stopMode -PostForceStopMs $postForceStopMs
+            if ($postStopDelayMs -gt 0) {
+                Start-Sleep -Milliseconds $postStopDelayMs
+            }
+            $stopSw.Stop()
+            Write-AudioRebindLog ("Apps: stop phase elapsedMs={0}" -f $stopSw.ElapsedMilliseconds)
+        }
+        if ($Phase -eq 'Stop') { return $true }
     }
-    $stopSw.Stop()
-    Write-AudioRebindLog ("Apps: stop phase elapsedMs={0}" -f $stopSw.ElapsedMilliseconds)
+
+    if ($WhatIf) {
+        foreach ($entry in $processes) {
+            $w = Get-AudioRebindWindowAfterStart -Entry $entry -Default $defaultWindow
+            Write-AudioRebindLog ("Apps: WhatIf would start path='{0}' name='{1}' windowAfterStart={2}" -f $entry.path, $entry.name, $w)
+        }
+        return $true
+    }
 
     $ok = $true
     foreach ($entry in $processes) {
         if (-not (Start-AudioRebindProcessEntry -Entry $entry -DefaultWindowAfterStart $defaultWindow -MinimizeTimeoutMs $minimizeTimeoutMs -MinimizeNoWindowGiveUpMs $minimizeNoWindowGiveUpMs)) {
             $ok = $false
         }
+    }
+    return $ok
+}
+
+function Start-AudioRebindAppsStopOverlap {
+    param(
+        [Parameter(Mandatory = $true)]
+        $StepConfig,
+
+        [Parameter(Mandatory = $true)]
+        [string] $LogPath
+    )
+
+    $libRoot = $script:AudioRebindAppsLibRoot
+    $ps = [powershell]::Create()
+    try {
+        $null = $ps.AddScript({
+            param($LibRoot, $LogPath, $StepConfig)
+            $ErrorActionPreference = 'Stop'
+            Set-StrictMode -Version Latest
+            . (Join-Path $LibRoot 'Write-AudioRebindLog.ps1')
+            . (Join-Path $LibRoot 'Step-Apps.ps1')
+            $script:AudioRebindLogPath = $LogPath
+            Invoke-AudioRebindApps -StepConfig $StepConfig -Phase Stop
+        }).AddArgument($libRoot).AddArgument($LogPath).AddArgument($StepConfig)
+        return @{
+            PowerShell = $ps
+            Handle     = $ps.BeginInvoke()
+        }
+    }
+    catch {
+        $ps.Dispose()
+        throw
+    }
+}
+
+function Complete-AudioRebindAppsStopOverlap {
+    if ($null -eq $script:AudioRebindStopOverlap) { return $true }
+    $overlap = $script:AudioRebindStopOverlap
+    $script:AudioRebindStopOverlap = $null
+    $ok = $true
+    try {
+        if (-not $overlap.Handle.IsCompleted) {
+            Write-AudioRebindLog "Apps: waiting for stop to finish"
+        }
+        $null = $overlap.PowerShell.EndInvoke($overlap.Handle)
+        foreach ($err in @($overlap.PowerShell.Streams.Error)) {
+            $message = $err.Exception.Message
+            if ([string]::IsNullOrWhiteSpace($message)) { $message = [string]$err }
+            Write-AudioRebindLog ("Apps: stop overlap failed: {0}" -f $message) -Level ERROR
+            $ok = $false
+        }
+    }
+    catch {
+        Write-AudioRebindLog ("Apps: stop overlap failed: {0}" -f $_.Exception.Message) -Level ERROR
+        $ok = $false
+    }
+    finally {
+        $overlap.PowerShell.Dispose()
     }
     return $ok
 }

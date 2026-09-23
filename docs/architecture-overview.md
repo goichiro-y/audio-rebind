@@ -1,4 +1,4 @@
-# Architecture overview
+﻿# Architecture overview
 
 ## Goal
 
@@ -39,7 +39,7 @@ Public utilities already cover slices of the same problem. AudioRebind is meant 
 | [SAMISH](https://github.com/thomwithah/samish) (close/restart mixer apps around sleep; sleep-blocker diagnostics) | **Apps** (and related sleep helpers) | No Windows Audio service restart |
 | Manual interface power cycle | **Device** | Not in the current pipeline ([Later](../ROADMAP.md)) |
 
-Order still matters: engine, then apps. Using only AudioWakeFix or only SAMISH leaves the other layer unrecovered.
+Order still matters for attach: start apps after the engine. App stop may overlap the engine restart ([#39](https://github.com/goichiro-y/audio-rebind/issues/39)). Using only AudioWakeFix or only SAMISH leaves the other layer unrecovered.
 
 ### Maintainer comparison (generalized, [#3](https://github.com/goichiro-y/audio-rebind/issues/3))
 

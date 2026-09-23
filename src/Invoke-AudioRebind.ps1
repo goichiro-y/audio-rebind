@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
   Run the AudioRebind resume pipeline against a YAML profile.
 
@@ -65,6 +65,8 @@ function Set-AudioRebindDebounceStamp {
     Set-Content -LiteralPath $path -Value (Get-Date -Format o) -Encoding ASCII
 }
 
+$script:AudioRebindStopOverlap = $null
+
 try {
     $resolvedProfile = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($ProfilePath)
     if (-not (Test-Path -LiteralPath $resolvedProfile)) {
@@ -97,10 +99,26 @@ try {
     $delays = $profile.delays
     $requiredFailed = $false
 
+    $apps = $steps.apps
+    $appsEnabled = $false
+    if ($apps -is [hashtable] -and $apps.ContainsKey('enabled')) { $appsEnabled = [bool]$apps.enabled }
+
     # --- AudioEngine (required when enabled; default enabled) ---
+    # App stop overlaps this restart. App start stays after success and afterAudioEngineMs (#39).
     $ae = $steps.audioEngine
     $aeEnabled = $true
     if ($ae -is [hashtable] -and $ae.ContainsKey('enabled')) { $aeEnabled = [bool]$ae.enabled }
+
+    if ($appsEnabled -and $aeEnabled) {
+        if ($WhatIf) {
+            Invoke-AudioRebindApps -StepConfig $apps -Phase Stop -WhatIf | Out-Null
+        }
+        else {
+            Write-AudioRebindLog "Apps: stop overlaps AudioEngine"
+            $script:AudioRebindStopOverlap = Start-AudioRebindAppsStopOverlap -StepConfig $apps -LogPath $script:AudioRebindLogPath
+        }
+    }
+
     if ($aeEnabled) {
         $ok = Invoke-AudioRebindAudioEngine -WhatIf:$WhatIf
         if (-not $ok) {
@@ -110,9 +128,11 @@ try {
         }
         else {
             $ms = Get-DelayMs $delays 'afterAudioEngineMs' 2000
-            if (-not $WhatIf -and $ms -gt 0) {
+            if ($ms -gt 0) {
                 Write-AudioRebindLog ("Delay afterAudioEngineMs={0}" -f $ms)
-                Start-Sleep -Milliseconds $ms
+                if (-not $WhatIf) {
+                    Start-Sleep -Milliseconds $ms
+                }
             }
         }
     }
@@ -120,30 +140,52 @@ try {
         Write-AudioRebindLog "AudioEngine: disabled in profile"
     }
 
-    # --- Apps (optional) ---
-    if (-not $requiredFailed) {
-        $apps = $steps.apps
-        $appsEnabled = $false
-        if ($apps -is [hashtable] -and $apps.ContainsKey('enabled')) { $appsEnabled = [bool]$apps.enabled }
+    # --- Apps start (optional). Stop already ran when it overlapped the engine. ---
+    if ($requiredFailed) {
+        if ($null -ne $script:AudioRebindStopOverlap) {
+            Complete-AudioRebindAppsStopOverlap | Out-Null
+        }
         if ($appsEnabled) {
-            $ok = Invoke-AudioRebindApps -StepConfig $apps -WhatIf:$WhatIf
-            if (-not $ok) {
-                Write-AudioRebindLog "Apps: step reported failure (optional — continuing)" -Level WARN
+            Write-AudioRebindLog "Apps: start skipped because AudioEngine failed" -Level ERROR
+        }
+    }
+    elseif ($appsEnabled) {
+        $ok = $true
+        if ($null -ne $script:AudioRebindStopOverlap) {
+            $ok = Complete-AudioRebindAppsStopOverlap
+            if ($ok) {
+                $ok = Invoke-AudioRebindApps -StepConfig $apps -Phase Start -WhatIf:$WhatIf
             }
-            $ms = Get-DelayMs $delays 'afterAppsMs' 0
-            if (-not $WhatIf -and $ms -gt 0) {
-                Write-AudioRebindLog ("Delay afterAppsMs={0}" -f $ms)
-                Start-Sleep -Milliseconds $ms
+            else {
+                Write-AudioRebindLog "Apps: start skipped because stop failed" -Level WARN
             }
+        }
+        elseif ($WhatIf -and $aeEnabled) {
+            $ok = Invoke-AudioRebindApps -StepConfig $apps -Phase Start -WhatIf
         }
         else {
-            Write-AudioRebindLog "Apps: disabled in profile"
+            $ok = Invoke-AudioRebindApps -StepConfig $apps -WhatIf:$WhatIf
         }
+        if (-not $ok) {
+            Write-AudioRebindLog "Apps: step reported failure (optional — continuing)" -Level WARN
+        }
+        $ms = Get-DelayMs $delays 'afterAppsMs' 0
+        if (-not $WhatIf -and $ms -gt 0) {
+            Write-AudioRebindLog ("Delay afterAppsMs={0}" -f $ms)
+            Start-Sleep -Milliseconds $ms
+        }
+    }
+    else {
+        Write-AudioRebindLog "Apps: disabled in profile"
     }
 
     Write-AudioRebindLog ("Finished exitCode={0}" -f $exitCode)
 }
 catch {
+    try {
+        Complete-AudioRebindAppsStopOverlap | Out-Null
+    }
+    catch { }
     $exitCode = 3
     $msg = $_.Exception.Message
     if ($msg -match 'powershell-yaml' -or $msg -match 'Unknown top-level' -or $msg -match 'Profile' -or $msg -match 'processes') {

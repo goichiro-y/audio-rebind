@@ -1,4 +1,4 @@
-# Resume pipeline specification
+﻿# Resume pipeline specification
 
 Thin contract for the orchestrator. v1 implementation is PowerShell ([ADR 0003](../decisions/0003-v1-powershell-orchestrator.md)); packaging may still evolve. This behavior should not.
 
@@ -25,9 +25,11 @@ Thin contract for the orchestrator. v1 implementation is PowerShell ([ADR 0003](
 
 ## Ordering and timing
 
-1. Run enabled steps in order AudioEngine, then Apps.
-2. Apply profile delays after each step so endpoints can reappear before apps attach.
-3. Idempotent re-runs should be safe (restarting already-healthy services/apps is acceptable).
+1. When AudioEngine and Apps are both enabled, stop configured apps while AudioEngine restarts. Stopping does not wait for the endpoint ([#39](https://github.com/goichiro-y/audio-rebind/issues/39)).
+2. Start configured apps only after AudioEngine succeeds and `delays.afterAudioEngineMs` has elapsed, and after that stop has finished. The delay is so endpoints can reappear before apps attach.
+3. If AudioEngine fails, do not start apps. A stop that already started is allowed to finish.
+4. If AudioEngine is disabled, stop apps and then start them, in that order.
+5. Idempotent re-runs should be safe (restarting already-healthy services/apps is acceptable).
 
 ## Logging
 
