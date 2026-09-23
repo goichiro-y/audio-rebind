@@ -1,4 +1,4 @@
-﻿# Changelog
+# Changelog
 
 All notable changes to this project will be documented in this file.
 
@@ -26,6 +26,7 @@ and this project aims to adhere to [Semantic Versioning](https://semver.org/).
 - Open [#32](https://github.com/goichiro-y/audio-rebind/issues/32) (installed-task sleep check) and [#33](https://github.com/goichiro-y/audio-rebind/issues/33) (settings window). The issues are independent and do not decide a release name
 - Open [#35](https://github.com/goichiro-y/audio-rebind/issues/35) (setup-failure dialogs). Independent of [#32](https://github.com/goichiro-y/audio-rebind/issues/32) and [#33](https://github.com/goichiro-y/audio-rebind/issues/33)
 - Open [#36](https://github.com/goichiro-y/audio-rebind/issues/36): remove the scheduled task from a window, and on open unregister it when its action file is already missing
+- Open [#37](https://github.com/goichiro-y/audio-rebind/issues/37): a process that omits `windowAfterStart` inherits the apps-level value. Independent of [#34](https://github.com/goichiro-y/audio-rebind/issues/34)
 
 ### Fixed
 

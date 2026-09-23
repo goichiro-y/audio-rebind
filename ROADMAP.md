@@ -1,4 +1,4 @@
-﻿# Roadmap
+# Roadmap
 
 Thin when/status overview. Durable specs: [`docs/`](docs/README.md). Adopted decisions: [`docs/decisions/`](docs/decisions/README.md). Placement rules: [CONTRIBUTING.md](CONTRIBUTING.md#where-work-lives). Actionable work: [GitHub Issues](https://github.com/goichiro-y/audio-rebind/issues).
 
@@ -57,7 +57,7 @@ Same MVP shape (YAML, Task Scheduler, admin). Thin fixed install so the task is 
 
 ## Open work
 
-[#32](https://github.com/goichiro-y/audio-rebind/issues/32), [#33](https://github.com/goichiro-y/audio-rebind/issues/33), [#35](https://github.com/goichiro-y/audio-rebind/issues/35), and [#36](https://github.com/goichiro-y/audio-rebind/issues/36) do not depend on each other. Any can be done first. They do not decide a version number.
+[#32](https://github.com/goichiro-y/audio-rebind/issues/32), [#33](https://github.com/goichiro-y/audio-rebind/issues/33), [#35](https://github.com/goichiro-y/audio-rebind/issues/35), [#36](https://github.com/goichiro-y/audio-rebind/issues/36), and [#37](https://github.com/goichiro-y/audio-rebind/issues/37) do not depend on each other. Any can be done first. They do not decide a version number.
 
 | Issue | Work |
 |-------|------|
@@ -65,6 +65,7 @@ Same MVP shape (YAML, Task Scheduler, admin). Thin fixed install so the task is 
 | [#33](https://github.com/goichiro-y/audio-rebind/issues/33) | Settings window: choose apps, write the existing LocalAppData profile |
 | [#35](https://github.com/goichiro-y/audio-rebind/issues/35) | Setup failures (execution policy, `powershell-yaml`, Program Files write, task registration) show a dialog |
 | [#36](https://github.com/goichiro-y/audio-rebind/issues/36) | Remove `AudioRebind-Resume` from a window. On open, unregister it when its action file is already missing |
+| [#37](https://github.com/goichiro-y/audio-rebind/issues/37) | A process that omits `windowAfterStart` inherits the apps-level value. Load must not stamp `leave` onto that process |
 
 Hand-edit first-run copy and a README YAML lesson are not opened. Display-off auto, a hibernate verification campaign, standard-user-only packaging, and an always-on agent stay out of these issues.
 
@@ -90,6 +91,10 @@ Do not file Issues for these until the version is accepted.
 | Secondary triggers | Unlock / other fallbacks if both Event ID 1 and Kernel-Power 107 miss (was [#10](https://github.com/goichiro-y/audio-rebind/issues/10); Kernel-Power 107 landed as [#22](https://github.com/goichiro-y/audio-rebind/issues/22)); not S5 auto for now |
 | Modern Standby | Deferred; community evidence welcome (see [scope](docs/scope.md)) — not a near-term maintainer verification task |
 | Optional further resume-speed ideas | May never do (profile micro-timing, Apps stop refinements, async overlap, latency measurement). Was [#28](https://github.com/goichiro-y/audio-rebind/issues/28) / closed #24–#27 — not an open backlog |
+| Task identity beyond the name | [#36](https://github.com/goichiro-y/audio-rebind/issues/36) finds `AudioRebind-Resume` by name. Enough while that name is unchanged. Later only: follow the task after a rename, and do not remove a different task that reused the same name. Not current work |
+| Log retention | Each run adds a file under `%LOCALAPPDATA%\AudioRebind\logs\`. No deletion rule. Harmless short-term; files accumulate over years. Not current work |
+| Re-register overwrites task edits | `Register-AudioRebindTask.ps1` replaces the same task name with `-Force`. A person who edited triggers in Task Scheduler loses that on the next setup. Later: warn before overwrite. Not current work |
+| Windows 11 dialog style | Setup notices use the classic `MessageBox`. A Windows 11 card dialog (WinUI `ContentDialog`) waits until the settings window (#33, **1.0.0** GUI) chooses a UI stack. Not current work; do not file an Issue for the decline dialog alone |
 | USB disable/enable as a required fix | Not in the current pipeline. Why it was withdrawn: [ADR 0012](docs/decisions/0012-withdraw-usb-disable-enable.md). Bring it back only after a case is separated where Windows Audio restart and app restart both fail, and disable/enable is what recovers it. Do not file an Issue until then. Not current work |
 
 **Not on Later (declined as maintainer work):** scheduled “verify hibernate (S4)” — auto on hibernate is best-effort/unverified only; updates via community Issue/PR to [scope](docs/scope.md). See Operator-style expectation notes there.
