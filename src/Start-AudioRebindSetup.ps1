@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
   Elevate once, run Install, then register the Program Files scheduled task.
 
@@ -6,8 +6,8 @@
   Launched by Install-AudioRebind.cmd at the repository root.
   Not copied to Program Files. Does not change the machine ExecutionPolicy.
   Declining elevation shows a dialog and does not install or register.
-  Setup-failure dialogs (execution policy, powershell-yaml, Program Files write,
-  task registration) are out of scope here.
+  Other setup failures show a dialog with the reason and what to do next (#35).
+  Success shows a completion dialog and does not wait for Enter (#38).
 #>
 [CmdletBinding()]
 param()
@@ -42,6 +42,20 @@ function Test-IsElevationDeclined {
     return $false
 }
 
+function Show-SetupFinishedDialog {
+    Add-Type -AssemblyName System.Windows.Forms
+    $text = @(
+        'インストールが完了しました。'
+        'Installation complete.'
+    ) -join "`r`n"
+    [void][System.Windows.Forms.MessageBox]::Show(
+        $text,
+        'AudioRebind',
+        [System.Windows.Forms.MessageBoxButtons]::OK,
+        [System.Windows.Forms.MessageBoxIcon]::Information
+    )
+}
+
 function Show-AdminRequiredDialog {
     Add-Type -AssemblyName System.Windows.Forms
     $text = @(
@@ -57,6 +71,38 @@ function Show-AdminRequiredDialog {
 }
 
 $powershellExe = Join-Path $env:SystemRoot 'System32\WindowsPowerShell\v1.0\powershell.exe'
+. (Join-Path $PSScriptRoot 'lib\Show-AudioRebindSetupFailure.ps1')
+
+function Invoke-AudioRebindCapturedScript {
+    param(
+        [string] $ScriptPath,
+        [string] $FallbackKind
+    )
+
+    $previous = $env:AUDIOREBIND_SETUP_CAPTURE
+    $env:AUDIOREBIND_SETUP_CAPTURE = '1'
+    try {
+        $lines = @(& $powershellExe -NoProfile -ExecutionPolicy Bypass -File $ScriptPath 2>&1 | ForEach-Object { "$_" })
+        $code = $LASTEXITCODE
+    }
+    finally {
+        if ([string]::IsNullOrEmpty($previous)) {
+            Remove-Item Env:AUDIOREBIND_SETUP_CAPTURE -ErrorAction SilentlyContinue
+        }
+        else {
+            $env:AUDIOREBIND_SETUP_CAPTURE = $previous
+        }
+    }
+
+    if ($code -ne 0) {
+        $text = ($lines -join [Environment]::NewLine).Trim()
+        $kind = Get-AudioRebindSetupFailureKind -Text $text
+        if ($kind -eq 'Other') { $kind = $FallbackKind }
+        Show-AudioRebindSetupFailure -Kind $kind -Detail $text
+        if ($null -eq $code) { exit 1 }
+        exit $code
+    }
+}
 
 if (-not (Test-IsAdmin)) {
     $quotedPath = $PSCommandPath.Replace('"', '""')
@@ -71,7 +117,8 @@ if (-not (Test-IsAdmin)) {
             Show-AdminRequiredDialog
             exit 1
         }
-        Write-Error -ErrorRecord $_
+        Write-Output $_.Exception.Message
+        Show-AudioRebindSetupFailure -Kind Other -Detail $_.Exception.Message
         exit 1
     }
 
@@ -89,30 +136,17 @@ if (-not (Test-IsAdmin)) {
 }
 
 $installScript = Join-Path $PSScriptRoot 'Install-AudioRebind.ps1'
-& $powershellExe -NoProfile -ExecutionPolicy Bypass -File $installScript
-if ($LASTEXITCODE -ne 0) {
-    if ($null -eq $LASTEXITCODE) { exit 1 }
-    exit $LASTEXITCODE
-}
+Invoke-AudioRebindCapturedScript -ScriptPath $installScript -FallbackKind ProgramFiles
 
 $registerScript = Join-Path $env:ProgramFiles 'AudioRebind\Register-AudioRebindTask.ps1'
 if (-not (Test-Path -LiteralPath $registerScript)) {
-    Write-Error "Installed Register script not found: $registerScript"
+    $detail = "Installed Register script not found: $registerScript"
+    Write-Output $detail
+    Show-AudioRebindSetupFailure -Kind Task -Detail $detail
     exit 1
 }
 
-& $powershellExe -NoProfile -ExecutionPolicy Bypass -File $registerScript
-if ($LASTEXITCODE -ne 0) {
-    if ($null -eq $LASTEXITCODE) { exit 1 }
-    exit $LASTEXITCODE
-}
+Invoke-AudioRebindCapturedScript -ScriptPath $registerScript -FallbackKind Task
 
-$defaultProfile = Join-Path $env:LOCALAPPDATA 'AudioRebind\profiles\default.yaml'
-Write-Host ''
-Write-Host 'Setup finished.'
-Write-Host "  Runtime: $env:ProgramFiles\AudioRebind"
-Write-Host "  Task profile (edit this; read on each resume): $defaultProfile"
-Write-Host ''
-Write-Host 'Press Enter to close.'
-[void](Read-Host)
+Show-SetupFinishedDialog
 exit 0

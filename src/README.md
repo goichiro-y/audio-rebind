@@ -1,4 +1,4 @@
-# AudioRebind runtime
+﻿# AudioRebind runtime
 
 PowerShell orchestrator for the resume rebind pipeline. Specs: [pipeline-spec](../docs/specs/pipeline-spec.md), [profile-spec](../docs/specs/profile-spec.md). Repo layout: [ADR 0008](../docs/decisions/0008-v1-repository-layout.md). Installed layout: [ADR 0010](../docs/decisions/0010-installed-layout-programfiles-localappdata.md). Trigger packaging: [ADR 0005](../docs/decisions/0005-resume-trigger-task-scheduler.md).
 
@@ -16,7 +16,7 @@ Install-Module powershell-yaml -Scope CurrentUser -Force
 
 ## Double-click setup
 
-`Install-AudioRebind.cmd` at the repository root asks for elevation once. If accepted, it runs `Install-AudioRebind.ps1`, then `%ProgramFiles%\AudioRebind\Register-AudioRebindTask.ps1` (the installed copy and LocalAppData `default.yaml`). That process uses `-ExecutionPolicy Bypass` only for itself; it does not change the machine policy. If elevation is declined, a dialog says Administrator is required and the task was not registered. The launcher is not copied to Program Files.
+`Install-AudioRebind.cmd` at the repository root asks for elevation once. If accepted, it runs `Install-AudioRebind.ps1`, then `%ProgramFiles%\AudioRebind\Register-AudioRebindTask.ps1` (the installed copy and LocalAppData `default.yaml`). That process uses `-ExecutionPolicy Bypass` only for itself; it does not change the machine policy. If elevation is declined, a dialog says Administrator is required and the task was not registered. If setup fails after that, a dialog states the reason and to double-click `Install-AudioRebind.cmd` again ([#35](https://github.com/goichiro-y/audio-rebind/issues/35)). Success shows a completion dialog; closing it ends the window ([#38](https://github.com/goichiro-y/audio-rebind/issues/38)). An existing profile is kept. The launcher is not copied to Program Files.
 
 ## Quick start (installed — preferred)
 
@@ -71,13 +71,13 @@ Logs: `%LOCALAPPDATA%\AudioRebind\logs\`
 
 ### Resume timing tips
 
-For Electron-style apps, lower `gracefulStopSeconds` / `forceStopSeconds` (e.g. `2`) so recycle finishes sooner ([#13](https://github.com/goichiro-y/audio-rebind/issues/13)).
+`gracefulStopSeconds` defaults to **2**: the max wait for an app to exit after a close request, before force-kill. Apps that exit sooner do not wait out the ceiling. `stopMode: force` skips that wait ([#13](https://github.com/goichiro-y/audio-rebind/issues/13), [#19](https://github.com/goichiro-y/audio-rebind/issues/19)).
 
 To avoid recycled apps stealing focus, set `windowAfterStart: minimize` on `apps` or per process ([#16](https://github.com/goichiro-y/audio-rebind/issues/16)). Launch uses Win32 `CreateProcess` + `SW_SHOWMINNOACTIVE` (not `Start-Process -WindowStyle Minimized`) ([#21](https://github.com/goichiro-y/audio-rebind/issues/21)); a short minimize poll remains as fallback when the app creates a window later. Electron-style apps may still flash briefly — that is an OS/app limit, not something AudioRebind can fully erase for arbitrary GUIs. Minimize polling early-exits on success and gives up quickly when there is no main window; tune `minimizeTimeoutMs` / `minimizeNoWindowGiveUpMs` if needed ([#18](https://github.com/goichiro-y/audio-rebind/issues/18)).
 
 For faster recycle of Electron-style apps, prefer `stopMode: force`, keep `gracefulStopSeconds` / `forceStopSeconds` small, and rely on `postStopDelayMs` / `postForceStopMs` instead of long fixed sleeps ([#19](https://github.com/goichiro-y/audio-rebind/issues/19)).
 
-`delays.afterAudioEngineMs` defaults to 2000 in examples. If the audio engine comes back quickly on your machine, try **500–1000**; if sessions still fail until a longer wait, keep 2000 ([#20](https://github.com/goichiro-y/audio-rebind/issues/20)). Within AudioEngine, service restarts wait via Running poll (not fixed 1s sleeps). Apps stop all configured process entries in one batched phase.
+`delays.afterAudioEngineMs` defaults to 2000 in examples. If the audio engine comes back quickly on your machine, try **500–1000**; if sessions still fail until a longer wait, keep 2000 ([#20](https://github.com/goichiro-y/audio-rebind/issues/20)). Within AudioEngine, service restarts wait via Running poll (not fixed 1s sleeps). App stop runs during that restart; the delay is only before apps start ([#39](https://github.com/goichiro-y/audio-rebind/issues/39)). Apps stop all configured process entries in one batched phase.
 
 ## Automatic run (Task Scheduler)
 

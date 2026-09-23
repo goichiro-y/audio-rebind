@@ -24,6 +24,17 @@ param(
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
+. (Join-Path $PSScriptRoot 'lib\Show-AudioRebindSetupFailure.ps1')
+
+trap {
+    $msg = [string]$_.Exception.Message
+    Write-Output $msg
+    if ($env:AUDIOREBIND_SETUP_CAPTURE -ne '1') {
+        Show-AudioRebindSetupFailure -Kind (Get-AudioRebindSetupFailureKind -Text $msg) -Detail $msg
+    }
+    exit 1
+}
+
 function Test-IsAdmin {
     $id = [Security.Principal.WindowsIdentity]::GetCurrent()
     $p = New-Object Security.Principal.WindowsPrincipal($id)
@@ -42,26 +53,17 @@ function Install-AudioRebindYamlModuleIfMissing {
         Install-Module -Name powershell-yaml -Scope CurrentUser -Force -AllowClobber -ErrorAction Stop
     }
     catch {
-        Write-Error @"
-Failed to install module 'powershell-yaml' for CurrentUser.
-$($_.Exception.Message)
-
-Fix network / PSGallery access, then either re-run this script or:
-  Install-Module powershell-yaml -Scope CurrentUser -Force
-"@
-        exit 1
+        Exit-AudioRebindSetupFailure -Kind Module -Detail $_.Exception.Message
     }
 
     if (-not (Get-Module -ListAvailable -Name powershell-yaml)) {
-        Write-Error "Install-Module finished but 'powershell-yaml' is still not listed for this user."
-        exit 1
+        Exit-AudioRebindSetupFailure -Kind Module -Detail "Install-Module finished but 'powershell-yaml' is still not listed for this user."
     }
     Write-Host "powershell-yaml: installed for CurrentUser"
 }
 
 if (-not (Test-IsAdmin)) {
-    Write-Error "Administrator elevation is required to install under Program Files."
-    exit 1
+    Exit-AudioRebindSetupFailure -Kind ProgramFiles -Detail 'Administrator elevation is required to install under Program Files.'
 }
 
 if (-not $SourceRoot) {
@@ -72,12 +74,10 @@ $SourceRoot = (Resolve-Path -LiteralPath $SourceRoot).Path
 $invokeSrc = Join-Path $SourceRoot 'Invoke-AudioRebind.ps1'
 $libSrc = Join-Path $SourceRoot 'lib'
 if (-not (Test-Path -LiteralPath $invokeSrc)) {
-    Write-Error "Missing entrypoint: $invokeSrc (pass -SourceRoot to a folder that contains Invoke-AudioRebind.ps1)."
-    exit 1
+    Exit-AudioRebindSetupFailure -Kind Other -Detail "Missing entrypoint: $invokeSrc"
 }
 if (-not (Test-Path -LiteralPath $libSrc)) {
-    Write-Error "Missing lib folder: $libSrc"
-    exit 1
+    Exit-AudioRebindSetupFailure -Kind Other -Detail "Missing lib folder: $libSrc"
 }
 
 Install-AudioRebindYamlModuleIfMissing
@@ -153,7 +153,7 @@ Write-Host "  Profiles: $profilesDir"
 Write-Host "  Logs:     $logsDir"
 Write-Host ""
 Write-Host "Next:"
-Write-Host "  1. Edit $defaultProfile (fill VID/PID and app path; see checklist in the file)."
+Write-Host "  1. Edit $defaultProfile (app path; see checklist in the file)."
 Write-Host "  2. Elevated: & '$InstallRoot\Register-AudioRebindTask.ps1'"
 Write-Host "     (defaults to default.yaml under LocalAppData)"
 exit 0

@@ -1,4 +1,4 @@
-﻿<#
+<#
 .SYNOPSIS
   Register an elevated Task Scheduler task that runs AudioRebind on resume.
 
@@ -29,6 +29,17 @@ param(
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
+. (Join-Path $PSScriptRoot 'lib\Show-AudioRebindSetupFailure.ps1')
+
+trap {
+    $msg = [string]$_.Exception.Message
+    Write-Output $msg
+    if ($env:AUDIOREBIND_SETUP_CAPTURE -ne '1') {
+        Show-AudioRebindSetupFailure -Kind (Get-AudioRebindSetupFailureKind -Text $msg) -Detail $msg
+    }
+    exit 1
+}
+
 function Test-IsAdmin {
     $id = [Security.Principal.WindowsIdentity]::GetCurrent()
     $p = New-Object Security.Principal.WindowsPrincipal($id)
@@ -36,8 +47,7 @@ function Test-IsAdmin {
 }
 
 if (-not (Test-IsAdmin)) {
-    Write-Error "Administrator elevation is required to register the task."
-    exit 1
+    Exit-AudioRebindSetupFailure -Kind Task -Detail 'Administrator elevation is required to register the task.'
 }
 
 # Setup-time only: ensure CurrentUser can load YAML (scheduled task runs as this user).
@@ -54,19 +64,11 @@ function Install-AudioRebindYamlModuleIfMissing {
         Install-Module -Name powershell-yaml -Scope CurrentUser -Force -AllowClobber -ErrorAction Stop
     }
     catch {
-        Write-Error @"
-Failed to install module 'powershell-yaml' for CurrentUser.
-$($_.Exception.Message)
-
-Fix network / PSGallery access, then either re-run this script or:
-  Install-Module powershell-yaml -Scope CurrentUser -Force
-"@
-        exit 1
+        Exit-AudioRebindSetupFailure -Kind Module -Detail $_.Exception.Message
     }
 
     if (-not (Get-Module -ListAvailable -Name powershell-yaml)) {
-        Write-Error "Install-Module finished but 'powershell-yaml' is still not listed for this user."
-        exit 1
+        Exit-AudioRebindSetupFailure -Kind Module -Detail "Install-Module finished but 'powershell-yaml' is still not listed for this user."
     }
     Write-Host "powershell-yaml: installed for CurrentUser"
 }
@@ -75,8 +77,7 @@ Install-AudioRebindYamlModuleIfMissing
 
 $invokePath = Join-Path $PSScriptRoot 'Invoke-AudioRebind.ps1'
 if (-not (Test-Path -LiteralPath $invokePath)) {
-    Write-Error "Missing entrypoint: $invokePath"
-    exit 1
+    Exit-AudioRebindSetupFailure -Kind Task -Detail "Missing entrypoint: $invokePath"
 }
 $invokePath = (Resolve-Path -LiteralPath $invokePath).Path
 
@@ -86,12 +87,7 @@ if (-not $ProfilePath) {
 }
 
 if (-not (Test-Path -LiteralPath $ProfilePath)) {
-    Write-Error @"
-Profile not found: $ProfilePath
-
-Run Install-AudioRebind.ps1 first (seeds default.yaml), or pass -ProfilePath explicitly.
-"@
-    exit 1
+    Exit-AudioRebindSetupFailure -Kind Task -Detail "Profile not found: $ProfilePath. Run Install-AudioRebind.ps1 first, or pass -ProfilePath explicitly."
 }
 $profileAbs = (Resolve-Path -LiteralPath $ProfilePath).Path
 
