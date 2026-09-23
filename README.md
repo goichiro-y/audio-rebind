@@ -6,7 +6,7 @@
 
 本ツールは、PCをスリープから復帰させたとき、「なぜか音が出ない」「なぜかマイクが反応しない」を直します。
 
-これまでは、手作業でWindowsの音声サービスを再起動したり、USBケーブルを抜き差ししたり、アプリを再起動したりして直していました。本ツールは、この面倒な復旧作業を代行します。特定のUSB機器やメーカー専用ではありません。
+これまでは直すために、手作業でアプリを再起動したり、USBケーブルを抜き差ししたりしていました。本ツールは、この面倒な復旧作業を代行します。特定のUSB機器やメーカー専用ではありません。
 
 **仕組みについて**
 
@@ -40,7 +40,7 @@
 | 直前のPCの状態 | ACPI | タスクスケジューラによる起動 |
 | --- | --- | --- |
 | スリープ | S3 | **起動する（推奨ルート）** |
-| 休止状態 | S4 | 未確認（同じ復帰ログが出れば動く可能性あり） |
+| 休止状態 | S4 | 未確認（S3同様に起動する可能性あり） |
 | 画面オフのみ | S0 | 起動しない |
 | モダンスタンバイ | S0低電力 | いまは保証しない |
 | シャットダウンからの起動 | S5 | 起動しない |
@@ -74,7 +74,7 @@
 
 This tool is for when a PC resumes from sleep and, for no obvious reason, there is no sound or the microphone does not pick up.
 
-People already recover this by restarting Windows Audio services, unplugging a USB cable, or restarting apps. AudioRebind does that recovery for you. It is not limited to a particular USB device or manufacturer.
+People used to fix this by hand, restarting apps or unplugging a USB cable. AudioRebind does that recovery for you. It is not limited to a particular USB device or manufacturer.
 
 **How it runs**
 
@@ -106,7 +106,7 @@ Automatic recovery does **not** run when:
 | Previous PC state | ACPI | Task Scheduler start |
 | --- | --- | --- |
 | Sleep | S3 | **Yes (supported path)** |
-| Hibernate | S4 | Unverified (may run if the same resume events are logged) |
+| Hibernate | S4 | Unverified (may start the same way as S3) |
 | Display off only | S0 | No |
 | Modern Standby | S0 low-power | Not a current promise |
 | Power on from shutdown | S5 | No |
