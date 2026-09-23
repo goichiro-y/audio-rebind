@@ -21,6 +21,7 @@ and this project aims to adhere to [Semantic Versioning](https://semver.org/).
 - Japanese README landing points at [docs/README.md](docs/README.md) and [CONTRIBUTING.md](CONTRIBUTING.md)
 - [src/README.md](src/README.md): host ExecutionPolicy can block local `.ps1` files (Install does not bypass it)
 - Open [#32](https://github.com/goichiro-y/audio-rebind/issues/32) (installed-task sleep check) and [#33](https://github.com/goichiro-y/audio-rebind/issues/33) (settings window). The issues are independent and do not decide a release name
+- Open [#34](https://github.com/goichiro-y/audio-rebind/issues/34) (double-click Install and task registration) and [#35](https://github.com/goichiro-y/audio-rebind/issues/35) (setup-failure dialogs). Independent of [#32](https://github.com/goichiro-y/audio-rebind/issues/32) and [#33](https://github.com/goichiro-y/audio-rebind/issues/33)
 
 ### Fixed
 
