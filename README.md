@@ -4,14 +4,16 @@
 
 ## 日本語
 
-本ツールは、PCをスリープから復帰させたとき、「なぜか音が出ない」「なぜかマイクが反応しない」を直すためのツールです。特定のUSB機器やメーカー専用ではありません。
+本ツールは、PCをスリープから復帰させたとき、「なぜか音が出ない」「なぜかマイクが反応しない」を直します。特定のUSB機器やメーカー専用ではありません。
 
-こんなとき、これまでは手作業でUSBケーブルを抜き差ししたり、アプリを再起動したりして直していました。本ツールは、この面倒な復旧作業を代行します。
+これまでは、手作業でWindowsの音声サービスを再起動したり、USBケーブルを抜き差ししたり、アプリを再起動したりして直していました。本ツールは、この面倒な復旧作業を代行します。
 
 **仕組みについて**
+
 本ツールは、常駐ソフトではありません。Windowsタスクスケジューラに処理を登録して使います。PCがスリープから戻ると、タスクスケジューラが本ツールを呼び出し、復旧処理を1回だけ走らせて終了します。
 
 **復旧する順番**
+
 以下の順番で処理を自動実行します。
 
 1. Windowsの音声サービスの再起動（標準で実行）
@@ -57,6 +59,7 @@
 （動作ログは `%LOCALAPPDATA%\AudioRebind\logs\` に保存されます）
 
 **今すぐ手動で復旧させたいとき:**
+
 タスクスケジューラを待たずに、以下のコマンドで直接ツールを走らせることもできます。
 `& "$env:ProgramFiles\AudioRebind\Invoke-AudioRebind.ps1"`
 
@@ -68,7 +71,7 @@
 
 This tool is for when a PC resumes from sleep and, for no obvious reason, there is no sound or the microphone does not pick up. It is not limited to a particular USB device or manufacturer.
 
-People already recover this by unplugging a USB cable or restarting apps. AudioRebind does that recovery for you.
+People already recover this by restarting Windows Audio services, unplugging a USB cable, or restarting apps. AudioRebind does that recovery for you.
 
 **How it runs**
 
