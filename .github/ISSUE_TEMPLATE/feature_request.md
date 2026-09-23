@@ -1,28 +1,28 @@
-﻿---
+---
 name: Feature request
 about: Suggest an enhancement
 title: "[feat] "
 labels: enhancement
 ---
 
-<!-- Language: Japanese + short English is OK (see docs/i18n.md). No host-private InstanceIds / personal paths. -->
+<!-- 説明は日本語。English summary と Acceptance は英語。個人のパスや InstanceId は書かない。docs/i18n.md の「日本語で書くもの」。 -->
 
-## 概要（日本語） / Problem
+## 概要
 
-<!-- What problem does this solve? -->
+<!-- 何が困っているか。 -->
 
 ## English summary
 
 <!-- Short paragraph for external readers / agents -->
 
-## Proposal
+## 提案
 
-<!-- What would you like to change? -->
+<!-- 何を変えるか。 -->
 
 ## Acceptance
 
 - [ ]
 
-## Alternatives considered
+## 検討した他の案
 
-## Additional context
+## 補足

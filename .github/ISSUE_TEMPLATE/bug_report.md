@@ -1,29 +1,33 @@
-﻿---
+---
 name: Bug report
 about: Something is broken or incorrect
 title: "[bug] "
 labels: bug
 ---
 
-<!-- Language: Japanese + short English is OK (see docs/i18n.md). No host-private InstanceIds / personal paths / raw secrets. -->
+<!-- 説明は日本語。English summary と Acceptance は英語。個人のパス、InstanceId、秘密は書かない。docs/i18n.md の「日本語で書くもの」。 -->
 
-## 概要（日本語） / Description
+## 概要
 
-<!-- What went wrong? -->
+<!-- 何が困っているか。 -->
 
 ## English summary
 
 <!-- Short paragraph for external readers / agents -->
 
-## Steps to reproduce
+## 再現手順
 
 1.
 2.
 3.
 
-## Expected
+## 期待
 
-## Actual
+<!-- こうなるはず、ということ。 -->
+
+## 実際
+
+<!-- 実際に起きたこと。 -->
 
 ## Acceptance
 
@@ -35,6 +39,6 @@ labels: bug
 - Version / commit:
 - Relevant hardware or drivers (if any):
 
-## Additional context
+## 補足
 
-<!-- Logs, screenshots, links. Do not paste secrets or full USB InstanceIds. -->
+<!-- ログ、画面、リンク。秘密や USB の InstanceId 全文は貼らない。 -->

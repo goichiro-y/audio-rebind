@@ -43,7 +43,7 @@ Participation is governed by [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
 
 English is the source of truth for durable docs. Do not put Japanese dual bodies in `docs/` or ADRs. Root [`README.md`](../README.md) has a **Japanese landing at the top** and an English landing of the same visitor density; if they disagree, English wins. Event IDs and the WASAPI diagnosis live in `docs/`, not README. The Japanese landing is the top of `README.md`, not a second file.
 
-**Issues:** prefer Japanese plus a short English summary and Acceptance checklist. Details: [docs/i18n.md](../docs/i18n.md).
+**Issues:** Japanese for the description you read, plus a short English summary and an Acceptance checklist. How to write the Japanese: [docs/i18n.md](../docs/i18n.md#日本語で書くもの).
 
 ## What not to commit
 

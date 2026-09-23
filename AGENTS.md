@@ -41,7 +41,16 @@ Full policy: [docs/i18n.md](docs/i18n.md).
 - When a version is cut, create a milestone titled with that version and no `v` prefix. Assign it to closed issues that shipped in the cut, then close the milestone. Leave open issues, and issues closed without shipping, without a milestone. An issue does not decide the release name ([.github/CONTRIBUTING.md](.github/CONTRIBUTING.md#where-work-lives)).
 - Close an issue when its acceptance has been checked. Code landing in the tree is not that check.
 - A `CHANGELOG.md` version section records what shipped in that version. Still-open work stays on `ROADMAP.md` and in Issues, not as bullets under that version.
-- The git tag `v` plus that version, and its GitHub Release, mark the commit. Write the Release body for someone who opens only that page: one opening sentence on what the product does, then only what a person using it would notice since the previous version, in everyday words. Japanese first, then a short English summary. Profile keys, step names, and the story of earlier versions stay in `CHANGELOG.md` and `README.md`.
+- The git tag `v` plus that version, and its GitHub Release, mark the commit. Release の本文は、次のとおり書く。
+  - そのページだけを開いた人向けに、製品が何をするかを一文で始める。日本語が先で、短い英語が続く。
+  - 載せるのは、その版を入れた人が、説明なしで「そうなった」と分かる変化だけ。時制は過去にする。「した」「なった」。これからの話や、できる能力の説明にしない。
+  - 以前より良くなった変更は、何をしたかと、それによって何が良くなったかを、「したことで、〜なった」でつなぐ。「ので」は使わない。見本は「アプリ停止処理を、音声復旧と同時に行うよう変更したことで、リバインド完了までの時間が短くなった。」原因は日常の言葉にし、段の順番までは書かない。
+  - 「A を B と同時に変更した」とは書かず、「同時に行うよう変更した」と書く。変更した時刻と読まれないようにする。
+  - 一連の処理が終わるまでの時間は「リバインド完了まで」と書いてよい。新しい呼び名は作らない。
+  - その版で初めて入った機能は、以前との比較がない。結果だけを過去で書く。見本は「インストールできるようにした」「アンインストールできるようにした」。
+  - クリックの手順、ファイルの置き場所、止めてから起動する順番は書かない。プロファイルのキー名、段の名前、前の版までの経緯は `CHANGELOG.md` と `README.md` に残す。
+  - 機能をやめたときは「ツールのスコープ外に変更した」と書く。見本は「USB 機器の抜き差しをツールのスコープ外に変更した。」「しなくなった」は、故障のように読める。
+  - 設定がまだ選べる不具合修正を、選べなくなったように書かない。読者がその不具合を知らなければ、Release には出さず `CHANGELOG.md` に残す。
 - Do not duplicate full specs inside the roadmap; link instead.
 - Commit only public-safe text. Host identity, InstanceIds, raw logs, driver/VID-PID investigation detail, applied mitigations on a specific PC, and **personal app-stack** details belong under `local/` or `notes/private/` — see [docs/guides/local-notes.md](docs/guides/local-notes.md).
 - Agents: when gathering or writing facts about *this* machine or *this* user’s apps, write them to `local/` first; only promote generalized wording into public docs.
@@ -52,7 +61,7 @@ Full policy: [docs/i18n.md](docs/i18n.md).
 - Commit machine-specific absolute paths, personal usernames, motherboard/PC inventory, or full USB InstanceIds
 - Commit personal stack inventories (specific installed apps, paths, process lists) — keep those in `local/`
 - Treat this project as Yamaha-AG03-only (AG03-class gear may appear only as an example profile target)
-- Put Japanese-only requirements in canonical English filenames
+- Put Japanese-only requirements in canonical English filenames. Instructions that decide Japanese output may be written in Japanese in that section. That is not a Japanese translation of an English spec beside it
 
 ## 5. PowerShell file encoding
 
