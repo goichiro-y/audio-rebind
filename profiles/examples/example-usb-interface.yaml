@@ -24,9 +24,8 @@ steps:
       - path: "C:\\Path\\To\\YourApp.exe"
         # name: "YourApp.exe"
         # windowAfterStart: minimize
-    gracefulStopSeconds: 10
+    gracefulStopSeconds: 2
     forceStopSeconds: 5
-    # Electron-style apps often need lower values (e.g. 2) — see src/README Resume timing tips / #13.
 
 delays:
   afterAudioEngineMs: 2000  # try 500–1000 if endpoints settle fast (see src/README / #20)

@@ -98,7 +98,7 @@ function Assert-AudioRebindProfile {
         $steps['apps'] = @{
             enabled = $false
             processes = @()
-            gracefulStopSeconds = 10
+            gracefulStopSeconds = 2
             forceStopSeconds = 5
             windowAfterStart = 'leave'
             minimizeTimeoutMs = 1200
@@ -110,7 +110,7 @@ function Assert-AudioRebindProfile {
         $apps = $steps['apps']
     }
     if (-not $apps.ContainsKey('enabled')) { $apps['enabled'] = $false }
-    if (-not $apps.ContainsKey('gracefulStopSeconds')) { $apps['gracefulStopSeconds'] = 10 }
+    if (-not $apps.ContainsKey('gracefulStopSeconds')) { $apps['gracefulStopSeconds'] = 2 }
     if (-not $apps.ContainsKey('forceStopSeconds')) { $apps['forceStopSeconds'] = 5 }
     if (-not $apps.ContainsKey('minimizeTimeoutMs')) { $apps['minimizeTimeoutMs'] = 1200 }
     if (-not $apps.ContainsKey('minimizeNoWindowGiveUpMs')) { $apps['minimizeNoWindowGiveUpMs'] = 400 }
@@ -208,14 +208,15 @@ function Normalize-ProcessEntries {
         if ([string]::IsNullOrWhiteSpace($path) -and [string]::IsNullOrWhiteSpace($name)) {
             throw "Each apps.processes entry needs path and/or name."
         }
-        $windowAfterStart = 'leave'
+        $entry = @{ path = $path; name = $name }
         if ($map.ContainsKey('windowAfterStart') -and -not [string]::IsNullOrWhiteSpace([string]$map['windowAfterStart'])) {
             $windowAfterStart = ([string]$map['windowAfterStart']).Trim().ToLowerInvariant()
+            if ($windowAfterStart -notin @('leave', 'minimize')) {
+                throw "apps.processes.windowAfterStart must be 'leave' or 'minimize' (got '$windowAfterStart'). 'restore' is not implemented yet."
+            }
+            $entry['windowAfterStart'] = $windowAfterStart
         }
-        if ($windowAfterStart -notin @('leave', 'minimize')) {
-            throw "apps.processes.windowAfterStart must be 'leave' or 'minimize' (got '$windowAfterStart'). 'restore' is not implemented yet."
-        }
-        $result += @{ path = $path; name = $name; windowAfterStart = $windowAfterStart }
+        $result += $entry
     }
     return $result
 }
