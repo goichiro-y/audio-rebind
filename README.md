@@ -69,7 +69,7 @@ PCを一度スリープさせてから復帰し、音が鳴るか確認します
 タスクスケジューラを待たずに、以下のコマンドで直接ツールを走らせることもできます。
 `& "$env:ProgramFiles\AudioRebind\Invoke-AudioRebind.ps1"`
 
-詳しい仕様や他ツールとの比較は、この下の英語（[English](#english)）と [docs/](docs/README.md) を参照してください。協力する場合は [CONTRIBUTING.md](CONTRIBUTING.md) です。
+詳しい仕様や他ツールとの比較は、この下の英語（[English](#english)）と [docs/](docs/README.md) を参照してください。協力する場合は [CONTRIBUTING.md](.github/CONTRIBUTING.md) です。
 
 ---
 
@@ -182,11 +182,11 @@ Dev clone Register (path-locked to the checkout) remains available — see [src/
 
 ## Contributing
 
-Bug reports and small fixes are welcome; this is not an active contributor-recruitment project. See [CONTRIBUTING.md](CONTRIBUTING.md) and [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
+Bug reports and small fixes are welcome; this is not an active contributor-recruitment project. See [CONTRIBUTING.md](.github/CONTRIBUTING.md) and [CODE_OF_CONDUCT.md](.github/CODE_OF_CONDUCT.md).
 
 ## Security
 
-See [SECURITY.md](SECURITY.md).
+See [SECURITY.md](.github/SECURITY.md).
 
 ## License
 

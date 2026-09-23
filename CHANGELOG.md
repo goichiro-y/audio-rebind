@@ -15,7 +15,7 @@ YAML product cut after 0.3.0. Same shape: explicit profiles, Task Scheduler, adm
 
 - [ADR 0011](docs/decisions/0011-version-ladder-1-0-catalog-gui.md): version ladder — **1.0.0** is catalog + settings GUI (admin still required); YAML tryout polish stays on **0.x** after 0.3.0 (**0.4.0** is one cut); no public **V2** / 2.0.0 destination
 - [ADR 0012](docs/decisions/0012-withdraw-usb-disable-enable.md): withdraw USB disable/enable from the current pipeline. Public reports leave it as a hypothesis; maintainer dogfood recovered with Windows Audio restart and app restart. Revisit when those two steps are not enough
-- README Japanese landing at the top (USP, audience, Quick start skeleton); [`README.ja.md`](README.ja.md) is a pointer ([docs/i18n.md](docs/i18n.md))
+- README Japanese landing at the top (USP, audience, Quick start skeleton) ([docs/i18n.md](docs/i18n.md))
 - Repository-root `Install-AudioRebind.cmd`: one elevation prompt, then existing Install and task registration against the Program Files copy ([#34](https://github.com/goichiro-y/audio-rebind/issues/34)). Declining elevation shows that admin is required and the task was not registered
 
 ### Changed
@@ -26,7 +26,7 @@ YAML product cut after 0.3.0. Same shape: explicit profiles, Task Scheduler, adm
 - README Japanese landing and English intro: user-facing sleep-resume dropout first; DAW as a caution, not product out-of-scope
 - README English landing matches Japanese density; Event IDs, debounce, and WASAPI diagnosis stay in [docs/scope.md](docs/scope.md) ([docs/i18n.md](docs/i18n.md))
 - [docs/scope.md](docs/scope.md): exclusive-mode / DAW as a caution; not a crashed-app watchdog
-- Japanese README landing points at [docs/README.md](docs/README.md) and [CONTRIBUTING.md](CONTRIBUTING.md)
+- Japanese README landing points at [docs/README.md](docs/README.md) and [.github/CONTRIBUTING.md](.github/CONTRIBUTING.md)
 - [src/README.md](src/README.md): host ExecutionPolicy can block local `.ps1` files (the double-click launcher bypasses it for that process only)
 - If PSGallery/network blocks `powershell-yaml`, or Program Files / task registration fails, a dialog states the reason and to double-click `Install-AudioRebind.cmd` again ([#35](https://github.com/goichiro-y/audio-rebind/issues/35)). An existing profile is kept. The machine execution policy is not changed
 - Open [#33](https://github.com/goichiro-y/audio-rebind/issues/33) (settings window). Independent of the Program Files sleep check. The issues do not decide a release name
@@ -58,7 +58,7 @@ Thin elevated Install to Program Files, profiles under LocalAppData, so the sche
 
 ### Changed
 
-- README / README.ja Quick start prefer Install → edit profile → Register from Program Files; clone Register remains for development ([src/README.md](src/README.md))
+- README Quick start prefers Install → edit profile → Register from Program Files; clone Register remains for development ([src/README.md](src/README.md))
 
 ## [0.2.0] - 2026-09-22
 

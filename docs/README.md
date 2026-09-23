@@ -2,7 +2,7 @@
 
 Durable specifications and guides (**what / why**).
 
-Progress belongs in [ROADMAP.md](../ROADMAP.md). **Committed** tasks belong in GitHub Issues; **uncommitted** ideas stay on ROADMAP **Later** — see [CONTRIBUTING.md](../CONTRIBUTING.md#where-work-lives). Do not duplicate progress tables here.
+Progress belongs in [ROADMAP.md](../ROADMAP.md). **Committed** tasks belong in GitHub Issues; **uncommitted** ideas stay on ROADMAP **Later** — see [CONTRIBUTING.md](../.github/CONTRIBUTING.md#where-work-lives). Do not duplicate progress tables here.
 
 Language policy (English canonical, `*.ja.md` for Japanese): [i18n.md](i18n.md).
 
@@ -27,5 +27,5 @@ Language policy (English canonical, `*.ja.md` for Japanese): [i18n.md](i18n.md).
 | Adopted design decisions | [`decisions/`](decisions/README.md) |
 | Social preview / OG image (repo copy) | [`assets/social-preview.png`](assets/social-preview.png) |
 | Roadmap / status (incl. Later ideas) | [ROADMAP.md](../ROADMAP.md) |
-| Committed tasks | GitHub Issues ([placement rules](../CONTRIBUTING.md#where-work-lives)) |
+| Committed tasks | GitHub Issues ([placement rules](../.github/CONTRIBUTING.md#where-work-lives)) |
 | Machine-local investigation notes | `local/` or `notes/private/` (not committed) |

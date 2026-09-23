@@ -1,6 +1,6 @@
 # Roadmap
 
-Thin when/status overview. Durable specs: [`docs/`](docs/README.md). Adopted decisions: [`docs/decisions/`](docs/decisions/README.md). Placement rules: [CONTRIBUTING.md](CONTRIBUTING.md#where-work-lives). Actionable work: [GitHub Issues](https://github.com/goichiro-y/audio-rebind/issues).
+Thin when/status overview. Durable specs: [`docs/`](docs/README.md). Adopted decisions: [`docs/decisions/`](docs/decisions/README.md). Placement rules: [.github/CONTRIBUTING.md](.github/CONTRIBUTING.md#where-work-lives). Actionable work: [GitHub Issues](https://github.com/goichiro-y/audio-rebind/issues).
 
 **Committed work lives in Issues.** Uncommitted ideas stay in **Later** below — do not open Issues for them until accepted.
 
@@ -104,4 +104,4 @@ Do not file Issues for these until the version is accepted.
 
 **Not on Later (declined):** least-privilege / standard-user-only packaging — see [docs/scope.md](docs/scope.md) Operator / privilege model (was sketched as [#8](https://github.com/goichiro-y/audio-rebind/issues/8)).
 
-When an item is accepted: open an Issue. A version milestone is optional. Naming a release **1.0.0** is a separate check after the work has moved, not a field on the Issue.
+When an item is accepted: open an Issue. After a version is cut, assign that milestone to the closed issues that shipped in the cut. An open issue does not get the milestone beforehand. Naming a release **1.0.0** is a separate check after the work has moved, not a field on the Issue.
