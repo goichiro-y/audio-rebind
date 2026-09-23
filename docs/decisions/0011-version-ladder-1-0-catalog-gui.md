@@ -21,7 +21,7 @@ The YAML MVP (explicit profiles, no catalog, Task Scheduler, elevation) is alrea
 
 Always-on agents stay a conditional Later idea (only if Event ID 1 + Kernel-Power 107 are insufficient), not a version name.
 
-**1.0.0** work stays on [ROADMAP Later](../../ROADMAP.md) until that line is accepted — then Milestone `1.0.0` and Issues. Do not file catalog/GUI Issues while it is uncommitted.
+The settings window is open as [#33](https://github.com/goichiro-y/audio-rebind/issues/33). That Issue does not carry a version milestone and does not decide the release name. Whether a release is called **1.0.0** is a later check outside Issues. Do not block [#33](https://github.com/goichiro-y/audio-rebind/issues/33) on that check. Do not add a catalog or settings GUI inside a **0.x** change that has no Issue.
 
 ## Consequences
 

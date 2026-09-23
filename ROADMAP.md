@@ -13,8 +13,8 @@ Product phases use **semver**. The next public major is **1.0.0** (catalog + set
 | **0.1.x** | Maintainer / personal dogfood MVP ([ADR 0007](docs/decisions/0007-v1-mvp-boundaries.md)): explicit YAML, no GUI, Task Scheduler resume | **Shipped** as [0.1.0](CHANGELOG.md) (GitHub Milestone `0.1.0` closed) |
 | **0.x** (after 0.1) | **Public-prep** for a safe private→public flip (privacy scan, honesty in Status) | **Ready to flip** after **[0.2.0](CHANGELOG.md)** + [#15](https://github.com/goichiro-y/audio-rebind/issues/15) done (Milestone `0.2.0` closed) |
 | **0.3.0** | Thin fixed install (Program Files + LocalAppData); clone path no longer required for the scheduled task | **Shipped** as [0.3.0](CHANGELOG.md) (Milestone [`0.3.0`](https://github.com/goichiro-y/audio-rebind/milestone/3): [#29](https://github.com/goichiro-y/audio-rebind/issues/29)–[#31](https://github.com/goichiro-y/audio-rebind/issues/31)) |
-| **0.3.x** | YAML-line polish: README-led tryouts, Install-path dogfood, clearer first-run failures. Same product shape (explicit YAML, admin, Task Scheduler). A long **0.x** is OK | **Current** — not a major; see below |
-| **1.0.0** | First semver major: catalog / defaults + settings GUI so typical stacks need not hand-edit YAML. **Admin still required.** Do not ship until that line exists | **Later** (not committed) — see below |
+| **0.3.x** | YAML-line polish on the same product (explicit YAML, admin, Task Scheduler). A long **0.x** is OK | Install-path check is [#32](https://github.com/goichiro-y/audio-rebind/issues/32). Hand-edit error copy and README YAML lessons are not opened |
+| **1.0.0** | First semver major: catalog / defaults + settings GUI so typical stacks need not hand-edit YAML. **Admin still required.** Do not ship until that line exists | **Not a release yet.** Related work is [#33](https://github.com/goichiro-y/audio-rebind/issues/33). The issues do not decide this name. A later check, outside the issues, decides when a release may be called **1.0.0** |
 
 Power-transition and privilege contracts: [docs/scope.md](docs/scope.md). Elevation is required on **0.x and 1.0.0**.
 
@@ -55,17 +55,16 @@ Same MVP shape (YAML, Task Scheduler, admin). Thin fixed install so the task is 
 | Implement Install/Uninstall + task paths for that layout | Done — [#30](https://github.com/goichiro-y/audio-rebind/issues/30) |
 | README Install Quick start (after thin install) | Done — [#31](https://github.com/goichiro-y/audio-rebind/issues/31) |
 
-## 0.3.x — YAML tryouts (current polish)
+## Open work
 
-Same product as **0.3.0** (explicit YAML, no catalog, elevation, Task Scheduler). Named so README-led stranger friction is not an unnamed gap and is **not** **1.0.0**.
+[#32](https://github.com/goichiro-y/audio-rebind/issues/32) and [#33](https://github.com/goichiro-y/audio-rebind/issues/33) do not depend on each other. Either can be done first. They do not decide a version number.
 
-| Theme | Sketch |
-|-------|--------|
-| Install-path dogfood | Confirm Program Files + LocalAppData after real sleep/resume |
-| First-run failures | Actionable errors when YAML / module / elevation / task registration is wrong |
-| README-led tryouts | A stranger who can elevate can follow Quick start without extra oral lore |
+| Issue | Work |
+|-------|------|
+| [#32](https://github.com/goichiro-y/audio-rebind/issues/32) | Confirm the Program Files task still runs after the clone is moved, on one classic sleep/resume |
+| [#33](https://github.com/goichiro-y/audio-rebind/issues/33) | Settings window: choose apps and a USB device, write the existing LocalAppData profile |
 
-Open **0.3.x** Issues when a concrete item is accepted. Catalog/GUI stays **Later** until the **1.0.0** line is accepted.
+Hand-edit first-run copy and a README YAML lesson are not opened. Display-off auto, a hibernate verification campaign, standard-user-only packaging, and an always-on agent stay out of these issues.
 
 ## Done (summary)
 
@@ -82,8 +81,6 @@ Do not file Issues for these until the version is accepted.
 
 | Theme | Sketch |
 |-------|--------|
-| **1.0.0** catalog | Built-in app/USB catalog + opt-out so typical stacks can work without hand-editing HardwareIds / process paths first. Admin elevation still required ([scope](docs/scope.md) Operator / privilege model) |
-| **1.0.0** settings GUI | Opt-out checkboxes / tray settings over the same profile model (edits LocalAppData YAML; does not replace [#29](https://github.com/goichiro-y/audio-rebind/issues/29)–[#30](https://github.com/goichiro-y/audio-rebind/issues/30) thin install). Routine setup without writing YAML or extra PowerShell beyond elevated Install/Register. Not a resident agent; **does not drop admin**. Do not ship semver **1.0.0** until this line exists |
 | Always-on agent | Only if Event ID 1 + Kernel-Power 107 still prove insufficient — not a product version |
 | Single-layer tool comparison | Done (optional) — [#3](https://github.com/goichiro-y/audio-rebind/issues/3); generalized in [architecture-overview](docs/architecture-overview.md) |
 | Optional WASAPI proxy | Only if orchestrator is not enough (was [#9](https://github.com/goichiro-y/audio-rebind/issues/9)) |
@@ -95,4 +92,4 @@ Do not file Issues for these until the version is accepted.
 
 **Not on Later (declined):** least-privilege / standard-user-only packaging — see [docs/scope.md](docs/scope.md) Operator / privilege model (was sketched as [#8](https://github.com/goichiro-y/audio-rebind/issues/8)).
 
-When an item is accepted: add Milestone (e.g. `0.3.x` polish or `1.0.0` for catalog/GUI), open Issues, and update specs/ADRs as needed.
+When an item is accepted: open an Issue. A version milestone is optional. Naming a release **1.0.0** is a separate check after the work has moved, not a field on the Issue.

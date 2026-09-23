@@ -7,9 +7,9 @@ Thanks for your interest. This project is maintained for a **narrow** sleep/resu
 | Kind | Where | Open a GitHub Issue? |
 |------|--------|----------------------|
 | Product version intent (0.1.x / 0.x / 0.3.x / 1.0.0) | [ROADMAP.md](ROADMAP.md) version ladder | No (versions are not Issues) |
-| 0.x / **0.3.x** YAML-line polish | [ROADMAP.md](ROADMAP.md) | Yes — when a concrete item is accepted (not catalog/GUI) |
-| **Accepted, actionable** work | GitHub Issues + Milestone | **Yes** |
-| **Uncommitted** ideas / **1.0.0** catalog-GUI sketches | [ROADMAP.md](ROADMAP.md) **Later** | **No** until accepted |
+| 0.x / **0.3.x** YAML-line polish | [ROADMAP.md](ROADMAP.md) | Yes — when a concrete item is accepted |
+| **Accepted, actionable** work | GitHub Issues | **Yes**. Open issues need not carry a version milestone |
+| **Uncommitted** ideas | [ROADMAP.md](ROADMAP.md) **Later** | **No** until accepted |
 | Adopted design | [docs/decisions/](docs/decisions/README.md) | Proposed ideas stay out of ADR files |
 | Stable what/why | [docs/](docs/README.md) | No progress tables in docs |
 | Machine / personal stack detail | `local/` (gitignored) | Never paste raw host inventory into Issues |
