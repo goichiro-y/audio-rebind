@@ -1,4 +1,4 @@
-﻿# AudioRebind
+# AudioRebind
 
 [日本語](#日本語) · [English](#english) · Language policy: [docs/i18n.md](docs/i18n.md)
 
@@ -17,8 +17,7 @@
 以下の順番で処理を自動実行します。
 
 1. Windowsの音声サービスの再起動（標準で実行）
-2. （設定した場合のみ）USB機器を一度無効にして有効にする処理
-3. （設定した場合のみ）指定した音声アプリの再起動
+2. （設定した場合のみ）指定した音声アプリの再起動
 
 ### 注意点・対象外となる環境
 
@@ -55,7 +54,7 @@
 - 許可すると、ツール本体を Program Files に置き、そのコピーと `%LOCALAPPDATA%\AudioRebind\profiles\default.yaml` に対してタスクを登録します。
 - 許可しなかったときは、管理者権限が必要なので、タスクは登録されません。
 
-そのあと `default.yaml` を編集します（再起動したいアプリなど。USB機器の指定は任意です）。中身は復帰のたびに読むので、編集のあと登録し直す必要はありません。
+そのあと `default.yaml` を編集します（再起動したいアプリなど）。見本に USB 機器の指定はありません。中身は復帰のたびに読むので、編集のあと登録し直す必要はありません。
 
 PCを一度スリープさせてから復帰し、音が鳴るか確認します。動作ログは `%LOCALAPPDATA%\AudioRebind\logs\` に保存されます。
 
@@ -78,7 +77,7 @@ PCを一度スリープさせてから復帰し、音が鳴るか確認します
 
 This tool is for when a PC resumes from sleep and, for no obvious reason, there is no sound or the microphone does not pick up.
 
-People used to fix this by hand, restarting apps or unplugging a USB cable. AudioRebind does that recovery for you. It is not limited to a particular USB device or manufacturer.
+People used to fix this by hand, restarting apps or unplugging a USB cable. AudioRebind restarts Windows Audio and the apps you list. It does not unplug a device. It is not limited to a particular USB device or manufacturer.
 
 **How it runs**
 
@@ -87,8 +86,7 @@ It is not a resident program. You register it with Windows Task Scheduler. After
 **Recovery order**
 
 1. Restart Windows Audio services (runs by default)
-2. (If configured) Disable then enable a USB audio device
-3. (If configured) Restart the listed audio apps
+2. (If configured) Restart the listed audio apps
 
 ### Limits
 
@@ -128,10 +126,10 @@ Public utilities often cover only one layer. AudioRebind is the ordered combinat
 
 | Approach | Covers | Typical gap |
 |----------|--------|-------------|
-| Restart `Audiosrv` / `AudioEndpointBuilder` only (e.g. [AudioWakeFix](https://jdslabs.com/support/troubleshooting/)-style) | Engine | No USB rebind; no app recycle — long-lived capture clients often stay broken |
-| Close/restart mixer or capture apps only (e.g. [SAMISH](https://github.com/thomwithah/samish)-style) | Apps | No service restart; no USB PnP |
-| Manual unplug / Device Manager toggle | Device | Not automated |
-| **AudioRebind** | Engine → optional USB → optional apps | Explicit YAML profile (built-in catalog is **1.0.0** / Later) |
+| Restart `Audiosrv` / `AudioEndpointBuilder` only (e.g. [AudioWakeFix](https://jdslabs.com/support/troubleshooting/)-style) | Engine | No app recycle — long-lived capture clients often stay broken |
+| Close/restart mixer or capture apps only (e.g. [SAMISH](https://github.com/thomwithah/samish)-style) | Apps | No service restart |
+| Manual unplug / Device Manager toggle | Device | Not in the current pipeline |
+| **AudioRebind** | Engine → optional apps | Explicit YAML profile (built-in catalog is **1.0.0** / Later) |
 
 More detail: [docs/architecture-overview.md](docs/architecture-overview.md). Why an ordered package was uncommon: [docs/problem-and-motivation.md](docs/problem-and-motivation.md).
 
@@ -142,7 +140,7 @@ From a clone or unpack of this repo, double-click `Install-AudioRebind.cmd` at t
 - If you accept, it copies the runtime to `%ProgramFiles%\AudioRebind\` and registers the scheduled task against that copy and `%LOCALAPPDATA%\AudioRebind\profiles\default.yaml`.
 - If you decline, a message says Administrator is required and the task was not registered.
 
-Then edit `default.yaml` (apps to restart; USB device IDs are optional. Checklist at the top of the file). The task reads that file on each resume, so you do not re-register after an edit.
+Then edit `default.yaml` (apps to restart. The shipped profile has no USB device entry. Checklist at the top of the file). The task reads that file on each resume, so you do not re-register after an edit.
 
 Sleep → resume, then check `%LOCALAPPDATA%\AudioRebind\logs\`.
 

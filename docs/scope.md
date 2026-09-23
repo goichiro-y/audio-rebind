@@ -1,14 +1,13 @@
-﻿# Scope
+# Scope
 
 ## In scope
 
 - Run an ordered **rebind pipeline** after a power-related resume leaves shared-mode WASAPI sessions invalid:
-  1. **Audio engine** — restart Windows Audio related services (e.g. `Audiosrv`, `AudioEndpointBuilder`).
-  2. **USB device** (optional, profile) — restart / disable-enable a configured audio interface when software recovery is not enough.
-  3. **Apps** (optional, profile) — stop and start configured processes so they open fresh WASAPI sessions.
-- Configuration-driven profiles (device match rules, process names, delays, which steps are enabled).
+  1. **Audio engine** — restart Windows Audio related services (e.g. `Audiosrv`, `AudioEndpointBuilder`). This is the current requirement.
+  2. **Apps** (profile) — stop and start configured processes so they open fresh WASAPI sessions. This is the current requirement when those apps are listed.
+- Configuration-driven profiles (process names, delays, which steps are enabled).
 - Logging suitable for diagnosing which step ran and whether it succeeded.
-- Documentation that treats any vendor mixer (for example an AG03-class USB interface) as an **example profile target**, not hard-coded product identity.
+- Documentation that treats any vendor mixer (for example an AG03-class USB interface) as an **example of the problem**, not hard-coded product identity. Disable/enable of a USB device is not in the current pipeline ([Later](../ROADMAP.md)).
 
 ### Pipeline vs automatic trigger
 
@@ -16,7 +15,7 @@ These are separate contracts:
 
 | Layer | Meaning |
 |-------|---------|
-| **A — Pipeline** | What `Invoke-AudioRebind.ps1` does once started (engine → optional USB → optional apps). |
+| **A — Pipeline** | What `Invoke-AudioRebind.ps1` does once started (engine, then apps when listed). |
 | **B — Automatic trigger** | When Task Scheduler starts that script without a manual run ([ADR 0005](decisions/0005-resume-trigger-task-scheduler.md)). |
 
 #### A — Pipeline (supported)
@@ -59,9 +58,9 @@ Setup (task registration) and automatic runs assume an elevated scheduled task o
 
 | Commitment | Stance |
 |------------|--------|
-| **In scope (near term)** | Admin (or one-time admin registration) for setup and for the privileged steps (audio services / PnP). Daily resume can stay quiet after that registration — no UAC every wake. Thin elevated Install copies runtime to Program Files and keeps profiles under LocalAppData ([ADR 0010](decisions/0010-installed-layout-programfiles-localappdata.md)). |
+| **In scope (near term)** | Admin (or one-time admin registration) for setup and for the privileged steps (audio services, and stopping or starting listed apps). Daily resume can stay quiet after that registration — no UAC every wake. Thin elevated Install copies runtime to Program Files and keeps profiles under LocalAppData ([ADR 0010](decisions/0010-installed-layout-programfiles-localappdata.md)). |
 | **Out of scope (not a product promise)** | Completing the same recovery as a locked-down **standard user with no elevation**. Enterprise “standard-user-only” packaging. |
-| **Not planned** | A least-privilege installer that splits elevation per step, or shipping a path where non-admins fully self-serve the same pipeline. Windows does not allow standard users to freely restart Audio services or toggle PnP; this project does not take on that product surface. |
+| **Not planned** | A least-privilege installer that splits elevation per step, or shipping a path where non-admins fully self-serve the same pipeline. Windows does not allow standard users to freely restart Audio services; this project does not take on that product surface. |
 
 Do **not** keep least-privilege installer on [ROADMAP Later](../ROADMAP.md) as a future improvement — it is declined for this product’s intended audience (people who administer their own PC). Semver **1.0.0** (catalog / settings GUI) still requires elevation ([ADR 0011](decisions/0011-version-ladder-1-0-catalog-gui.md)).
 
@@ -97,6 +96,6 @@ Release and product-phase naming (full ladder: [ROADMAP.md](../ROADMAP.md)):
 
 ## Design stance
 
-Prefer one orchestrator with three steps over three separate tools. Existing projects such as “restart Audiosrv on wake” or “restart mixer apps on wake” are complementary references, not the end state for this repository.
+Prefer one orchestrator for the current steps (audio engine, then apps) over separate tools. USB disable/enable is not in the current pipeline ([Later](../ROADMAP.md)). Existing projects such as “restart Audiosrv on wake” or “restart mixer apps on wake” are complementary references, not the end state for this repository.
 
 Stay on classic sleep/resume rebind; do not grow into every silent playback or dead mic. User-facing wording: [README.md](../README.md). Why: [problem-and-motivation.md](problem-and-motivation.md). New automatic patterns (display-off, extra event IDs, health probes) need an explicit scope change before code.

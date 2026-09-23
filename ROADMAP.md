@@ -62,7 +62,7 @@ Same MVP shape (YAML, Task Scheduler, admin). Thin fixed install so the task is 
 | Issue | Work |
 |-------|------|
 | [#32](https://github.com/goichiro-y/audio-rebind/issues/32) | Confirm the Program Files task still runs after the clone is moved, on one classic sleep/resume |
-| [#33](https://github.com/goichiro-y/audio-rebind/issues/33) | Settings window: choose apps and a USB device, write the existing LocalAppData profile |
+| [#33](https://github.com/goichiro-y/audio-rebind/issues/33) | Settings window: choose apps, write the existing LocalAppData profile |
 | [#35](https://github.com/goichiro-y/audio-rebind/issues/35) | Setup failures (execution policy, `powershell-yaml`, Program Files write, task registration) show a dialog |
 | [#36](https://github.com/goichiro-y/audio-rebind/issues/36) | Remove `AudioRebind-Resume` from a window. On open, unregister it when its action file is already missing |
 
@@ -90,6 +90,7 @@ Do not file Issues for these until the version is accepted.
 | Secondary triggers | Unlock / other fallbacks if both Event ID 1 and Kernel-Power 107 miss (was [#10](https://github.com/goichiro-y/audio-rebind/issues/10); Kernel-Power 107 landed as [#22](https://github.com/goichiro-y/audio-rebind/issues/22)); not S5 auto for now |
 | Modern Standby | Deferred; community evidence welcome (see [scope](docs/scope.md)) — not a near-term maintainer verification task |
 | Optional further resume-speed ideas | May never do (profile micro-timing, Apps stop refinements, async overlap, latency measurement). Was [#28](https://github.com/goichiro-y/audio-rebind/issues/28) / closed #24–#27 — not an open backlog |
+| USB disable/enable as a required fix | Not in the current pipeline. Why it was withdrawn: [ADR 0012](docs/decisions/0012-withdraw-usb-disable-enable.md). Bring it back only after a case is separated where Windows Audio restart and app restart both fail, and disable/enable is what recovers it. Do not file an Issue until then. Not current work |
 
 **Not on Later (declined as maintainer work):** scheduled “verify hibernate (S4)” — auto on hibernate is best-effort/unverified only; updates via community Issue/PR to [scope](docs/scope.md). See Operator-style expectation notes there.
 

@@ -1,4 +1,4 @@
-﻿# Specs
+# Specs
 
 Area-specific specifications (**what / why** for a subsystem).
 
@@ -12,5 +12,5 @@ Area-specific specifications (**what / why** for a subsystem).
 
 | Spec | Description |
 |------|-------------|
-| [pipeline-spec.md](pipeline-spec.md) | Ordered resume rebind steps (engine → USB → apps) |
-| [profile-spec.md](profile-spec.md) | YAML profile schema (steps, delays, match rules) |
+| [pipeline-spec.md](pipeline-spec.md) | Ordered resume rebind steps (engine, then apps) |
+| [profile-spec.md](profile-spec.md) | YAML profile schema (steps, delays, app list) |

@@ -1,4 +1,4 @@
-﻿# Architecture overview
+# Architecture overview
 
 ## Goal
 
@@ -9,12 +9,11 @@ On resume, rebuild enough of the Windows audio path that shared-mode WASAPI clie
 ```text
 Resume event
     -> Step AudioEngine   (services)
-    -> Step UsbDevice     (optional PnP restart)
     -> Step Apps          (optional process recycle)
     -> Logs / exit status
 ```
 
-Order matters: restarting apps while the audio engine or device is still zombie often reproduces `AUDCLNT_E_DEVICE_INVALIDATED`. Engine first, then device if needed, then apps.
+Order matters: restarting apps while the audio engine is still down often reproduces `AUDCLNT_E_DEVICE_INVALIDATED`. Engine first, then apps.
 
 ## Triggers
 
@@ -26,10 +25,9 @@ Profiles are **YAML** ([ADR 0004](decisions/0004-profile-format-yaml.md); schema
 
 - Whether each step is enabled
 - Delays between steps
-- USB device match rules (HardwareId patterns; prefer OK/Started instances)
 - App executable paths or process names to recycle
 
-Shipping examples may include a USB audio interface and a long-lived capture helper; users edit profiles for their stack.
+Shipping examples include a placeholder app path; users edit profiles for their stack. USB disable/enable is not in the current pipeline ([Later](../ROADMAP.md)).
 
 ## Relation to existing tools
 
@@ -37,11 +35,11 @@ Public utilities already cover slices of the same problem. AudioRebind is meant 
 
 | Tool / approach | What it covers | Gap vs AudioRebind |
 |-----------------|----------------|--------------------|
-| [AudioWakeFix](https://jdslabs.com/support/troubleshooting/) (JDS Labs; wake task restarts `Audiosrv` / `AudioEndpointBuilder`) | Audio **engine** only | No USB device step; no app recycle |
-| [SAMISH](https://github.com/thomwithah/samish) (close/restart mixer apps around sleep; sleep-blocker diagnostics) | **Apps** (and related sleep helpers) | No Windows Audio service restart; no USB PnP rebind |
-| Manual interface power cycle | **Device** | Not automated |
+| [AudioWakeFix](https://jdslabs.com/support/troubleshooting/) (JDS Labs; wake task restarts `Audiosrv` / `AudioEndpointBuilder`) | Audio **engine** only | No app recycle — long-lived capture clients often stay broken |
+| [SAMISH](https://github.com/thomwithah/samish) (close/restart mixer apps around sleep; sleep-blocker diagnostics) | **Apps** (and related sleep helpers) | No Windows Audio service restart |
+| Manual interface power cycle | **Device** | Not in the current pipeline ([Later](../ROADMAP.md)) |
 
-Order still matters: engine → optional USB → apps. Using only AudioWakeFix or only SAMISH leaves the other layers unrecovered.
+Order still matters: engine, then apps. Using only AudioWakeFix or only SAMISH leaves the other layer unrecovered.
 
 ### Maintainer comparison (generalized, [#3](https://github.com/goichiro-y/audio-rebind/issues/3))
 

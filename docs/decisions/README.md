@@ -1,4 +1,4 @@
-﻿# Architecture Decision Records (ADRs)
+# Architecture Decision Records (ADRs)
 
 Store **adopted** decisions here.
 
@@ -23,6 +23,7 @@ Store **adopted** decisions here.
 | [0009-yaml-on-windows-powershell-51.md](0009-yaml-on-windows-powershell-51.md) | YAML via powershell-yaml on Windows PowerShell 5.1 |
 | [0010-installed-layout-programfiles-localappdata.md](0010-installed-layout-programfiles-localappdata.md) | Program Files runtime + LocalAppData profiles/logs (#29/#30) |
 | [0011-version-ladder-1-0-catalog-gui.md](0011-version-ladder-1-0-catalog-gui.md) | **1.0.0** = catalog + settings GUI; YAML polish is **0.3.x**; no public **V2** / 2.0 destination |
+| [0012-withdraw-usb-disable-enable.md](0012-withdraw-usb-disable-enable.md) | USB disable/enable withdrawn from the current pipeline; revisit when two steps are not enough |
 
 ## Template (copy into a new file)
 

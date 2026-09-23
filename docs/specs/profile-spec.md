@@ -1,4 +1,4 @@
-﻿# Profile specification
+# Profile specification
 
 On-disk profile contract for the resume orchestrator. Format decision: YAML ([ADR 0004](../decisions/0004-profile-format-yaml.md)). Step behavior: [pipeline-spec](pipeline-spec.md), [ADR 0006](../decisions/0006-v1-step-defaults-engine-usb.md).
 
@@ -16,11 +16,6 @@ description: Optional human-readable note
 steps:
   audioEngine:
     enabled: true          # default true; required by default when enabled
-  usbDevice:
-    enabled: false
-    hardwareIdPatterns:    # matched against DEVPKEY_Device_HardwareIds
-      - "USB\\VID_XXXX&PID_YYYY"
-    # Prefer Started/OK instances; do not use full InstanceIds in shared examples
   apps:
     enabled: false
     # windowAfterStart: minimize
@@ -38,15 +33,12 @@ steps:
 
 delays:
   afterAudioEngineMs: 2000   # safe default; try 500–1000 on fast hosts (#20)
-  afterUsbDeviceMs: 2000
   afterAppsMs: 0
 ```
 
 ## Matching rules
 
-1. `hardwareIdPatterns`: substring or wildcard match against any HardwareId on the device (document exact matcher in implementation). See [discover-hardware-id.md](../guides/discover-hardware-id.md).
-2. Ignore non-Started / problem devices when a healthy match exists.
-3. Never commit machine-specific full InstanceIds or personal usernames into shared profiles.
+Never commit machine-specific full InstanceIds or personal usernames into shared profiles.
 
 ## YAML loading (v1)
 
@@ -57,9 +49,7 @@ Document the module install step in `src/` when the loader is implemented ([#6](
 ## Validation
 
 - Unknown keys: warn or reject (implementation chooses; prefer reject in v1 for typos).
-- If `usbDevice.enabled` is true and `hardwareIdPatterns` is empty → configuration error.
 - If `apps.enabled` is true and `processes` is empty → configuration error.
-- On hosts where PnP disable/enable fails, set `usbDevice.enabled: false` rather than leaving long soft-fail retries ([#13](https://github.com/goichiro-y/audio-rebind/issues/13); closed [#12](https://github.com/goichiro-y/audio-rebind/issues/12)).
 - For apps that restart slowly when given a long graceful wait (e.g. Electron), lower `gracefulStopSeconds` / `forceStopSeconds`.
 - `windowAfterStart` (`leave` | `minimize`) on `apps` and/or each `processes[]` entry. Default `leave`. `restore` is not implemented yet ([#16](https://github.com/goichiro-y/audio-rebind/issues/16)).
 - When `minimize`: start via Win32 `CreateProcess` with `SW_SHOWMINNOACTIVE` (avoid `Start-Process -WindowStyle Minimized` foreground flash) ([#21](https://github.com/goichiro-y/audio-rebind/issues/21)), then a short fallback poll still applies `SW_SHOWMINNOACTIVE` if a window appears later. **Limits:** Electron/Chromium apps often create their own window after launch and may still flash briefly; OS/app behavior can override the initial show flag. There is no reliable generic “tray-only / never paint” launch for arbitrary GUI apps.

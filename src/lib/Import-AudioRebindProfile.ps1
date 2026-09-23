@@ -1,4 +1,4 @@
-﻿# Load and validate an AudioRebind YAML profile (Windows PowerShell 5.1 + powershell-yaml).
+# Load and validate an AudioRebind YAML profile (Windows PowerShell 5.1 + powershell-yaml).
 
 function Test-AudioRebindAdmin {
     $id = [Security.Principal.WindowsIdentity]::GetCurrent()
@@ -86,7 +86,6 @@ function Assert-AudioRebindProfile {
     }
 
     $ae = Get-ProfileStepMap -Parent $steps -Name 'audioEngine'
-    $usb = Get-ProfileStepMap -Parent $steps -Name 'usbDevice'
     $apps = Get-ProfileStepMap -Parent $steps -Name 'apps'
 
     if ($null -eq $ae) {
@@ -94,14 +93,6 @@ function Assert-AudioRebindProfile {
         $ae = $steps['audioEngine']
     }
     if (-not $ae.ContainsKey('enabled')) { $ae['enabled'] = $true }
-
-    if ($null -eq $usb) {
-        $steps['usbDevice'] = @{ enabled = $false; hardwareIdPatterns = @() }
-        $usb = $steps['usbDevice']
-    }
-    if (-not $usb.ContainsKey('enabled')) { $usb['enabled'] = $false }
-    if (-not $usb.ContainsKey('hardwareIdPatterns')) { $usb['hardwareIdPatterns'] = @() }
-    $usb['hardwareIdPatterns'] = @(ConvertTo-StringArray $usb['hardwareIdPatterns'])
 
     if ($null -eq $apps) {
         $steps['apps'] = @{
@@ -144,12 +135,6 @@ function Assert-AudioRebindProfile {
     if (-not $apps.ContainsKey('processes')) { $apps['processes'] = @() }
     $apps['processes'] = @(Normalize-ProcessEntries $apps['processes'])
 
-    if ([bool]$usb.enabled) {
-        if (@($usb.hardwareIdPatterns | Where-Object { -not [string]::IsNullOrWhiteSpace($_) }).Count -eq 0) {
-            throw "usbDevice.enabled is true but hardwareIdPatterns is empty: $SourcePath"
-        }
-    }
-
     if ([bool]$apps.enabled) {
         if (@($apps.processes).Count -eq 0) {
             throw "apps.enabled is true but processes is empty: $SourcePath"
@@ -159,7 +144,6 @@ function Assert-AudioRebindProfile {
     if (-not $Profile.ContainsKey('delays') -or $null -eq $Profile.delays) {
         $Profile['delays'] = @{
             afterAudioEngineMs = 2000
-            afterUsbDeviceMs   = 2000
             afterAppsMs        = 0
         }
     }
@@ -172,7 +156,6 @@ function Assert-AudioRebindProfile {
             $Profile.delays = $delays
         }
         if (-not $delays.ContainsKey('afterAudioEngineMs')) { $delays['afterAudioEngineMs'] = 2000 }
-        if (-not $delays.ContainsKey('afterUsbDeviceMs')) { $delays['afterUsbDeviceMs'] = 2000 }
         if (-not $delays.ContainsKey('afterAppsMs')) { $delays['afterAppsMs'] = 0 }
     }
 
@@ -199,19 +182,6 @@ function Get-ProfileStepMap {
     foreach ($p in $v.PSObject.Properties) { $ht[$p.Name] = $p.Value }
     if ($Parent -is [hashtable]) { $Parent[$Name] = $ht }
     return $ht
-}
-
-function ConvertTo-StringArray {
-    param($Value)
-    if ($null -eq $Value) { return @() }
-    if ($Value -is [string]) { return @($Value) }
-    $list = @()
-    foreach ($item in @($Value)) {
-        if ($null -ne $item -and -not [string]::IsNullOrWhiteSpace([string]$item)) {
-            $list += [string]$item
-        }
-    }
-    return $list
 }
 
 function Normalize-ProcessEntries {

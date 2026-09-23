@@ -1,4 +1,4 @@
-﻿<#
+<#
 .SYNOPSIS
   Run the AudioRebind resume pipeline against a YAML profile.
 
@@ -6,7 +6,7 @@
   Path to a profile .yaml / .yml file.
 
 .PARAMETER WhatIf
-  Log planned steps without restarting services, toggling PnP, or recycling apps.
+  Log planned steps without restarting services or recycling apps.
 
 .NOTES
   Requires Windows PowerShell 5.1, administrator elevation, and module powershell-yaml.
@@ -29,7 +29,6 @@ $libRoot = Join-Path $PSScriptRoot 'lib'
 . (Join-Path $libRoot 'Write-AudioRebindLog.ps1')
 . (Join-Path $libRoot 'Import-AudioRebindProfile.ps1')
 . (Join-Path $libRoot 'Step-AudioEngine.ps1')
-. (Join-Path $libRoot 'Step-UsbDevice.ps1')
 . (Join-Path $libRoot 'Step-Apps.ps1')
 
 function Get-DelayMs {
@@ -121,27 +120,6 @@ try {
         Write-AudioRebindLog "AudioEngine: disabled in profile"
     }
 
-    # --- UsbDevice (optional) ---
-    if (-not $requiredFailed) {
-        $usb = $steps.usbDevice
-        $usbEnabled = $false
-        if ($usb -is [hashtable] -and $usb.ContainsKey('enabled')) { $usbEnabled = [bool]$usb.enabled }
-        if ($usbEnabled) {
-            $ok = Invoke-AudioRebindUsbDevice -StepConfig $usb -WhatIf:$WhatIf
-            if (-not $ok) {
-                Write-AudioRebindLog "UsbDevice: step reported failure (optional — continuing)" -Level WARN
-            }
-            $ms = Get-DelayMs $delays 'afterUsbDeviceMs' 2000
-            if (-not $WhatIf -and $ms -gt 0) {
-                Write-AudioRebindLog ("Delay afterUsbDeviceMs={0}" -f $ms)
-                Start-Sleep -Milliseconds $ms
-            }
-        }
-        else {
-            Write-AudioRebindLog "UsbDevice: disabled in profile"
-        }
-    }
-
     # --- Apps (optional) ---
     if (-not $requiredFailed) {
         $apps = $steps.apps
@@ -168,7 +146,7 @@ try {
 catch {
     $exitCode = 3
     $msg = $_.Exception.Message
-    if ($msg -match 'powershell-yaml' -or $msg -match 'Unknown top-level' -or $msg -match 'Profile' -or $msg -match 'hardwareIdPatterns' -or $msg -match 'processes') {
+    if ($msg -match 'powershell-yaml' -or $msg -match 'Unknown top-level' -or $msg -match 'Profile' -or $msg -match 'processes') {
         $exitCode = 1
     }
     try {

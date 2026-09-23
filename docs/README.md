@@ -1,4 +1,4 @@
-﻿# docs
+# docs
 
 Durable specifications and guides (**what / why**).
 
@@ -15,7 +15,7 @@ Language policy (English canonical, `*.ja.md` for Japanese): [i18n.md](i18n.md).
 | [architecture-overview.md](architecture-overview.md) | Resume pipeline and relation to other tools |
 | [specs/](specs/README.md) | Area specs (`pipeline-spec`, `profile-spec`) |
 | [decisions/](decisions/README.md) | Adopted ADRs |
-| [guides/](guides/README.md) | How-to (`local-notes`, `discover-hardware-id`) |
+| [guides/](guides/README.md) | How-to (`local-notes`) |
 | [i18n.md](i18n.md) | Language / translation rules |
 | [assets/social-preview.png](assets/social-preview.png) | GitHub Social preview / OG source (upload under Settings → Social preview) |
 

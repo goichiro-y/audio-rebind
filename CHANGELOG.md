@@ -10,11 +10,13 @@ and this project aims to adhere to [Semantic Versioning](https://semver.org/).
 ### Added
 
 - [ADR 0011](docs/decisions/0011-version-ladder-1-0-catalog-gui.md): version ladder — **1.0.0** is catalog + settings GUI (admin still required); YAML tryout polish is **0.3.x**; no public **V2** / 2.0.0 destination
+- [ADR 0012](docs/decisions/0012-withdraw-usb-disable-enable.md): withdraw USB disable/enable from the current pipeline. Public reports leave it as a hypothesis; maintainer dogfood recovered with Windows Audio restart and app restart. Revisit when those two steps are not enough
 - README Japanese landing at the top (USP, audience, Quick start skeleton); [`README.ja.md`](README.ja.md) is a pointer ([docs/i18n.md](docs/i18n.md))
 - Repository-root `Install-AudioRebind.cmd`: one elevation prompt, then existing Install and task registration against the Program Files copy ([#34](https://github.com/goichiro-y/audio-rebind/issues/34)). Declining elevation shows that admin is required and the task was not registered
 
 ### Changed
 
+- Example profile ships with `apps.windowAfterStart: minimize` and no `usbDevice` block. Omitted `windowAfterStart` in the engine still means `leave`
 - Document which power states start the task automatically vs a manual run (S0 display-off, Modern Standby, S3, S4, S5) in [docs/scope.md](docs/scope.md) and the README
 - README Japanese landing and English intro: user-facing sleep-resume dropout first; DAW as a caution, not product out-of-scope
 - README English landing matches Japanese density; Event IDs, debounce, and WASAPI diagnosis stay in [docs/scope.md](docs/scope.md) ([docs/i18n.md](docs/i18n.md))
@@ -28,6 +30,8 @@ and this project aims to adhere to [Semantic Versioning](https://semver.org/).
 ### Fixed
 
 ### Removed
+
+- USB disable/enable (`usbDevice`, `afterUsbDeviceMs`, `Step-UsbDevice.ps1`) from the current pipeline ([ADR 0012](docs/decisions/0012-withdraw-usb-disable-enable.md)). Profiles that still contain those keys are not run as a device toggle. The guide `docs/guides/discover-hardware-id.md` is removed with that step. Reintroduction is [Later](ROADMAP.md)
 
 ## [0.3.0] - 2026-09-22
 

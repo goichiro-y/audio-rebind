@@ -1,4 +1,4 @@
-﻿# AudioRebind runtime
+# AudioRebind runtime
 
 PowerShell orchestrator for the resume rebind pipeline. Specs: [pipeline-spec](../docs/specs/pipeline-spec.md), [profile-spec](../docs/specs/profile-spec.md). Repo layout: [ADR 0008](../docs/decisions/0008-v1-repository-layout.md). Installed layout: [ADR 0010](../docs/decisions/0010-installed-layout-programfiles-localappdata.md). Trigger packaging: [ADR 0005](../docs/decisions/0005-resume-trigger-task-scheduler.md).
 
@@ -71,7 +71,7 @@ Logs: `%LOCALAPPDATA%\AudioRebind\logs\`
 
 ### Resume timing tips
 
-On hosts where UsbDevice disable fails (see closed [#12](https://github.com/goichiro-y/audio-rebind/issues/12)), set `usbDevice.enabled: false` in the profile to skip that step before Apps. For Electron-style apps, lower `gracefulStopSeconds` / `forceStopSeconds` (e.g. `2`) so recycle finishes sooner ([#13](https://github.com/goichiro-y/audio-rebind/issues/13)).
+For Electron-style apps, lower `gracefulStopSeconds` / `forceStopSeconds` (e.g. `2`) so recycle finishes sooner ([#13](https://github.com/goichiro-y/audio-rebind/issues/13)).
 
 To avoid recycled apps stealing focus, set `windowAfterStart: minimize` on `apps` or per process ([#16](https://github.com/goichiro-y/audio-rebind/issues/16)). Launch uses Win32 `CreateProcess` + `SW_SHOWMINNOACTIVE` (not `Start-Process -WindowStyle Minimized`) ([#21](https://github.com/goichiro-y/audio-rebind/issues/21)); a short minimize poll remains as fallback when the app creates a window later. Electron-style apps may still flash briefly — that is an OS/app limit, not something AudioRebind can fully erase for arbitrary GUIs. Minimize polling early-exits on success and gives up quickly when there is no main window; tune `minimizeTimeoutMs` / `minimizeNoWindowGiveUpMs` if needed ([#18](https://github.com/goichiro-y/audio-rebind/issues/18)).
 
@@ -112,7 +112,6 @@ Get-ScheduledTask -TaskName AudioRebind-Resume | Format-List TaskName, State
 | `lib/Import-AudioRebindProfile.ps1` | YAML load + validation |
 | `lib/Write-AudioRebindLog.ps1` | Logging |
 | `lib/Step-AudioEngine.ps1` | Restart EndpointBuilder + Audiosrv |
-| `lib/Step-UsbDevice.ps1` | HardwareId match + disable/enable (+ pnputil fallback) |
 | `lib/Step-Apps.ps1` | Stop/start configured processes |
 
 Installed profiles: `%LOCALAPPDATA%\AudioRebind\profiles\` (default `default.yaml`). Dev personal profiles: `local/profiles/` (gitignored). Shared placeholders: `profiles/examples/`.

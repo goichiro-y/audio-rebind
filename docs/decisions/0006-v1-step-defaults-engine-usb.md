@@ -1,7 +1,9 @@
-﻿# 6. v1 step defaults for AudioEngine and UsbDevice
+# 6. v1 step defaults for AudioEngine and UsbDevice
 
 - Status: Accepted
 - Date: 2026-09-21
+
+The USB disable/enable step is withdrawn from the current product ([ADR 0012](0012-withdraw-usb-disable-enable.md)). The text below is the decision as adopted.
 
 ## Context
 

@@ -1,38 +1,23 @@
-﻿# Example profile for an AG03-class USB interface + one long-lived app.
+# Example profile: Windows Audio restart + one long-lived app.
 # Schema: docs/specs/profile-spec.md
 #
 # Copy to local/profiles/ first, then fill this checklist (do not commit personal paths):
-# [ ] hardwareIdPatterns: replace XXXX and YYYY with your device's VID/PID
-#     Where: elevated PowerShell → docs/guides/discover-hardware-id.md
-#     Use a HardwareId *pattern* like USB\VID_xxxx&PID_yyyy — never the full InstanceId
 # [ ] apps.processes[].path: full path to your .exe (or set apps.enabled: false)
-# [ ] usbDevice: leave enabled only if you want a disable→enable cycle on that device
-#     When: during a pipeline run (manual or scheduled resume), *after* AudioEngine,
-#     *before* Apps — not at Windows sleep time and not during profile edit
-# [ ] If Disable-PnpDevice fails on your PC: usbDevice.enabled: false (skip USB step)
-# [ ] Optional: windowAfterStart: minimize; lower gracefulStopSeconds for Electron-style apps
-# Do not commit real InstanceIds, usernames, real VID/PID, or machine-absolute personal paths
-# into shared examples under profiles/examples/.
+# [ ] Apps in this example use windowAfterStart: minimize (override per process if needed)
+# This file has no usbDevice block. Adding a disable/enable step is Later (ROADMAP.md).
+# Do not commit personal absolute paths into shared examples under profiles/examples/.
 
 name: example-usb-interface
 description: >
-  Placeholder profile. Replace VID/PID and executable path before use.
+  Placeholder profile. Replace the executable path before use.
+  No USB device entry.
 
 steps:
   audioEngine:
     enabled: true
-  usbDevice:
-    # Runs only when the orchestrator runs (not when you save this file).
-    # Order: AudioEngine → UsbDevice (disable/enable match) → Apps.
-    enabled: true
-    hardwareIdPatterns:
-      # XXXX = VID, YYYY = PID (hex). How to read them: docs/guides/discover-hardware-id.md
-      # Pattern only — not full InstanceId (InstanceId often includes serial-like suffixes).
-      - "USB\\VID_XXXX&PID_YYYY"
-    # Soft-fail hosts: set enabled: false (see src/README Resume timing tips / closed #12).
   apps:
     enabled: true
-    # windowAfterStart: minimize   # or per process entry
+    windowAfterStart: minimize
     processes:
       # Prefer full path; name-only matching is allowed but weaker.
       # Keep real paths in local/profiles/ only — not in this shared example.
@@ -45,5 +30,4 @@ steps:
 
 delays:
   afterAudioEngineMs: 2000  # try 500–1000 if endpoints settle fast (see src/README / #20)
-  afterUsbDeviceMs: 2000
   afterAppsMs: 0
