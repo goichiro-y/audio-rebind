@@ -1,4 +1,4 @@
-# Changelog
+﻿# Changelog
 
 All notable changes to this project will be documented in this file.
 
@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project aims to adhere to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
+
+## [0.4.0] - 2026-09-24
+
+YAML product cut after 0.3.0. Same shape: explicit profiles, Task Scheduler, admin. Not the catalog or settings GUI.
 
 ### Added
 
@@ -16,19 +20,24 @@ and this project aims to adhere to [Semantic Versioning](https://semver.org/).
 
 ### Changed
 
-- Example profile ships with `apps.windowAfterStart: minimize` and no `usbDevice` block. Omitted `windowAfterStart` in the engine still means `leave`
+- Example profile ships with `apps.windowAfterStart: minimize` and no `usbDevice` block. A process that omits `windowAfterStart` inherits the apps-level value. Both omitted stays `leave` ([#37](https://github.com/goichiro-y/audio-rebind/issues/37))
+- Shipped `gracefulStopSeconds` ceiling is **2** (example, loader default). Apps that exit sooner do not wait it out. `stopMode: force` still skips the close wait
 - Document which power states start the task automatically vs a manual run (S0 display-off, Modern Standby, S3, S4, S5) in [docs/scope.md](docs/scope.md) and the README
 - README Japanese landing and English intro: user-facing sleep-resume dropout first; DAW as a caution, not product out-of-scope
 - README English landing matches Japanese density; Event IDs, debounce, and WASAPI diagnosis stay in [docs/scope.md](docs/scope.md) ([docs/i18n.md](docs/i18n.md))
 - [docs/scope.md](docs/scope.md): exclusive-mode / DAW as a caution; not a crashed-app watchdog
 - Japanese README landing points at [docs/README.md](docs/README.md) and [CONTRIBUTING.md](CONTRIBUTING.md)
-- [src/README.md](src/README.md): host ExecutionPolicy can block local `.ps1` files (Install does not bypass it)
-- Open [#32](https://github.com/goichiro-y/audio-rebind/issues/32) (installed-task sleep check) and [#33](https://github.com/goichiro-y/audio-rebind/issues/33) (settings window). The issues are independent and do not decide a release name
-- Open [#35](https://github.com/goichiro-y/audio-rebind/issues/35) (setup-failure dialogs). Independent of [#32](https://github.com/goichiro-y/audio-rebind/issues/32) and [#33](https://github.com/goichiro-y/audio-rebind/issues/33)
+- [src/README.md](src/README.md): host ExecutionPolicy can block local `.ps1` files (the double-click launcher bypasses it for that process only)
+- If PSGallery/network blocks `powershell-yaml`, or Program Files / task registration fails, a dialog states the reason and to double-click `Install-AudioRebind.cmd` again ([#35](https://github.com/goichiro-y/audio-rebind/issues/35)). An existing profile is kept. The machine execution policy is not changed
+- Open [#33](https://github.com/goichiro-y/audio-rebind/issues/33) (settings window). Independent of the Program Files sleep check. The issues do not decide a release name
+- Open [#35](https://github.com/goichiro-y/audio-rebind/issues/35) (setup-failure dialogs). Independent of [#33](https://github.com/goichiro-y/audio-rebind/issues/33)
 - Open [#36](https://github.com/goichiro-y/audio-rebind/issues/36): remove the scheduled task from a window, and on open unregister it when its action file is already missing
-- Open [#37](https://github.com/goichiro-y/audio-rebind/issues/37): a process that omits `windowAfterStart` inherits the apps-level value. Independent of [#34](https://github.com/goichiro-y/audio-rebind/issues/34)
+- A successful double-click setup shows a completion dialog. Closing it ends the window ([#38](https://github.com/goichiro-y/audio-rebind/issues/38)). Independent of [#35](https://github.com/goichiro-y/audio-rebind/issues/35)
+- App stop runs during the Windows Audio restart. Apps start only after that restart succeeds and `afterAudioEngineMs` has elapsed ([#39](https://github.com/goichiro-y/audio-rebind/issues/39)). One classic sleep finished with exit 0
 
 ### Fixed
+
+- A process that omits `windowAfterStart` inherits `apps.windowAfterStart`. The loader no longer stamps `leave` onto that process ([#37](https://github.com/goichiro-y/audio-rebind/issues/37))
 
 ### Removed
 

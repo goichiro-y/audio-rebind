@@ -77,7 +77,8 @@ Release and product-phase naming (full ladder: [ROADMAP.md](../ROADMAP.md)):
 | **0.1.x** | Maintainer / personal dogfood MVP: **explicit** YAML targets (apps / USB), **no settings GUI**, resume via elevated Task Scheduler (not always-on). See [ADR 0007](decisions/0007-v1-mvp-boundaries.md). | Shipped [0.1.0](../CHANGELOG.md); Milestone `0.1.0` closed |
 | **0.x** (public prep) | Safe private→public flip (privacy scan); maintainer dogfood shipped as 0.2.0 | Done — [#15](https://github.com/goichiro-y/audio-rebind/issues/15) |
 | **0.3.0** | Thin fixed install (Program Files + LocalAppData); clone path not required for the task | Shipped [0.3.0](../CHANGELOG.md); Milestone `0.3.0` — [#29](https://github.com/goichiro-y/audio-rebind/issues/29)–[#31](https://github.com/goichiro-y/audio-rebind/issues/31) |
-| **0.3.x** | YAML-line polish (README-led tryouts, Install dogfood, first-run errors). Same shape; not a major. | Current — [ROADMAP](../ROADMAP.md) |
+| **0.4.0** | Same YAML product: double-click setup, USB step withdrawn, stop overlaps the engine, setup dialogs | Shipped [0.4.0](../CHANGELOG.md) |
+| **0.3.x** | YAML-line polish (README-led tryouts, Install dogfood, first-run errors). Same shape; not a major. | **0.4.0** is the latest cut — [ROADMAP](../ROADMAP.md) |
 | **1.0.0** | First semver major: catalog / heuristics + **opt-out**, and settings GUI so typical stacks need not hand-edit YAML. **Admin still required.** Do not ship before that line exists. | [ROADMAP](../ROADMAP.md) **Later** — no Issues until accepted |
 
 0.1.x stays deliberately narrow so the ordered pipeline can be proven on a real host before investing in zero-config UX. Catalog / GUI is **1.0.0**, not a second public major ([ADR 0011](decisions/0011-version-ladder-1-0-catalog-gui.md)). A long **0.x** is accepted.

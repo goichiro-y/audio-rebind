@@ -1,4 +1,4 @@
-# Roadmap
+﻿# Roadmap
 
 Thin when/status overview. Durable specs: [`docs/`](docs/README.md). Adopted decisions: [`docs/decisions/`](docs/decisions/README.md). Placement rules: [CONTRIBUTING.md](CONTRIBUTING.md#where-work-lives). Actionable work: [GitHub Issues](https://github.com/goichiro-y/audio-rebind/issues).
 
@@ -13,7 +13,8 @@ Product phases use **semver**. The next public major is **1.0.0** (catalog + set
 | **0.1.x** | Maintainer / personal dogfood MVP ([ADR 0007](docs/decisions/0007-v1-mvp-boundaries.md)): explicit YAML, no GUI, Task Scheduler resume | **Shipped** as [0.1.0](CHANGELOG.md) (GitHub Milestone `0.1.0` closed) |
 | **0.x** (after 0.1) | **Public-prep** for a safe private→public flip (privacy scan, honesty in Status) | **Ready to flip** after **[0.2.0](CHANGELOG.md)** + [#15](https://github.com/goichiro-y/audio-rebind/issues/15) done (Milestone `0.2.0` closed) |
 | **0.3.0** | Thin fixed install (Program Files + LocalAppData); clone path no longer required for the scheduled task | **Shipped** as [0.3.0](CHANGELOG.md) (Milestone [`0.3.0`](https://github.com/goichiro-y/audio-rebind/milestone/3): [#29](https://github.com/goichiro-y/audio-rebind/issues/29)–[#31](https://github.com/goichiro-y/audio-rebind/issues/31)) |
-| **0.3.x** | YAML-line polish on the same product (explicit YAML, admin, Task Scheduler). A long **0.x** is OK | Install-path check is [#32](https://github.com/goichiro-y/audio-rebind/issues/32). Hand-edit error copy and README YAML lessons are not opened |
+| **0.3.x** | YAML-line polish on the same product (explicit YAML, admin, Task Scheduler). A long **0.x** is OK | **0.4.0** is the latest cut. Hand-edit error copy and README YAML lessons are not opened |
+| **0.4.0** | Same YAML product after that install: double-click setup, USB step withdrawn, stop overlaps the engine, setup dialogs | **Shipped** as [0.4.0](CHANGELOG.md) |
 | **1.0.0** | First semver major: catalog / defaults + settings GUI so typical stacks need not hand-edit YAML. **Admin still required.** Do not ship until that line exists | **Not a release yet.** Related work is [#33](https://github.com/goichiro-y/audio-rebind/issues/33). The issues do not decide this name. A later check, outside the issues, decides when a release may be called **1.0.0** |
 
 Power-transition and privilege contracts: [docs/scope.md](docs/scope.md). Elevation is required on **0.x and 1.0.0**.
@@ -57,15 +58,13 @@ Same MVP shape (YAML, Task Scheduler, admin). Thin fixed install so the task is 
 
 ## Open work
 
-[#32](https://github.com/goichiro-y/audio-rebind/issues/32), [#33](https://github.com/goichiro-y/audio-rebind/issues/33), [#35](https://github.com/goichiro-y/audio-rebind/issues/35), [#36](https://github.com/goichiro-y/audio-rebind/issues/36), and [#37](https://github.com/goichiro-y/audio-rebind/issues/37) do not depend on each other. Any can be done first. They do not decide a version number.
+[#33](https://github.com/goichiro-y/audio-rebind/issues/33), [#35](https://github.com/goichiro-y/audio-rebind/issues/35), and [#36](https://github.com/goichiro-y/audio-rebind/issues/36) do not depend on each other. Any can be done first. They do not decide a version number.
 
 | Issue | Work |
 |-------|------|
-| [#32](https://github.com/goichiro-y/audio-rebind/issues/32) | Confirm the Program Files task still runs after the clone is moved, on one classic sleep/resume |
 | [#33](https://github.com/goichiro-y/audio-rebind/issues/33) | Settings window: choose apps, write the existing LocalAppData profile |
 | [#35](https://github.com/goichiro-y/audio-rebind/issues/35) | Setup failures (execution policy, `powershell-yaml`, Program Files write, task registration) show a dialog |
 | [#36](https://github.com/goichiro-y/audio-rebind/issues/36) | Remove `AudioRebind-Resume` from a window. On open, unregister it when its action file is already missing |
-| [#37](https://github.com/goichiro-y/audio-rebind/issues/37) | A process that omits `windowAfterStart` inherits the apps-level value. Load must not stamp `leave` onto that process |
 
 Hand-edit first-run copy and a README YAML lesson are not opened. Display-off auto, a hibernate verification campaign, standard-user-only packaging, and an always-on agent stay out of these issues.
 
@@ -78,6 +77,10 @@ Hand-edit first-run copy and a README YAML lesson are not opened. Display-off au
 | 0.1.0 maintainer MVP exit | [CHANGELOG 0.1.0](CHANGELOG.md); Milestone `0.1.0` closed |
 | 0.3.0 thin install + README Install path | [CHANGELOG 0.3.0](CHANGELOG.md); Milestone `0.3.0` |
 | Double-click setup | Done — [#34](https://github.com/goichiro-y/audio-rebind/issues/34). Decline shows that admin is required. Accept copies to Program Files and registers the task |
+| Program Files task does not depend on the clone | Done — [#32](https://github.com/goichiro-y/audio-rebind/issues/32). Task action is under Program Files. One classic sleep/resume started the pipeline and finished with exit 0 |
+| Process inherits apps windowAfterStart | Done — [#37](https://github.com/goichiro-y/audio-rebind/issues/37). An entry overrides only when it sets the key. Both omitted stays `leave` |
+| Setup completion dialog | Done — [#38](https://github.com/goichiro-y/audio-rebind/issues/38). Success shows two short lines. Closing the dialog ends the window |
+| App stop overlaps the audio restart | Done — [#39](https://github.com/goichiro-y/audio-rebind/issues/39). One classic sleep: stop ran during the engine restart, start was after the attach delay, exit 0 |
 
 ## Later (not committed)
 
@@ -90,7 +93,7 @@ Do not file Issues for these until the version is accepted.
 | Optional WASAPI proxy | Only if orchestrator is not enough (was [#9](https://github.com/goichiro-y/audio-rebind/issues/9)) |
 | Secondary triggers | Unlock / other fallbacks if both Event ID 1 and Kernel-Power 107 miss (was [#10](https://github.com/goichiro-y/audio-rebind/issues/10); Kernel-Power 107 landed as [#22](https://github.com/goichiro-y/audio-rebind/issues/22)); not S5 auto for now |
 | Modern Standby | Deferred; community evidence welcome (see [scope](docs/scope.md)) — not a near-term maintainer verification task |
-| Optional further resume-speed ideas | May never do (profile micro-timing, Apps stop refinements, async overlap, latency measurement). Was [#28](https://github.com/goichiro-y/audio-rebind/issues/28) / closed #24–#27 — not an open backlog |
+| Optional further resume-speed ideas | May never do (profile micro-timing, Apps stop refinements, latency measurement, async minimize, playback-first, thin hot-path profile). Engine and app-stop overlap shipped as [#39](https://github.com/goichiro-y/audio-rebind/issues/39). Was [#28](https://github.com/goichiro-y/audio-rebind/issues/28) / closed #24–#27 — the rest is not an open backlog |
 | Task identity beyond the name | [#36](https://github.com/goichiro-y/audio-rebind/issues/36) finds `AudioRebind-Resume` by name. Enough while that name is unchanged. Later only: follow the task after a rename, and do not remove a different task that reused the same name. Not current work |
 | Log retention | Each run adds a file under `%LOCALAPPDATA%\AudioRebind\logs\`. No deletion rule. Harmless short-term; files accumulate over years. Not current work |
 | Re-register overwrites task edits | `Register-AudioRebindTask.ps1` replaces the same task name with `-Force`. A person who edited triggers in Task Scheduler loses that on the next setup. Later: warn before overwrite. Not current work |

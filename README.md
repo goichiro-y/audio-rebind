@@ -1,4 +1,4 @@
-# AudioRebind
+﻿# AudioRebind
 
 [日本語](#日本語) · [English](#english) · Language policy: [docs/i18n.md](docs/i18n.md)
 
@@ -168,7 +168,7 @@ Dev clone Register (path-locked to the checkout) remains available — see [src/
 
 ## Status
 
-**[0.3.0](CHANGELOG.md):** thin Install to Program Files + LocalAppData profiles; scheduled task need not depend on a durable clone path. Current polish is **0.3.x** (same YAML product). Semver **1.0.0** is catalog + settings GUI and is not shipped until that exists; **admin is still required then**. Version ladder: [ROADMAP.md](ROADMAP.md).
+**[0.4.0](CHANGELOG.md):** double-click setup, USB disable/enable withdrawn, app stop overlaps the Windows Audio restart, setup dialogs. Same YAML product as **0.3.0**. Semver **1.0.0** is catalog + settings GUI and is not shipped until that exists; **admin is still required then**. Version ladder: [ROADMAP.md](ROADMAP.md).
 
 ## Layout
 
