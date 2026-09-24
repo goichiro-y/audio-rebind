@@ -37,11 +37,11 @@ function Test-IsElevationDeclined {
 }
 
 function Show-SetupFinishedDialog {
-    Show-AudioRebindNotice -Code 'SETUP-4HNW' -Icon Information
+    Show-AudioRebindNotice -Code 'SETUP-4HNW' -Icon 'Information'
 }
 
 function Show-AdminRequiredDialog {
-    Show-AudioRebindNotice -Code 'SETUP-8CQT' -Icon Information
+    Show-AudioRebindNotice -Code 'SETUP-8CQT' -Icon 'Information'
 }
 
 $powershellExe = Join-Path $env:SystemRoot 'System32\WindowsPowerShell\v1.0\powershell.exe'

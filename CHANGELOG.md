@@ -1,4 +1,4 @@
-# Changelog
+﻿# Changelog
 
 All notable changes to this project will be documented in this file.
 
@@ -8,6 +8,7 @@ and this project aims to adhere to [Semantic Versioning](https://semver.org/).
 ## [Unreleased]
 
 - Setup dialogs keep their text and end with a stable `SETUP-` code from one table ([#40](https://github.com/goichiro-y/audio-rebind/issues/40))
+- Setup notices reach the dialog. The icon value is no longer written onto the notice parameter, so the `SETUP-` line is shown ([#35](https://github.com/goichiro-y/audio-rebind/issues/35))
 
 ## [0.4.0] - 2026-09-24
 

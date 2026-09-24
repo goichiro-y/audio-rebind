@@ -50,16 +50,16 @@ function Show-AudioRebindNotice {
         [string] $Icon = 'Error'
     )
 
-    $icon = [System.Windows.Forms.MessageBoxIcon]::Error
-    if ($Icon -eq 'Information') {
-        $icon = [System.Windows.Forms.MessageBoxIcon]::Information
-    }
     Add-Type -AssemblyName System.Windows.Forms
+    $boxIcon = [System.Windows.Forms.MessageBoxIcon]::Error
+    if ($Icon -eq 'Information') {
+        $boxIcon = [System.Windows.Forms.MessageBoxIcon]::Information
+    }
     [void][System.Windows.Forms.MessageBox]::Show(
         (Get-AudioRebindNoticeText -Code $Code),
         'AudioRebind',
         [System.Windows.Forms.MessageBoxButtons]::OK,
-        $icon
+        $boxIcon
     )
 }
 
@@ -92,7 +92,7 @@ function Show-AudioRebindSetupFailure {
         'Task' { $code = 'SETUP-HW3C' }
         default { $code = 'SETUP-5BJY' }
     }
-    Show-AudioRebindNotice -Code $code -Icon Error
+    Show-AudioRebindNotice -Code $code -Icon 'Error'
 }
 
 function Exit-AudioRebindSetupFailure {
