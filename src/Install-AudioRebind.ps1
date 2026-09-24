@@ -30,7 +30,7 @@ trap {
     $msg = [string]$_.Exception.Message
     Write-Output $msg
     if ($env:AUDIOREBIND_SETUP_CAPTURE -ne '1') {
-        Show-AudioRebindSetupFailure -Kind (Get-AudioRebindSetupFailureKind -Text $msg) -Detail $msg
+        Show-AudioRebindSetupFailure -Kind (Get-AudioRebindSetupFailureKind -Text $msg)
     }
     exit 1
 }

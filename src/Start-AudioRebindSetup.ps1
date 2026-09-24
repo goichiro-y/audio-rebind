@@ -43,31 +43,11 @@ function Test-IsElevationDeclined {
 }
 
 function Show-SetupFinishedDialog {
-    Add-Type -AssemblyName System.Windows.Forms
-    $text = @(
-        'インストールが完了しました。'
-        'Installation complete.'
-    ) -join "`r`n"
-    [void][System.Windows.Forms.MessageBox]::Show(
-        $text,
-        'AudioRebind',
-        [System.Windows.Forms.MessageBoxButtons]::OK,
-        [System.Windows.Forms.MessageBoxIcon]::Information
-    )
+    Show-AudioRebindNotice -Code 'SETUP-4HNW' -Icon Information
 }
 
 function Show-AdminRequiredDialog {
-    Add-Type -AssemblyName System.Windows.Forms
-    $text = @(
-        '管理者権限が必要です。タスクは登録していません。'
-        'Administrator permission is required. The scheduled task was not registered.'
-    ) -join "`r`n"
-    [void][System.Windows.Forms.MessageBox]::Show(
-        $text,
-        'AudioRebind',
-        [System.Windows.Forms.MessageBoxButtons]::OK,
-        [System.Windows.Forms.MessageBoxIcon]::Information
-    )
+    Show-AudioRebindNotice -Code 'SETUP-8CQT' -Icon Information
 }
 
 $powershellExe = Join-Path $env:SystemRoot 'System32\WindowsPowerShell\v1.0\powershell.exe'
@@ -98,7 +78,7 @@ function Invoke-AudioRebindCapturedScript {
         $text = ($lines -join [Environment]::NewLine).Trim()
         $kind = Get-AudioRebindSetupFailureKind -Text $text
         if ($kind -eq 'Other') { $kind = $FallbackKind }
-        Show-AudioRebindSetupFailure -Kind $kind -Detail $text
+        Show-AudioRebindSetupFailure -Kind $kind
         if ($null -eq $code) { exit 1 }
         exit $code
     }
@@ -118,7 +98,7 @@ if (-not (Test-IsAdmin)) {
             exit 1
         }
         Write-Output $_.Exception.Message
-        Show-AudioRebindSetupFailure -Kind Other -Detail $_.Exception.Message
+        Show-AudioRebindSetupFailure -Kind Other
         exit 1
     }
 
@@ -142,7 +122,7 @@ $registerScript = Join-Path $env:ProgramFiles 'AudioRebind\Register-AudioRebindT
 if (-not (Test-Path -LiteralPath $registerScript)) {
     $detail = "Installed Register script not found: $registerScript"
     Write-Output $detail
-    Show-AudioRebindSetupFailure -Kind Task -Detail $detail
+    Show-AudioRebindSetupFailure -Kind Task
     exit 1
 }
 

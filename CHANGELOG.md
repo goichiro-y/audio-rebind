@@ -7,6 +7,8 @@ and this project aims to adhere to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+- Setup dialogs keep their text and end with a stable `SETUP-` code from one table ([#40](https://github.com/goichiro-y/audio-rebind/issues/40))
+
 ## [0.4.0] - 2026-09-24
 
 YAML product cut after 0.3.0. Same shape: explicit profiles, Task Scheduler, admin. Not the catalog or settings GUI.
