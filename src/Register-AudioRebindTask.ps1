@@ -31,6 +31,7 @@ $ErrorActionPreference = 'Stop'
 
 . (Join-Path $PSScriptRoot 'lib\Test-AudioRebindAdmin.ps1')
 . (Join-Path $PSScriptRoot 'lib\Show-AudioRebindSetupFailure.ps1')
+. (Join-Path $PSScriptRoot 'lib\Install-AudioRebindYamlModuleIfMissing.ps1')
 
 trap {
     $msg = [string]$_.Exception.Message
@@ -43,29 +44,6 @@ trap {
 
 if (-not (Test-AudioRebindAdmin)) {
     Exit-AudioRebindSetupFailure -Kind Task -Detail 'Administrator elevation is required to register the task.'
-}
-
-# Setup-time only: ensure CurrentUser can load YAML (scheduled task runs as this user).
-function Install-AudioRebindYamlModuleIfMissing {
-    if (Get-Module -ListAvailable -Name powershell-yaml) {
-        Write-Host "powershell-yaml: already available for CurrentUser"
-        return
-    }
-
-    Write-Host "powershell-yaml: not found; installing with Install-Module -Scope CurrentUser ..."
-    try {
-        # PS 5.1 + PSGallery often needs TLS 1.2
-        [Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::Tls12
-        Install-Module -Name powershell-yaml -Scope CurrentUser -Force -AllowClobber -ErrorAction Stop
-    }
-    catch {
-        Exit-AudioRebindSetupFailure -Kind Module -Detail $_.Exception.Message
-    }
-
-    if (-not (Get-Module -ListAvailable -Name powershell-yaml)) {
-        Exit-AudioRebindSetupFailure -Kind Module -Detail "Install-Module finished but 'powershell-yaml' is still not listed for this user."
-    }
-    Write-Host "powershell-yaml: installed for CurrentUser"
 }
 
 Install-AudioRebindYamlModuleIfMissing
