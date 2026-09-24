@@ -29,6 +29,7 @@ param(
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
+. (Join-Path $PSScriptRoot 'lib\Test-AudioRebindAdmin.ps1')
 . (Join-Path $PSScriptRoot 'lib\Show-AudioRebindSetupFailure.ps1')
 
 trap {
@@ -40,13 +41,7 @@ trap {
     exit 1
 }
 
-function Test-IsAdmin {
-    $id = [Security.Principal.WindowsIdentity]::GetCurrent()
-    $p = New-Object Security.Principal.WindowsPrincipal($id)
-    return $p.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
-}
-
-if (-not (Test-IsAdmin)) {
+if (-not (Test-AudioRebindAdmin)) {
     Exit-AudioRebindSetupFailure -Kind Task -Detail 'Administrator elevation is required to register the task.'
 }
 

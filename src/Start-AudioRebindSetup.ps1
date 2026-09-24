@@ -15,12 +15,6 @@ param()
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
-function Test-IsAdmin {
-    $id = [Security.Principal.WindowsIdentity]::GetCurrent()
-    $p = New-Object Security.Principal.WindowsPrincipal($id)
-    return $p.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
-}
-
 function Test-IsElevationDeclined {
     param($ErrorRecord)
 
@@ -51,6 +45,7 @@ function Show-AdminRequiredDialog {
 }
 
 $powershellExe = Join-Path $env:SystemRoot 'System32\WindowsPowerShell\v1.0\powershell.exe'
+. (Join-Path $PSScriptRoot 'lib\Test-AudioRebindAdmin.ps1')
 . (Join-Path $PSScriptRoot 'lib\Show-AudioRebindSetupFailure.ps1')
 
 function Invoke-AudioRebindCapturedScript {
@@ -84,7 +79,7 @@ function Invoke-AudioRebindCapturedScript {
     }
 }
 
-if (-not (Test-IsAdmin)) {
+if (-not (Test-AudioRebindAdmin)) {
     $quotedPath = $PSCommandPath.Replace('"', '""')
     $arg = '-NoProfile -ExecutionPolicy Bypass -File "{0}"' -f $quotedPath
     try {

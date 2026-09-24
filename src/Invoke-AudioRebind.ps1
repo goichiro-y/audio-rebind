@@ -27,6 +27,7 @@ $exitCode = 0
 $libRoot = Join-Path $PSScriptRoot 'lib'
 
 . (Join-Path $libRoot 'Write-AudioRebindLog.ps1')
+. (Join-Path $libRoot 'Test-AudioRebindAdmin.ps1')
 . (Join-Path $libRoot 'Import-AudioRebindProfile.ps1')
 . (Join-Path $libRoot 'Step-AudioEngine.ps1')
 . (Join-Path $libRoot 'Step-Apps.ps1')

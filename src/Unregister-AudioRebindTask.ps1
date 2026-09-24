@@ -13,13 +13,9 @@ param(
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
-function Test-IsAdmin {
-    $id = [Security.Principal.WindowsIdentity]::GetCurrent()
-    $p = New-Object Security.Principal.WindowsPrincipal($id)
-    return $p.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
-}
+. (Join-Path $PSScriptRoot 'lib\Test-AudioRebindAdmin.ps1')
 
-if (-not (Test-IsAdmin)) {
+if (-not (Test-AudioRebindAdmin)) {
     Write-Error "Administrator elevation is required to unregister the task."
     exit 1
 }

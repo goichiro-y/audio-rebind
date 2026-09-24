@@ -1,11 +1,5 @@
 # Load and validate an AudioRebind YAML profile (Windows PowerShell 5.1 + powershell-yaml).
 
-function Test-AudioRebindAdmin {
-    $id = [Security.Principal.WindowsIdentity]::GetCurrent()
-    $principal = New-Object Security.Principal.WindowsPrincipal($id)
-    return $principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
-}
-
 function Import-AudioRebindYamlModule {
     [CmdletBinding()]
     param()
