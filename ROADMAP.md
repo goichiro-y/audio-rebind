@@ -1,4 +1,4 @@
-# Roadmap
+﻿# Roadmap
 
 Thin when/status overview. Durable specs: [`docs/`](docs/README.md). Adopted decisions: [`docs/decisions/`](docs/decisions/README.md). Placement rules: [.github/CONTRIBUTING.md](.github/CONTRIBUTING.md#where-work-lives). Actionable work: [GitHub Issues](https://github.com/goichiro-y/audio-rebind/issues).
 
@@ -58,14 +58,13 @@ Same MVP shape (YAML, Task Scheduler, admin). Thin fixed install so the task is 
 
 ## Open work
 
-[#33](https://github.com/goichiro-y/audio-rebind/issues/33), [#35](https://github.com/goichiro-y/audio-rebind/issues/35), [#36](https://github.com/goichiro-y/audio-rebind/issues/36), and [#40](https://github.com/goichiro-y/audio-rebind/issues/40) do not depend on each other. Any can be done first. They do not decide a version number.
+[#33](https://github.com/goichiro-y/audio-rebind/issues/33), [#35](https://github.com/goichiro-y/audio-rebind/issues/35), and [#36](https://github.com/goichiro-y/audio-rebind/issues/36) do not depend on each other. Any can be done first. They do not decide a version number.
 
 | Issue | Work |
 |-------|------|
 | [#33](https://github.com/goichiro-y/audio-rebind/issues/33) | Settings window: choose apps, write the existing LocalAppData profile |
 | [#35](https://github.com/goichiro-y/audio-rebind/issues/35) | Setup failures (execution policy, `powershell-yaml`, Program Files write, task registration) show a dialog |
 | [#36](https://github.com/goichiro-y/audio-rebind/issues/36) | Remove `AudioRebind-Resume` from a window. On open, unregister it when its action file is already missing |
-| [#40](https://github.com/goichiro-y/audio-rebind/issues/40) | Setup notices keep their text and end with a `SETUP-` code from one table |
 
 Hand-edit first-run copy and a README YAML lesson are not opened. Display-off auto, a hibernate verification campaign, standard-user-only packaging, and an always-on agent stay out of these issues.
 
@@ -81,6 +80,7 @@ Hand-edit first-run copy and a README YAML lesson are not opened. Display-off au
 | Program Files task does not depend on the clone | Done — [#32](https://github.com/goichiro-y/audio-rebind/issues/32). Task action is under Program Files. One classic sleep/resume started the pipeline and finished with exit 0 |
 | Process inherits apps windowAfterStart | Done — [#37](https://github.com/goichiro-y/audio-rebind/issues/37). An entry overrides only when it sets the key. Both omitted stays `leave` |
 | Setup completion dialog | Done — [#38](https://github.com/goichiro-y/audio-rebind/issues/38). Success shows two short lines. Closing the dialog ends the window |
+| Setup notice codes | Done — [#40](https://github.com/goichiro-y/audio-rebind/issues/40). Each current setup dialog keeps its text and ends with a `SETUP-` code from one table |
 | App stop overlaps the audio restart | Done — [#39](https://github.com/goichiro-y/audio-rebind/issues/39). One classic sleep: stop ran during the engine restart, start was after the attach delay, exit 0 |
 
 ## Later (not committed)
