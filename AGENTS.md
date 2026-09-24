@@ -39,7 +39,7 @@ Full policy: [docs/i18n.md](docs/i18n.md).
 - When specs and roadmap disagree, fix the durable spec in `docs/` first, then update `ROADMAP.md`.
 - A version cut updates the ladder wording that names the ongoing line, in the ADR and in every place that quotes it, so an older minor is not left as the name of later cuts.
 - Labels mark the kind of an issue (`bug`, `enhancement`, `decision`, `investigation`, `optional`). A label is not a version. Do not add a version label.
-- When a version is cut, create a milestone titled with that version and no `v` prefix. Assign it to closed issues that shipped in the cut, then close the milestone. Leave open issues, and issues closed without shipping, without a milestone. An issue does not decide the release name ([.github/CONTRIBUTING.md](.github/CONTRIBUTING.md#where-work-lives)).
+- When a version is released, close its milestone and do not assign that milestone afterward. At the same time, open the next version's milestone, titled with that version and no `v` prefix. An issue closed as completed after the release gets that open milestone. Do not assign a milestone to an open issue or to an issue closed as not planned. Closed as not planned is the mark that the issue was not done. An issue does not decide the release name ([.github/CONTRIBUTING.md](.github/CONTRIBUTING.md#where-work-lives)).
 - Close an issue when its acceptance has been checked. Code landing in the tree is not that check.
 - A `CHANGELOG.md` version section records what shipped in that version. Still-open work stays on `ROADMAP.md` and in Issues, not as bullets under that version.
 - The git tag `v` plus that version, and its GitHub Release, mark the commit. Release の本文は、次のとおり書く。
