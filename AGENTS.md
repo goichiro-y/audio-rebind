@@ -30,6 +30,7 @@ Where work lives (Issues vs ROADMAP vs docs): [.github/CONTRIBUTING.md](.github/
 | Japanese elsewhere | Sibling `*.ja.md` only | Optional; must not replace English. The Japanese landing is the top of `README.md` |
 | GitHub Issues | Japanese + short English summary / Acceptance | See [docs/i18n.md](docs/i18n.md) |
 | Other locales | `*.<locale>.md` | Same sibling-file pattern |
+| Setup dialogs | MessageBox text in `src/` | English block first, then a Japanese block, then the notice code alone on the last line. The sentences and the code are one row in `src/lib/Show-AudioRebindSetupFailure.ps1`. Short: what failed, and the next click. Do not explain execution policy, profile handling, or paste exception text and paths. Do not copy the sentences into another list. Prefixes: `SETUP-` (install, register, uninstall), `REBIND-` (pipeline, including a manual run), `SETTINGS-` (settings window). A row under those three may be added when that notice exists. Do not add any other prefix in the same change: propose the word to the user first, and wait for acceptance. See [docs/i18n.md](docs/i18n.md) |
 
 Full policy: [docs/i18n.md](docs/i18n.md).
 
