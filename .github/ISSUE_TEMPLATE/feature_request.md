@@ -2,7 +2,6 @@
 name: Feature request
 about: Suggest an enhancement
 title: "[feat] "
-labels: enhancement
 ---
 
 <!-- 説明は日本語。English summary と Acceptance は英語。個人のパスや InstanceId は書かない。docs/i18n.md の「日本語で書くもの」。 -->

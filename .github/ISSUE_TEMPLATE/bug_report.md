@@ -2,7 +2,6 @@
 name: Bug report
 about: Something is broken or incorrect
 title: "[bug] "
-labels: bug
 ---
 
 <!-- 説明は日本語。English summary と Acceptance は英語。個人のパス、InstanceId、秘密は書かない。docs/i18n.md の「日本語で書くもの」。 -->
