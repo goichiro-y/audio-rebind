@@ -85,11 +85,11 @@ For faster recycle of Electron-style apps, prefer `stopMode: force`, keep `grace
 - Triggers (same task):
   - System / `Microsoft-Windows-Power-Troubleshooter` / Event ID **1** (primary)
   - System / `Microsoft-Windows-Kernel-Power` / Event ID **107** (fallback when ID 1 is missing — [#22](https://github.com/goichiro-y/audio-rebind/issues/22))
-- Dedup: `MultipleInstancesPolicy=IgnoreNew` while a run is live; `Invoke-AudioRebind.ps1` also skips if the last non-WhatIf run was within ~120s (`%LOCALAPPDATA%\AudioRebind\last-run.stamp`)
+- Dedup: `MultipleInstancesPolicy=StopExisting` (a later start replaces a live run). `Invoke-AudioRebind.ps1` skips only when a non-WhatIf run finished exit 0 within ~120s (`%LOCALAPPDATA%\AudioRebind\last-run.stamp` written at that success, not at start)
 - Principal: registering user, **HighestAvailable** (so CurrentUser modules resolve)
 - Classic sleep→resume verified; hibernate best-effort/unverified — see [scope](../docs/scope.md)
 
-After upgrading from a single-trigger install, **re-run Register** so Kernel-Power 107 is added.
+After upgrading from a single-trigger install, **re-run Register** so Kernel-Power 107 is added. Re-run Register after the overlap policy change so an existing task leaves `IgnoreNew` ([#47](https://github.com/goichiro-y/audio-rebind/issues/47)).
 
 Verify:
 

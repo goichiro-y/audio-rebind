@@ -17,7 +17,7 @@
   Triggers (ADR 0005 / #22):
     - Microsoft-Windows-Power-Troubleshooter Event ID 1 (primary)
     - Microsoft-Windows-Kernel-Power Event ID 107 (fallback when ID 1 is missing)
-  MultipleInstancesPolicy=IgnoreNew; Invoke-AudioRebind also debounce-skips near-duplicate starts.
+  MultipleInstancesPolicy=StopExisting (#47). Invoke-AudioRebind skips only after a successful finish within ~120s.
 #>
 [CmdletBinding()]
 param(
@@ -106,7 +106,7 @@ $xml = @"
     </Principal>
   </Principals>
   <Settings>
-    <MultipleInstancesPolicy>IgnoreNew</MultipleInstancesPolicy>
+    <MultipleInstancesPolicy>StopExisting</MultipleInstancesPolicy>
     <DisallowStartIfOnBatteries>false</DisallowStartIfOnBatteries>
     <StopIfGoingOnBatteries>false</StopIfGoingOnBatteries>
     <AllowHardTerminate>true</AllowHardTerminate>
@@ -137,5 +137,5 @@ Write-Host "  Profile:    $profileAbs"
 Write-Host "  Run as:     $userId (InteractiveToken, HighestAvailable)"
 Write-Host "  Triggers:   System / Microsoft-Windows-Power-Troubleshooter / EventID=1"
 Write-Host "              System / Microsoft-Windows-Kernel-Power / EventID=107 (fallback)"
-Write-Host "  Overlap:    MultipleInstancesPolicy=IgnoreNew; Invoke debounce ~120s"
+Write-Host "  Overlap:    MultipleInstancesPolicy=StopExisting; skip only within ~120s of exit 0"
 exit 0

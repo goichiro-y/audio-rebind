@@ -42,7 +42,8 @@ function Get-DelayMs {
 }
 
 # Dual Task Scheduler triggers (Event ID 1 + Kernel-Power 107) can fire on one resume.
-# IgnoreNew covers overlap while a run is live; this stamp covers near-sequential starts (#22).
+# The task uses StopExisting, so a later start replaces a live one (#47).
+# This stamp is written only after exit 0, and skips a start within ~120s of that success (#22).
 $script:AudioRebindDebounceSeconds = 120
 
 function Get-AudioRebindDebounceStampPath {
@@ -88,12 +89,9 @@ try {
         Write-AudioRebindLog "Mode: WhatIf"
     }
     elseif (Test-AudioRebindRecentRun) {
-        Write-AudioRebindLog ("Debounce: skipping pipeline (run within last {0}s; dual-trigger overlap)" -f $script:AudioRebindDebounceSeconds)
+        Write-AudioRebindLog ("Debounce: skipping pipeline (successful run within last {0}s)" -f $script:AudioRebindDebounceSeconds)
         Write-AudioRebindLog "Finished exitCode=0"
         exit 0
-    }
-    else {
-        Set-AudioRebindDebounceStamp
     }
 
     $steps = $profile.steps
@@ -181,6 +179,9 @@ try {
     }
 
     Write-AudioRebindLog ("Finished exitCode={0}" -f $exitCode)
+    if (-not $WhatIf -and $exitCode -eq 0) {
+        Set-AudioRebindDebounceStamp
+    }
 }
 catch {
     try {
