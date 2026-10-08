@@ -7,8 +7,21 @@ and this project aims to adhere to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
-- Setup dialogs keep their text and end with a stable `SETUP-` code from one table ([#40](https://github.com/goichiro-y/audio-rebind/issues/40))
+## [0.4.1] - 2026-10-08
+
+Bugfix cut on 0.4.0. Same YAML product. Not a new feature line, and not the catalog or settings GUI.
+
+### Fixed
+
+- One resume that starts the task twice no longer restarts Windows Audio twice. The later start waits until the first run finishes, then skips the pipeline within about 120 seconds of a successful exit ([#49](https://github.com/goichiro-y/audio-rebind/issues/49), [#47](https://github.com/goichiro-y/audio-rebind/issues/47))
+- The resume task replaces a stuck run instead of refusing the next start. An existing task keeps the old policy until Register runs again ([#47](https://github.com/goichiro-y/audio-rebind/issues/47))
+- A log write waits at most 500ms. On timeout it appends `Log: mutex wait skipped` without the mutex, and the pipeline continues ([#50](https://github.com/goichiro-y/audio-rebind/issues/50))
 - Setup notices reach the dialog. The icon value is no longer written onto the notice parameter, so the `SETUP-` line is shown ([#35](https://github.com/goichiro-y/audio-rebind/issues/35))
+- Setup dialogs keep their text and end with a stable `SETUP-` code from one table ([#40](https://github.com/goichiro-y/audio-rebind/issues/40))
+
+### Changed
+
+- [ADR 0012](docs/decisions/0012-withdraw-usb-disable-enable.md): a present endpoint that is already Active, plus a configured app that is not running, does not meet the bar for bringing USB disable/enable back
 
 ## [0.4.0] - 2026-09-24
 
