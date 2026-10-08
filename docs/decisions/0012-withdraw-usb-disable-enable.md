@@ -2,6 +2,7 @@
 
 - Status: Accepted
 - Date: 2026-09-24
+- Updated: 2026-10-07
 - Withdraws the USB step from the current product. The bodies of [ADR 0001](0001-single-orchestrator-three-steps.md), [ADR 0006](0006-v1-step-defaults-engine-usb.md), and [ADR 0007](0007-v1-mvp-boundaries.md) stay as adopted at the time.
 
 ## Context
@@ -23,3 +24,11 @@ The hypothesis stays. Bring the step back only after user insight, including fur
 - Living specs describe two steps. `Step-UsbDevice.ps1` is not part of the orchestrator. A profile that still contains `usbDevice` or `afterUsbDeviceMs` does not run a device toggle.
 - [ADR 0001](0001-single-orchestrator-three-steps.md), [ADR 0006](0006-v1-step-defaults-engine-usb.md), and [ADR 0007](0007-v1-mvp-boundaries.md) keep their original text. They are not rewritten to pretend the USB step was never adopted.
 - The settings window ([#33](https://github.com/goichiro-y/audio-rebind/issues/33)) chooses apps only.
+
+## Example that does not meet the bar
+
+On one maintainer resume, many audio-endpoint nodes reported Status Unknown, and a configured app process was absent. That was read as the device still being dead after the two steps, which is the condition for bringing disable/enable back.
+
+Those Unknown nodes were not present. They were leftover registrations. The endpoint that was present was Active, and it was the default for capture and render. Opening that capture endpoint succeeded. The missing process was the configured app: the pipeline had started it, and the process then exited because that app's own install was incomplete.
+
+A list of Unknown endpoint nodes, plus a configured app that is not running, does not separate a case the two steps cannot cover. When a present endpoint is Active, look at why that app exited before treating disable/enable as required.
