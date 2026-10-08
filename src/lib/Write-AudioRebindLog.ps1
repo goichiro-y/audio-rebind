@@ -1,5 +1,10 @@
 ﻿# Writes timestamped run logs under %LOCALAPPDATA%\AudioRebind\logs\
 
+# Two threads append one file while stop overlaps AudioEngine (#39).
+# The wait is finite so a stuck holder cannot keep a resume run out of AudioEngine (#48).
+# A timed-out wait records that skip without the mutex (#50).
+$script:AudioRebindLogMutexTimeoutMs = 500
+
 function Initialize-AudioRebindLog {
     [CmdletBinding()]
     param(
@@ -15,7 +20,8 @@ function Initialize-AudioRebindLog {
     $stamp = Get-Date -Format 'yyyyMMdd-HHmmss'
     $safeLabel = ($RunLabel -replace '[^\w\-]+', '_').Trim('_')
     if ([string]::IsNullOrWhiteSpace($safeLabel)) { $safeLabel = 'run' }
-    $script:AudioRebindLogPath = Join-Path $dir ("{0}-{1}.log" -f $stamp, $safeLabel)
+    # PID keeps a second start in the same second from replacing the first run's file (#49).
+    $script:AudioRebindLogPath = Join-Path $dir ("{0}-{1}-{2}.log" -f $stamp, $PID, $safeLabel)
 
     $header = @(
         "AudioRebind log"
@@ -38,21 +44,30 @@ function Add-AudioRebindLogLine {
         [string] $Line
     )
 
-    # Stop overlaps AudioEngine, so two threads append the same file (#39).
     $mutex = New-Object System.Threading.Mutex($false, 'Local\AudioRebindLog')
     $held = $false
+    $timedOut = $false
     try {
         try {
-            $held = $mutex.WaitOne()
+            $held = $mutex.WaitOne($script:AudioRebindLogMutexTimeoutMs)
         }
         catch [System.Threading.AbandonedMutexException] {
             $held = $true
         }
-        Add-Content -LiteralPath $Path -Value $Line -Encoding UTF8
+        if ($held) {
+            Add-Content -LiteralPath $Path -Value $Line -Encoding UTF8
+        }
+        else {
+            $timedOut = $true
+        }
     }
     finally {
         if ($held) { $mutex.ReleaseMutex() }
         $mutex.Dispose()
+    }
+    if ($timedOut) {
+        $skip = '{0} [WARN] Log: mutex wait skipped' -f (Get-Date -Format 'yyyy-MM-dd HH:mm:ss')
+        Add-Content -LiteralPath $Path -Value $skip -Encoding UTF8
     }
 }
 

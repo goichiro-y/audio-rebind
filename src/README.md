@@ -110,7 +110,7 @@ Get-ScheduledTask -TaskName AudioRebind-Resume | Format-List TaskName, State
 | `Register-AudioRebindTask.ps1` | Install resume scheduled task |
 | `Unregister-AudioRebindTask.ps1` | Remove scheduled task only |
 | `lib/Import-AudioRebindProfile.ps1` | YAML load + validation |
-| `lib/Write-AudioRebindLog.ps1` | Logging |
+| `lib/Write-AudioRebindLog.ps1` | Logging. Appends share one mutex. The wait is 500ms; a missed line is skipped and the pipeline continues (#48). That skip appends `Log: mutex wait skipped` without the mutex (#50) |
 | `lib/Step-AudioEngine.ps1` | Restart EndpointBuilder + Audiosrv |
 | `lib/Step-Apps.ps1` | Stop/start configured processes |
 
