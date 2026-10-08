@@ -1,7 +1,5 @@
 ﻿# AudioRebind
 
-**Tracking:** `github-issues` — [task-tracking-modes](https://github.com/goichiro-y/pc-personal-environment/blob/main/docs/git/task-tracking-modes.md)
-
 [日本語](#日本語) · [English](#english) · Language policy: [docs/i18n.md](docs/i18n.md)
 
 ## 日本語
