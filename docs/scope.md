@@ -29,7 +29,7 @@ Auto triggers (one task, two subscriptions — [ADR 0005](decisions/0005-resume-
 1. `Microsoft-Windows-Power-Troubleshooter` **Event ID 1** (primary)
 2. `Microsoft-Windows-Kernel-Power` **Event ID 107** (fallback when ID 1 is missing)
 
-Overlap: `MultipleInstancesPolicy=StopExisting`. The later start replaces a live run. The orchestrator skips only within ~120s of a finished exit code 0, so one resume that emits both events finishes the pipeline once ([#47](https://github.com/goichiro-y/audio-rebind/issues/47)).
+Overlap: `MultipleInstancesPolicy=StopExisting`. A second start waits on the pipeline mutex and does not restart the audio services during a live run. It skips the pipeline within ~120s of a finished exit code 0 ([#47](https://github.com/goichiro-y/audio-rebind/issues/47), [#49](https://github.com/goichiro-y/audio-rebind/issues/49)).
 
 Automatic start happens only when Windows logs a **resume from sleep** (Event ID 1 and/or 107). The ACPI name in Settings is a hint, not a second trigger.
 

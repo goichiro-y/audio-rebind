@@ -85,7 +85,7 @@ For faster recycle of Electron-style apps, prefer `stopMode: force`, keep `grace
 - Triggers (same task):
   - System / `Microsoft-Windows-Power-Troubleshooter` / Event ID **1** (primary)
   - System / `Microsoft-Windows-Kernel-Power` / Event ID **107** (fallback when ID 1 is missing — [#22](https://github.com/goichiro-y/audio-rebind/issues/22))
-- Dedup: `MultipleInstancesPolicy=StopExisting` (a later start replaces a live run). `Invoke-AudioRebind.ps1` skips only when a non-WhatIf run finished exit 0 within ~120s (`%LOCALAPPDATA%\AudioRebind\last-run.stamp` written at that success, not at start)
+- Dedup: `MultipleInstancesPolicy=StopExisting` replaces a stuck run. A second start waits on a pipeline mutex so AudioEngine runs once ([#49](https://github.com/goichiro-y/audio-rebind/issues/49)). After a non-WhatIf exit 0, another start within ~120s skips (`%LOCALAPPDATA%\AudioRebind\last-run.stamp` written at that success, not at start)
 - Principal: registering user, **HighestAvailable** (so CurrentUser modules resolve)
 - Classic sleep→resume verified; hibernate best-effort/unverified — see [scope](../docs/scope.md)
 

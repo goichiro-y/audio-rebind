@@ -2,7 +2,7 @@
 
 - Status: Accepted
 - Date: 2026-09-21
-- Updated: 2026-10-02 ([#47](https://github.com/goichiro-y/audio-rebind/issues/47); [#22](https://github.com/goichiro-y/audio-rebind/issues/22))
+- Updated: 2026-10-07 ([#49](https://github.com/goichiro-y/audio-rebind/issues/49); [#47](https://github.com/goichiro-y/audio-rebind/issues/47); [#22](https://github.com/goichiro-y/audio-rebind/issues/22))
 
 ## Context
 
@@ -16,7 +16,7 @@ For **v1**:
 
 1. **Primary trigger:** Task Scheduler on `Microsoft-Windows-Power-Troubleshooter` **Event ID 1** (system resumed from sleep).
 2. **Fallback co-trigger:** Same task also subscribes to `Microsoft-Windows-Kernel-Power` **Event ID 107** (system resumed from sleep). One task, two `EventTrigger`s — not a second task name ([#22](https://github.com/goichiro-y/audio-rebind/issues/22)).
-3. **Dedup:** Task `MultipleInstancesPolicy=StopExisting`. A second trigger while a run is live stops that run and starts a new one, so a stuck Running instance does not keep later resumes from starting ([#47](https://github.com/goichiro-y/audio-rebind/issues/47)). `Invoke-AudioRebind.ps1` writes `%LOCALAPPDATA%\AudioRebind\last-run.stamp` only after a non-WhatIf run finishes with exit code 0, and skips the pipeline if that success was within ~120 seconds. The stamp is not written at start: the replacement run must still execute. One resume that emits both events therefore finishes the pipeline once (the later start).
+3. **Dedup:** Task `MultipleInstancesPolicy=StopExisting`, so a later start can replace a stuck run ([#47](https://github.com/goichiro-y/audio-rebind/issues/47)). `Invoke-AudioRebind.ps1` holds a cross-process pipeline mutex from before it creates the run log until the run finishes. A second start waits on that mutex instead of restarting the audio services while the first run still is ([#49](https://github.com/goichiro-y/audio-rebind/issues/49)). If the first process is stopped, the mutex is abandoned and the waiter runs the pipeline. The script writes `%LOCALAPPDATA%\AudioRebind\last-run.stamp` only after a non-WhatIf run finishes with exit code 0. A start that acquires the mutex after that success skips the pipeline when the success was within ~120 seconds. The stamp is not written at start. One resume that emits both events therefore runs AudioEngine once.
 4. **Elevation:** Register the task with **Run with highest privileges**. Do not ship an always-on Windows Service solely for elevation in v1. The **supported operator** is someone who can elevate (local admin); standard-user-only completion of the same pipeline is out of scope ([scope.md](../scope.md) Operator / privilege model).
 5. **Manual:** Support **manual** invocation of the same orchestrator entrypoint. Unlock-based or other secondary triggers stay optional follow-ups if both Event ID 1 and Kernel-Power 107 still miss on some hosts.
 

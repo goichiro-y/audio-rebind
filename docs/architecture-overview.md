@@ -17,7 +17,7 @@ Order matters: restarting apps while the audio engine is still down often reprod
 
 ## Triggers
 
-**0.1.x auto:** Task Scheduler with highest privileges on **Power-Troubleshooter Event ID 1** and **Kernel-Power Event ID 107** (same task; a later start replaces a live run, and a finished exit code 0 suppresses another pipeline for ~120s) — [ADR 0005](decisions/0005-resume-trigger-task-scheduler.md), [#22](https://github.com/goichiro-y/audio-rebind/issues/22), [#47](https://github.com/goichiro-y/audio-rebind/issues/47). Manual invocation of the same entrypoint is supported. Which power transitions are claimed for auto vs manual — including hibernate as best-effort/unverified, not a near-term maintainer commitment — is defined in [scope.md](scope.md) (Pipeline vs automatic trigger). Unlock or other triggers may be added later if both events still miss on some hosts.
+**0.1.x auto:** Task Scheduler with highest privileges on **Power-Troubleshooter Event ID 1** and **Kernel-Power Event ID 107** (same task; a later start waits so AudioEngine runs once, and a finished exit code 0 suppresses another pipeline for ~120s) — [ADR 0005](decisions/0005-resume-trigger-task-scheduler.md), [#22](https://github.com/goichiro-y/audio-rebind/issues/22), [#47](https://github.com/goichiro-y/audio-rebind/issues/47), [#49](https://github.com/goichiro-y/audio-rebind/issues/49). Manual invocation of the same entrypoint is supported. Which power transitions are claimed for auto vs manual — including hibernate as best-effort/unverified, not a near-term maintainer commitment — is defined in [scope.md](scope.md) (Pipeline vs automatic trigger). Unlock or other triggers may be added later if both events still miss on some hosts.
 
 ## Profiles
 

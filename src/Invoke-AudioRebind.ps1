@@ -42,9 +42,14 @@ function Get-DelayMs {
 }
 
 # Dual Task Scheduler triggers (Event ID 1 + Kernel-Power 107) can fire on one resume.
-# The task uses StopExisting, so a later start replaces a live one (#47).
-# This stamp is written only after exit 0, and skips a start within ~120s of that success (#22).
+# The task uses StopExisting, so a later start replaces a stuck one (#47).
+# This mutex is held for the whole pipeline so the later start waits instead of
+# restarting the audio services while the earlier one still is (#49).
+# The stamp is written only after exit 0, and a start that acquires the mutex
+# after that success skips the pipeline within ~120s (#22).
 $script:AudioRebindDebounceSeconds = 120
+$script:AudioRebindPipelineMutex = $null
+$script:AudioRebindPipelineHeld = $false
 
 function Get-AudioRebindDebounceStampPath {
     return (Join-Path $env:LOCALAPPDATA 'AudioRebind\last-run.stamp')
@@ -67,6 +72,28 @@ function Set-AudioRebindDebounceStamp {
     Set-Content -LiteralPath $path -Value (Get-Date -Format o) -Encoding ASCII
 }
 
+function Enter-AudioRebindPipeline {
+    $script:AudioRebindPipelineMutex = New-Object System.Threading.Mutex($false, 'Local\AudioRebindPipeline')
+    try {
+        $script:AudioRebindPipelineHeld = $script:AudioRebindPipelineMutex.WaitOne()
+    }
+    catch [System.Threading.AbandonedMutexException] {
+        # The earlier process was stopped while it held the pipeline (#47, #49).
+        $script:AudioRebindPipelineHeld = $true
+    }
+}
+
+function Exit-AudioRebindPipeline {
+    if ($script:AudioRebindPipelineHeld -and $null -ne $script:AudioRebindPipelineMutex) {
+        $script:AudioRebindPipelineMutex.ReleaseMutex()
+        $script:AudioRebindPipelineHeld = $false
+    }
+    if ($null -ne $script:AudioRebindPipelineMutex) {
+        $script:AudioRebindPipelineMutex.Dispose()
+        $script:AudioRebindPipelineMutex = $null
+    }
+}
+
 $script:AudioRebindStopOverlap = $null
 
 try {
@@ -82,16 +109,24 @@ try {
     }
 
     $profile = Import-AudioRebindProfile -Path $resolvedProfile
+    if (-not $WhatIf) {
+        Enter-AudioRebindPipeline
+    }
     $logPath = Initialize-AudioRebindLog -RunLabel ([string]$profile.name)
     Write-AudioRebindLog ("Profile: {0} ({1})" -f $profile.name, $resolvedProfile)
     Write-AudioRebindLog ("LogFile: {0}" -f $logPath)
+    $skipPipeline = $false
     if ($WhatIf) {
         Write-AudioRebindLog "Mode: WhatIf"
     }
     elseif (Test-AudioRebindRecentRun) {
         Write-AudioRebindLog ("Debounce: skipping pipeline (successful run within last {0}s)" -f $script:AudioRebindDebounceSeconds)
         Write-AudioRebindLog "Finished exitCode=0"
-        exit 0
+        $skipPipeline = $true
+    }
+
+    if ($skipPipeline) {
+        return
     }
 
     $steps = $profile.steps
@@ -202,6 +237,9 @@ catch {
     catch {
         Write-Error $msg
     }
+}
+finally {
+    Exit-AudioRebindPipeline
 }
 
 exit $exitCode
