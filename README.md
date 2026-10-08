@@ -168,7 +168,7 @@ Dev clone Register (path-locked to the checkout) remains available — see [src/
 
 ## Status
 
-**[0.4.1](CHANGELOG.md):** one resume restarts Windows Audio once; a stuck run is replaced; setup notices show their code. **[0.4.0](CHANGELOG.md):** double-click setup, USB disable/enable withdrawn, app stop overlaps the Windows Audio restart, setup dialogs. Same YAML product as **0.3.0**. Semver **1.0.0** is catalog + settings GUI and is not shipped until that exists; **admin is still required then**. The open line is **0.5.0**. Version ladder: [ROADMAP.md](ROADMAP.md).
+**[0.4.1](CHANGELOG.md):** one resume restarts Windows Audio once; a stuck run is replaced. **[0.4.0](CHANGELOG.md):** double-click setup, USB disable/enable withdrawn, app stop overlaps the Windows Audio restart, setup dialogs. Same YAML product as **0.3.0**. Semver **1.0.0** is catalog + settings GUI and is not shipped until that exists; **admin is still required then**. The open line is **0.5.0**. Version ladder: [ROADMAP.md](ROADMAP.md).
 
 ## Layout
 
