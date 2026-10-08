@@ -79,7 +79,7 @@ Release and product-phase naming (full ladder: [ROADMAP.md](../ROADMAP.md)):
 | **0.3.0** | Thin fixed install (Program Files + LocalAppData); clone path not required for the task | Shipped [0.3.0](../CHANGELOG.md); Milestone `0.3.0` — [#29](https://github.com/goichiro-y/audio-rebind/issues/29)–[#31](https://github.com/goichiro-y/audio-rebind/issues/31) |
 | **0.4.0** | Same YAML product: double-click setup, USB step withdrawn, stop overlaps the engine, setup dialogs | Shipped [0.4.0](../CHANGELOG.md); Milestone `0.4.0` — [#32](https://github.com/goichiro-y/audio-rebind/issues/32), [#34](https://github.com/goichiro-y/audio-rebind/issues/34), [#37](https://github.com/goichiro-y/audio-rebind/issues/37)–[#39](https://github.com/goichiro-y/audio-rebind/issues/39) |
 | **0.x** after **0.3.0** | YAML-line polish (README-led tryouts, Install dogfood, first-run errors). Same shape. **0.4.0** is one cut. | Latest cut is [0.4.0](../CHANGELOG.md) — [ROADMAP](../ROADMAP.md) |
-| **1.0.0** | First semver major: catalog / heuristics + **opt-out**, and settings GUI so typical stacks need not hand-edit YAML. **Admin still required.** Do not ship before that line exists. | [ROADMAP](../ROADMAP.md) **Later** — no Issues until accepted |
+| **1.0.0** | First semver major: catalog / heuristics + **opt-out**, and settings GUI so typical stacks need not hand-edit YAML. **Admin still required.** Do not ship before that line exists. | Not a release yet. The settings window is [#33](https://github.com/goichiro-y/audio-rebind/issues/33). That issue does not decide this name ([ADR 0011](decisions/0011-version-ladder-1-0-catalog-gui.md)) |
 
 0.1.x stays deliberately narrow so the ordered pipeline can be proven on a real host before investing in zero-config UX. Catalog / GUI is **1.0.0**, not a second public major ([ADR 0011](decisions/0011-version-ladder-1-0-catalog-gui.md)). A long **0.x** is accepted.
 
@@ -90,7 +90,7 @@ Release and product-phase naming (full ladder: [ROADMAP.md](../ROADMAP.md)):
 - Rewriting closed apps (dictation helpers, chat clients, browsers) to handle `DEVICE_INVALIDATED` themselves.
 - A full virtual-cable / WASAPI proxy product (may be revisited later if the orchestrator is not enough).
 - Non-Windows platforms (unless explicitly added later).
-- MVP / 0.x settings GUI, built-in “restart all audio-looking apps” catalogs, or always-on agents (**1.0.0** / Later for catalog+GUI; always-on only if resume events are insufficient).
+- MVP / 0.x settings GUI, built-in “restart all audio-looking apps” catalogs, or always-on agents (catalog and settings GUI are the **1.0.0** line; the settings window is [#33](https://github.com/goichiro-y/audio-rebind/issues/33). Always-on agents stay uncommitted until resume events prove insufficient).
 - **Automatic** runs on display-off-only (S0, not sleep), shutdown/boot (S5), unlock-only, or Modern Standby (see table above). Manual pipeline runs remain available.
 - Watching or relaunching apps that **exited on their own** (including after display-off while the PC stayed awake). This is not a crashed-app watchdog; optional Apps recycle runs only when the pipeline itself starts.
 - Standard-user-only / no-elevation completion of the full pipeline; least-privilege “elevate only some steps” installer (see Operator / privilege model).

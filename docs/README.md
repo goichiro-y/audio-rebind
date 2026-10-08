@@ -2,7 +2,7 @@
 
 Durable specifications and guides (**what / why**).
 
-Progress belongs in [ROADMAP.md](../ROADMAP.md). **Committed** tasks belong in GitHub Issues; **uncommitted** ideas stay on ROADMAP **Later** — see [CONTRIBUTING.md](../.github/CONTRIBUTING.md#where-work-lives). Do not duplicate progress tables here.
+Progress of a version line belongs in [ROADMAP.md](../ROADMAP.md). **Committed** tasks belong in GitHub Issues, and the open list is not copied into ROADMAP. **Uncommitted** ideas stay on ROADMAP **Later** — see [CONTRIBUTING.md](../.github/CONTRIBUTING.md#where-work-lives). Do not duplicate progress tables here.
 
 Language policy (English canonical, `*.ja.md` for Japanese): [i18n.md](i18n.md).
 

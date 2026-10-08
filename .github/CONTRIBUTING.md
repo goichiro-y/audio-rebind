@@ -7,14 +7,14 @@ Thanks for your interest. This project is maintained for a **narrow** sleep/resu
 | Kind | Where | Open a GitHub Issue? |
 |------|--------|----------------------|
 | Product version intent (0.1.x / 0.x / 1.0.0) | [ROADMAP.md](../ROADMAP.md) version ladder | No (versions are not Issues) |
-| **0.x** YAML-line polish after 0.3.0 | [ROADMAP.md](../ROADMAP.md) | Yes — when a concrete item is accepted |
-| **Accepted, actionable** work | GitHub Issues | **Yes**. Open issues need not carry a version milestone |
+| **0.x** YAML-line polish after 0.3.0 | [ROADMAP.md](../ROADMAP.md) version ladder names the line. A concrete item is an Issue once accepted | Yes — when a concrete item is accepted |
+| **Accepted, actionable** work | GitHub Issues. Do not copy the open list into [ROADMAP.md](../ROADMAP.md) | **Yes**. Open issues need not carry a version milestone |
 | **Uncommitted** ideas | [ROADMAP.md](../ROADMAP.md) **Later** | **No** until accepted |
 | Adopted design | [docs/decisions/](../docs/decisions/README.md) | Proposed ideas stay out of ADR files |
 | Stable what/why | [docs/](../docs/README.md) | No progress tables in docs |
 | Machine / personal stack detail | `local/` (gitignored) | Never paste raw host inventory into Issues |
 
-Committed work only in Issues. Uncommitted ideas stay on ROADMAP **Later**.
+Committed work only in Issues. Uncommitted ideas stay on ROADMAP **Later**. Edit ROADMAP when the version ladder changes, or when an idea moves into or out of Later. Opening or closing an Issue does not edit ROADMAP.
 
 ## Small contributions
 

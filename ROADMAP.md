@@ -59,15 +59,9 @@ Same MVP shape (YAML, Task Scheduler, admin). Thin fixed install so the task is 
 
 ## Open work
 
-[#33](https://github.com/goichiro-y/audio-rebind/issues/33), [#35](https://github.com/goichiro-y/audio-rebind/issues/35), and [#36](https://github.com/goichiro-y/audio-rebind/issues/36) do not depend on each other. Any can be done first. They do not decide a version number.
+Accepted work that is not finished is the [open Issues](https://github.com/goichiro-y/audio-rebind/issues). This file does not list them. Opening or closing an Issue does not edit this file.
 
-| Issue | Work |
-|-------|------|
-| [#33](https://github.com/goichiro-y/audio-rebind/issues/33) | Settings window: choose apps, write the existing LocalAppData profile |
-| [#35](https://github.com/goichiro-y/audio-rebind/issues/35) | Setup failures (execution policy, `powershell-yaml`, Program Files write, task registration) show a dialog |
-| [#36](https://github.com/goichiro-y/audio-rebind/issues/36) | Remove `AudioRebind-Resume` from a window. On open, unregister it when its action file is already missing |
-
-Hand-edit first-run copy and a README YAML lesson are not opened. Display-off auto, a hibernate verification campaign, standard-user-only packaging, and an always-on agent stay out of these issues.
+Edit this file when the version ladder changes, or when an idea moves into or out of **Later**.
 
 ## Done (summary)
 

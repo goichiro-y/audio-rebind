@@ -41,7 +41,7 @@ Full policy: [docs/i18n.md](docs/i18n.md).
 - Labels mark the kind of an issue (`bug`, `enhancement`, `decision`, `investigation`, `optional`). A label is not a version. Do not add a version label.
 - When a version is released, close its milestone and do not assign that milestone afterward. At the same time, open the next version's milestone, titled with that version and no `v` prefix. An issue closed as completed after the release gets that open milestone. Do not assign a milestone to an open issue or to an issue closed as not planned. Closed as not planned is the mark that the issue was not done. An issue does not decide the release name ([.github/CONTRIBUTING.md](.github/CONTRIBUTING.md#where-work-lives)).
 - Close an issue when its acceptance has been checked. Code landing in the tree is not that check.
-- A `CHANGELOG.md` version section records what shipped in that version. Still-open work stays on `ROADMAP.md` and in Issues, not as bullets under that version.
+- A `CHANGELOG.md` version section records what shipped in that version. Still-open work stays in Issues, not as bullets under that version, and not as a list in `ROADMAP.md`. Edit `ROADMAP.md` when the version ladder changes, or when an idea moves into or out of Later.
 - The git tag `v` plus that version, and its GitHub Release, mark the commit. Release の本文は、次のとおり書く。
   - そのページだけを開いた人向けに、製品が何をするかを一文で始める。日本語が先で、短い英語が続く。
   - 載せるのは、その版を入れた人が、説明なしで「そうなった」と分かる変化だけ。時制は過去にする。「した」「なった」。これからの話や、できる能力の説明にしない。
