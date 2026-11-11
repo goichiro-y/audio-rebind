@@ -88,6 +88,7 @@ Release and product-phase naming (full ladder: [ROADMAP.md](../ROADMAP.md)):
 
 - Replacing or resigning vendor kernel drivers.
 - Guaranteeing audio through sleep without any resume action.
+- A missing audio device after a driver update or removal was interrupted (for example by a reboot). That is not a dead session after resume, and no pipeline step can recover a device that is absent. Reinstall the driver.
 - Rewriting closed apps (dictation helpers, chat clients, browsers) to handle `DEVICE_INVALIDATED` themselves.
 - A full virtual-cable / WASAPI proxy product (may be revisited later if the orchestrator is not enough).
 - Non-Windows platforms (unless explicitly added later).
